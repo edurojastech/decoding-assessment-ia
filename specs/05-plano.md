@@ -19,7 +19,7 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] Auth admin (bcrypt + JWT cookie) + tela de login com credenciais demo
 - [x] Seed idempotente — etapa 1: 1 admin, 2 empresas (18 e 22 participantes com links), 1 turma vazia. **Respostas nos 4 níveis e turma populada: etapa 2, na Fatia A** (calculadas pelo motor de `scoring/`, regra 1)
 - [x] **Pronto quando:** login funciona e `/admin` lista 2 empresas
-- [ ] Subir pro GitHub e importar no Replit já agora (validar PORT, DATABASE_URL, build)
+- [ ] Subir pro GitHub e importar no Replit já agora (validar PORT, DATABASE_URL, build) — GitHub ✅ (`edurojastech/decoding-assessment-ia`, privado); import no Replit pendente
 
 ## Fase 4 · Fatias
 ### Fatia A · Participante + pontuação (C2, C5) — prioridade máxima

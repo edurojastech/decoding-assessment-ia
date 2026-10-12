@@ -1,0 +1,1 @@
+- [Package firewall](package-firewall.md) — imported test dependencies may be blocked; prefer a safe runner release compatible with the existing runtime.

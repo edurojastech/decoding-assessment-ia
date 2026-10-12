@@ -34,6 +34,6 @@ React + Vite + Tailwind (client/) · Node 20 + Express, JavaScript ESM (server/)
 Todo o front segue o design system oficial: https://design-system-decoding.vercel.app/ — resumo em `specs/06-design-system.md` (prevalece sobre a seção 10 do prompt).
 - Use só os tokens de `client/src/theme/tokens.css` (espelhados no Tailwind). Nunca hex solto nos componentes.
 - Componentes em `client/src/components/ui/` com a API do DS (Button, Card, Input, Badge, Alert, Tag, Progress, Avatar).
-- Aileron/Just Sans com fallback Inter; labels em uppercase + letter-spacing 0.2em; grid de 8px.
+- Fontes Aileron/Just Sans locais (`assets/fonts`, @font-face no 06-design-system.md), Inter só como fallback; logos em `assets/brand`; labels em uppercase + letter-spacing 0.2em; grid de 8px.
 - 60% Insight · 40% Lime; texto Code Blue no claro, branco no escuro; cores semânticas só para estado.
 - Rodapé: "IA First. Human Driven." + espaço para logo Decoding.

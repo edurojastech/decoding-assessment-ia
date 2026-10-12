@@ -1,0 +1,43 @@
+/* Tokens do DS Decoding — copiados de specs/06-design-system.md (fonte: design-system-decoding.vercel.app). */
+:root {
+  /* Base */
+  --code-blue: #0B1B56;   /* inteligência, IA — âncora e textos */
+  --insight:   #77C6F9;   /* clareza — acento predominante */
+  --pulse-lime:#E4FD98;   /* energia humana — acento secundário e assinatura */
+  --canvas:    #FFFFFF;
+  --surface:   #F8F9FE;
+  --root:      #111111;
+
+  /* Tints */
+  --code-blue-50:#F0F3FD; --code-blue-100:#E0E5FA; --code-blue-200:#BAC6F2; --code-blue-300:#8AA0E8;
+  --insight-50:#EDF8FE;   --insight-100:#D8F0FD;   --insight-500:#77C6F9;
+  --lime-50:#FAFFF0;      --lime-500:#E4FD98;      --lime-900:#8CB800;
+
+  /* Semânticas (só feedback de estado, sempre com ícone + texto) */
+  --success:#22C55E; --warning:#F59E0B; --error:#EF4444; --info:#77C6F9;
+
+  /* Sombras */
+  --shadow-sm:0 1px 3px rgba(11,27,86,.08);
+  --shadow-md:0 4px 16px rgba(11,27,86,.12);
+  --shadow-lg:0 10px 32px rgba(11,27,86,.16);
+
+  /* Raios */
+  --radius-sm:4px; --radius-md:8px; --radius-lg:12px; --radius-xl:16px;
+  --radius-2xl:24px; --radius-3xl:32px; --radius-full:9999px;
+
+  /* Espaçamento (grid de 8px; 4px só para ajustes internos) */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px;
+  --space-8:32px; --space-10:40px; --space-12:48px; --space-16:64px; --space-20:80px; --space-24:96px;
+
+  /* Movimento */
+  --transition-fast:150ms; --transition-normal:250ms; --transition-slow:400ms;
+
+  /* Gradientes oficiais (usar com moderação) */
+  --gradient-mesh-dark:
+    radial-gradient(ellipse at 20% 50%, rgba(119,198,249,.3) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(228,253,152,.2) 0%, transparent 50%),
+    linear-gradient(135deg,#0B1B56 0%,#1A2B8A 50%,#0B1B56 100%);
+  --gradient-insight-lime: linear-gradient(135deg,#77C6F9 0%,#E4FD98 100%);
+  --gradient-deep-blue: linear-gradient(135deg,#0B1B56 0%,#3552C8 50%,#77C6F9 100%);
+  --gradient-hero-light: linear-gradient(135deg,#77C6F9 10%,#a8e0f9 40%,#c8f0a0 70%,#E4FD98 100%);
+}

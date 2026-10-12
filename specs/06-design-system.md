@@ -68,7 +68,16 @@ Espelhar esses tokens no `tailwind.config.js` (`theme.extend.colors/boxShadow/bo
 | Tiny | 10px | 600 · Aileron |
 
 - Stack: `font-family: Aileron, Inter, system-ui, sans-serif` (títulos/corpo) e `"Just Sans", Inter, system-ui, sans-serif` (H3/H4).
-- Aileron e Just Sans são arquivos locais do DS; enquanto não tivermos os arquivos, usar **Inter** (Google Fonts) como fallback. Deixar `@font-face` preparado em `client/public/fonts/`.
+- **Arquivos de fonte já baixados do DS em `assets/fonts/`** (Aileron Light/Regular/SemiBold/Bold, JUST Sans ExLight/Regular). Na Fase 3, copiar para `client/public/fonts/` e declarar:
+```css
+@font-face{font-family:"Aileron";src:url(/fonts/Aileron-Light.otf) format("opentype");font-weight:300;font-display:swap}
+@font-face{font-family:"Aileron";src:url(/fonts/Aileron-Regular.otf) format("opentype");font-weight:400;font-display:swap}
+@font-face{font-family:"Aileron";src:url(/fonts/Aileron-SemiBold.otf) format("opentype");font-weight:600;font-display:swap}
+@font-face{font-family:"Aileron";src:url(/fonts/Aileron-Bold.otf) format("opentype");font-weight:700;font-display:swap}
+@font-face{font-family:"Just Sans";src:url(/fonts/JustSans-ExLight.ttf) format("truetype");font-weight:300;font-display:swap}
+@font-face{font-family:"Just Sans";src:url(/fonts/JustSans-Regular.otf) format("opentype");font-weight:400;font-display:swap}
+```
+- Inter fica só como fallback na pilha.
 - **Labels, itens de navegação e categorias: `uppercase` + `letter-spacing: 0.2em`.**
 
 ## Componentes do DS → uso no app
@@ -89,7 +98,12 @@ Criar em `client/src/components/ui/` com a mesma API do DS (ex.: `<Button varian
 Radar, barras por nível, cobertura e barras por área com Code Blue (linha/contorno), Insight (preenchimento principal) e Lime (destaque). Grade e eixos em Code Blue tints (100/200).
 
 ## Logo e rodapé
-- Espaço de logo no topo e rodapé; placeholder até receber o SVG oficial (asset de referência no DS: `/assets/brand/logos/logo-on-dark.png`).
+- **Logos e símbolos já baixados do DS em `assets/brand/`** (copiar para `client/public/brand/` na Fase 3):
+  - `logos/logo-on-light.png` → header/rodapé em fundo claro (admin, devolutiva, PDF)
+  - `logos/logo-on-dark.png` → fundos escuros (hero com Mesh Escuro, login)
+  - `logos/logo-gradient.png`, `logos/logo-insight.png`, `logos/logo-white-faint.png` → variações
+  - `symbols/symbol-blue|lime|white.png`, `badge-blue|lime.png` → favicon e marcas pequenas
+- Os PNGs são enormes (até 8571 px de largura): gerar versões redimensionadas (~600 px) ou exibir com `height` fixo. SVG oficial ainda não disponível no DS.
 - Rodapé e abertura com a assinatura **IA First. Human Driven.**
 
 ## Tom de voz

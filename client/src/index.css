@@ -1,0 +1,81 @@
+@import 'tailwindcss';
+@import './theme/fonts.css';
+@import './theme/tokens.css';
+
+/* Tailwind v4: os tokens do DS viram classes (bg-code-blue, text-insight, shadow-md, rounded-xl...). */
+@theme inline {
+  --color-code-blue: var(--code-blue);
+  --color-code-blue-50: var(--code-blue-50);
+  --color-code-blue-100: var(--code-blue-100);
+  --color-code-blue-200: var(--code-blue-200);
+  --color-code-blue-300: var(--code-blue-300);
+  --color-insight: var(--insight);
+  --color-insight-50: var(--insight-50);
+  --color-insight-100: var(--insight-100);
+  --color-insight-500: var(--insight-500);
+  --color-pulse-lime: var(--pulse-lime);
+  --color-lime-50: var(--lime-50);
+  --color-lime-500: var(--lime-500);
+  --color-lime-900: var(--lime-900);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-root: var(--root);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-info: var(--info);
+
+  --font-sans: Aileron, Inter, system-ui, sans-serif;
+  --font-display: 'Just Sans', Inter, system-ui, sans-serif;
+}
+
+/* Sombras e raios têm o mesmo nome no DS e no Tailwind: valores literais (iguais a tokens.css)
+   para não criar referência circular. O espaçamento padrão do Tailwind (4px) já segue o grid do DS. */
+@theme {
+  --shadow-sm: 0 1px 3px rgba(11,27,86,.08);
+  --shadow-md: 0 4px 16px rgba(11,27,86,.12);
+  --shadow-lg: 0 10px 32px rgba(11,27,86,.16);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+}
+
+/* Labels, navegação e categorias: uppercase + 0.2em (DS). */
+@utility text-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+@utility bg-mesh-dark {
+  background: var(--gradient-mesh-dark);
+}
+
+@utility bg-insight-lime {
+  background: var(--gradient-insight-lime);
+}
+
+@utility bg-deep-blue {
+  background: var(--gradient-deep-blue);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-surface font-sans text-code-blue;
+  }
+  h1, h2 {
+    @apply font-bold tracking-tight;
+  }
+  :focus-visible {
+    outline: 2px solid var(--insight);
+    outline-offset: 2px;
+  }
+}

@@ -13,17 +13,18 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] Dados e API → `03-dados-e-api.md`
 
 ## Fase 3 · Fundação (≈1h30)
-- [ ] `git init`, `.gitignore`, `package.json` raiz com scripts `dev | build | start | test | seed`
-- [ ] `server/`: Express, `db.js` (SQLite/Postgres), models, `sync`
-- [ ] `client/`: Vite + React + Tailwind; `theme/tokens.css` + tailwind.config com os tokens do `06-design-system.md`; componentes base `ui/` (Button, Card, Input, Badge, Alert, Progress); rotas vazias
-- [ ] Auth admin (bcrypt + JWT cookie) + tela de login com credenciais demo
-- [ ] Seed idempotente (1 admin, 2 empresas × 15–25 participantes, respostas variadas nos 4 níveis, 1 turma)
-- [ ] **Pronto quando:** login funciona e `/admin` lista 2 empresas
+- [x] `git init`, `.gitignore`, `package.json` raiz com scripts `dev | build | start | test | seed`
+- [x] `server/`: Express, `db.js` (SQLite/Postgres), models, `sync`
+- [x] `client/`: Vite + React + Tailwind; copiar `assets/fonts` → `client/public/fonts` e `assets/brand` → `client/public/brand` (logos redimensionados para 600px, símbolos 256px); `theme/tokens.css` + tokens espelhados via `@theme` (Tailwind v4 não usa `tailwind.config.js`); componentes base `ui/` (Button, Card, Input, Badge, Alert, Progress); rotas vazias
+- [x] Auth admin (bcrypt + JWT cookie) + tela de login com credenciais demo
+- [x] Seed idempotente — etapa 1: 1 admin, 2 empresas (18 e 22 participantes com links), 1 turma vazia. **Respostas nos 4 níveis e turma populada: etapa 2, na Fatia A** (calculadas pelo motor de `scoring/`, regra 1)
+- [x] **Pronto quando:** login funciona e `/admin` lista 2 empresas
 - [ ] Subir pro GitHub e importar no Replit já agora (validar PORT, DATABASE_URL, build)
 
 ## Fase 4 · Fatias
 ### Fatia A · Participante + pontuação (C2, C5) — prioridade máxima
 - [ ] `scoring/questions.js`, `score.js`, testes T1–T8 passando
+- [ ] Seed etapa 2: respostas variadas cobrindo os 4 níveis (calculadas pelo motor) e turma exemplo com participantes (RF-19, C6)
 - [ ] `GET/PATCH /api/r/:token`, `POST /submit`
 - [ ] Telas Welcome (LGPD, 9–12 min) → Identify → Questionnaire (por dimensão, progresso, voltar)
 - [ ] **Pronto quando:** responder salva scores/nível no banco e testes passam

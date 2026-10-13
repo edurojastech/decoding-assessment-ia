@@ -178,7 +178,7 @@ export default function Diagnosis({ company, onNavigate }) {
           <CardBody className="flex flex-col items-start gap-3">
             <h2 className="text-xl">Ainda não há respostas</h2>
             <p className="text-code-blue/80">
-              Quando as pessoas concluírem o questionário, o perfil dos respondentes aparece aqui. Confira os links na aba Participantes.
+              Quando as pessoas concluírem o questionário, o perfil dos respondentes aparece aqui. Confira os links na tela Participantes.
             </p>
             <Button variant="secondary" size="sm" onClick={() => onNavigate('participantes')}>Ver participantes</Button>
           </CardBody>

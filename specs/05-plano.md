@@ -48,11 +48,11 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] **Pronto quando:** dá para montar Turma A/B/C da empresa demo — 17 testes (`aggregate.test.js` + `turmas.test.js`, incluindo A/B/C e mover) e verificado no Chrome headless (desktop 1280px e celular 390px): diagnóstico, grupos → criar turma, turmas, visão geral
 
 ## Fase 4.5 · Shell de dashboard (padrão Decoding Campus) — ver `07-layout-dashboard.md`
-- [ ] Sidebar navy + topbar com breadcrumb + seletor de empresa
-- [ ] Visão geral da empresa: hero, KPIs (concluídos · em andamento · pendentes · cobertura), distribuição por nível, "Pede atenção"
-- [ ] Telas existentes dentro do shell com cabeçalho padrão; filtro por status via URL
-- [ ] Responsivo (drawer < 1024px) e testes verdes
-- [ ] **Pronto quando:** todo o admin é navegável pela sidebar e os KPIs batem com a lista
+- [x] Sidebar navy + topbar com breadcrumb + seletor de empresa (`components/layout/`; empresa na URL, última lembrada em localStorage)
+- [x] Visão geral da empresa: hero, KPIs (concluídos · em andamento · pendentes · cobertura), distribuição por nível, "Pede atenção" — sem o item "autopercepção acima da prática": a flag `inconsistency` não sai em nenhum endpoint do admin e a API ficou intocada
+- [x] Telas existentes dentro do shell com cabeçalho padrão; filtro por status via URL (`?status=`)
+- [x] Responsivo (drawer < 1024px) e testes verdes — 117 testes; verificado no Chrome headless (1280px e 390px), sem rolagem horizontal
+- [x] **Pronto quando:** todo o admin é navegável pela sidebar e os KPIs batem com a lista (mesma fonte: `statusCounts`; ex.: 2 pendentes → 2 linhas)
 
 ## Fase 5 · Validar (C1–C7)
 | C | Teste | OK |

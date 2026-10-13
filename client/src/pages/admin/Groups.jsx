@@ -48,7 +48,7 @@ function CreateFromGroup({ group, company, onCreated, onCancel }) {
       <Input label="Nome da turma" value={name} maxLength={120} autoFocus onChange={(e) => setName(e.target.value)} error={error} />
       <p className="text-sm text-code-blue/80">
         Entram {free.length} {free.length === 1 ? 'pessoa' : 'pessoas'} deste grupo que ainda não têm turma, com o percurso
-        “{group.offer}”. Depois dá para mover pessoas e juntar níveis vizinhos na aba Turmas.
+        “{group.offer}”. Depois dá para mover pessoas e juntar níveis vizinhos na tela Turmas.
       </p>
       <div className="flex flex-wrap gap-2">
         <Button type="submit" size="sm" disabled={saving}>{saving ? 'Criando…' : 'Criar turma'}</Button>
@@ -153,7 +153,7 @@ export default function Groups({ company, onNavigate }) {
       {notice && (
         <Alert variant="success" title={`Turma “${notice}” criada`}>
           <button type="button" className="font-semibold underline underline-offset-4" onClick={() => onNavigate('turmas')}>
-            Abrir a aba Turmas
+            Abrir Turmas
           </button>
         </Alert>
       )}

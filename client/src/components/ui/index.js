@@ -10,3 +10,7 @@ export { Alert } from './Alert.jsx';
 export { Tag } from './Tag.jsx';
 export { Progress } from './Progress.jsx';
 export { Avatar } from './Avatar.jsx';
+export { KpiCard } from './KpiCard.jsx';
+export { HeroCard } from './HeroCard.jsx';
+export { AttentionList } from './AttentionList.jsx';
+export { Icon } from './Icon.jsx';

@@ -348,7 +348,7 @@ export default function Turmas({ company }) {
       </Card>
 
       {board.turmas.length === 0 && (
-        <Card><CardBody><p className="text-code-blue/80">Nenhuma turma ainda. Crie uma aqui ou a partir de um grupo na aba Grupos.</p></CardBody></Card>
+        <Card><CardBody><p className="text-code-blue/80">Nenhuma turma ainda. Crie uma aqui ou a partir de um grupo na tela Grupos.</p></CardBody></Card>
       )}
 
       {board.turmas.map((t) => <TurmaCard key={t.id} turma={t} board={board} onBoard={setBoard} />)}

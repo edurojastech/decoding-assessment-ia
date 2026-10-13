@@ -9,7 +9,7 @@
 **Sidebar fixa à esquerda (~240px), fundo Code Blue `#0B1B56`:**
 - Topo: logo Decoding (on dark) + label "CAMPUS" (uppercase, letter-spacing 0.2em, pequeno).
 - Bloco "ESPAÇO DE TRABALHO": card com borda sutil mostrando a **empresa selecionada** (ícone + nome + "Assessment de IA") e chevron → dropdown para trocar de empresa (lista de `/api/companies`).
-- Label "ADMINISTRADORA" e navegação com ícones (lucide-react ou SVG próprio):
+- Label "ADMINISTRADORA" e navegação com ícones Tabler (`@tabler/icons-react`, padrão do DS — ver `06-design-system.md`):
   - Visão geral (todas as empresas)
   - Participantes
   - Importar

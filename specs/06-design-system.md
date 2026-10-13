@@ -94,6 +94,12 @@ Espelhar esses tokens no `tailwind.config.js` (`theme.extend.colors/boxShadow/bo
 
 Criar em `client/src/components/ui/` com a mesma API do DS (ex.: `<Button variant="accent" size="lg">`).
 
+## Ícones
+- Fonte: https://design-system-decoding.vercel.app/icones.
+- **Interface (botões, estados, navegação): Tabler Icons** (`@tabler/icons-react`), `stroke={1.5}` — no app, sempre via `components/ui/Icon.jsx` (decorativo, `aria-hidden`).
+- **Identidade (símbolo, logo, splash): PNGs lineares da marca** — nunca emojis como ícone.
+- Cor: Code Blue ou Insight no fundo claro; Lime só no fundo escuro (Code Blue ou Root); nunca Insight sobre insight-50/100/200.
+
 ## Gráficos
 Radar, barras por nível, cobertura e barras por área com Code Blue (linha/contorno), Insight (preenchimento principal) e Lime (destaque). Grade e eixos em Code Blue tints (100/200).
 

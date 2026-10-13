@@ -26,8 +26,8 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] `scoring/questions.js`, `score.js`, `recommend.js`, testes T1–T8 passando (+ fronteiras 60%/70%, trava mínima, evidências, validação)
 - [x] Seed etapa 2: respostas variadas cobrindo os 4 níveis (calculadas pelo motor) e turma exemplo com participantes (RF-19, C6) — banco já semeado (Replit): rodar `npm run seed` uma vez
 - [x] `GET/PATCH /api/r/:token`, `POST /submit` (12 testes em `public.test.js`)
-- [ ] Telas Welcome (LGPD, 9–12 min) → Identify → Questionnaire (por dimensão, progresso, voltar)
-- [ ] **Pronto quando:** responder salva scores/nível no banco e testes passam
+- [x] Telas Welcome (LGPD, 9–12 min) → Identify → Questionnaire (perfil + por dimensão, progresso, voltar, pular com aviso) → conclusão (Result na Fatia B)
+- [x] **Pronto quando:** responder salva scores/nível no banco e testes passam — verificado via API pelo proxy do Vite; revisão visual no navegador pendente
 
 ### Fatia B · Devolutiva + PDF (C2)
 - [ ] `services/reportIndividual.js` (7 blocos, frases + evidências, recomendação)

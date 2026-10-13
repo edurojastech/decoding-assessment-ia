@@ -1,0 +1,40 @@
+import { cx } from './cx.js';
+
+// Opção selecionável em card (radio ou checkbox nativo, acessível por teclado).
+// Usada nas alternativas do questionário, nas ferramentas (P0c) e no consentimento.
+export function OptionCard({
+  type = 'radio', checked = false, hint, className, children, ...props
+}) {
+  return (
+    <label
+      className={cx(
+        'flex cursor-pointer items-start gap-3 rounded-lg border p-4 text-base text-code-blue',
+        'transition-[border-color,background-color] duration-150',
+        'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-insight',
+        checked ? 'border-insight bg-insight-50' : 'border-code-blue-100 bg-canvas hover:border-code-blue-200',
+        className,
+      )}
+    >
+      <input type={type} checked={checked} className="sr-only" {...props} />
+      <span
+        aria-hidden="true"
+        className={cx(
+          'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border-2 transition-colors duration-150',
+          type === 'radio' ? 'rounded-full' : 'rounded-sm',
+          checked ? 'border-code-blue bg-code-blue' : 'border-code-blue-200 bg-canvas',
+        )}
+      >
+        {checked && type === 'radio' && <span className="h-2 w-2 rounded-full bg-canvas" />}
+        {checked && type === 'checkbox' && (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="h-3.5 w-3.5 text-canvas">
+            <path d="M5 12l5 5 9-10" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        )}
+      </span>
+      <span className="min-w-0">
+        {children}
+        {hint && <span className="mt-1 block text-sm text-code-blue/70">{hint}</span>}
+      </span>
+    </label>
+  );
+}

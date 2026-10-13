@@ -5,7 +5,7 @@ import { AdminLayout } from './components/AdminLayout.jsx';
 import Login from './pages/admin/Login.jsx';
 import Overview from './pages/admin/Overview.jsx';
 import Company from './pages/admin/Company.jsx';
-import Welcome from './pages/participant/Welcome.jsx';
+import ParticipantFlow from './pages/participant/ParticipantFlow.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 // Rotas conforme specs/03-dados-e-api.md ("Rotas do front").
@@ -13,7 +13,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/admin" replace />} />
-      <Route path="/r/:token" element={<Welcome />} />
+      <Route path="/r/:token" element={<ParticipantFlow />} />
 
       <Route path="/admin" element={<AuthProvider />}>
         <Route path="login" element={<Login />} />

@@ -9,6 +9,7 @@ App fullstack de diagnóstico de maturidade em IA (porta de entrada da Trilha de
 - `specs/03-dados-e-api.md` models e endpoints
 - `specs/04-pontuacao.md` perguntas, algoritmo, testes, frases
 - `specs/05-plano.md` fases e fatias (marque os checkboxes ao concluir)
+- `specs/07-layout-dashboard.md` layout do admin no padrão Decoding Campus (sidebar, KPIs, hero)
 - `specs/06-design-system.md` design system Decoding (tokens, tipografia, componentes, tom de voz)
 
 ## Stack

@@ -47,6 +47,13 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] Visão geral de todas as empresas (`GET /api/admin/overview`: macro + distribuição por empresa)
 - [x] **Pronto quando:** dá para montar Turma A/B/C da empresa demo — 17 testes (`aggregate.test.js` + `turmas.test.js`, incluindo A/B/C e mover) e verificado no Chrome headless (desktop 1280px e celular 390px): diagnóstico, grupos → criar turma, turmas, visão geral
 
+## Fase 4.5 · Shell de dashboard (padrão Decoding Campus) — ver `07-layout-dashboard.md`
+- [ ] Sidebar navy + topbar com breadcrumb + seletor de empresa
+- [ ] Visão geral da empresa: hero, KPIs (concluídos · em andamento · pendentes · cobertura), distribuição por nível, "Pede atenção"
+- [ ] Telas existentes dentro do shell com cabeçalho padrão; filtro por status via URL
+- [ ] Responsivo (drawer < 1024px) e testes verdes
+- [ ] **Pronto quando:** todo o admin é navegável pela sidebar e os KPIs batem com a lista
+
 ## Fase 5 · Validar (C1–C7)
 | C | Teste | OK |
 |---|-------|----|

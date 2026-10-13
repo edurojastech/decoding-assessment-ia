@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web"]
+  modules = ["nodejs-20", "web"]
 
 [nix]
 channel = "stable-25_05"
@@ -46,4 +46,9 @@ exposeLocalhost = true
 [userenv]
 
 [userenv.shared]
-JWT_SECRET = ""
+JWT_SECRET = "9c35d2f241cdbaf7274e3fe17e60a03ebb2f21acecf7ca2fa55fbc20c65a554af73e8f20dbe83427792135ffa1c47f3f"
+
+[deployment]
+deploymentTarget = "autoscale"
+build = ["sh", "-c", "npm install && npm run build"]
+run = ["sh", "-c", "NODE_ENV=production npm start"]

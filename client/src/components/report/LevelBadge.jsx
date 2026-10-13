@@ -8,6 +8,8 @@ const VARIANTS = {
   'Avançado': 'highlight',
 };
 
+export const LEVELS = Object.keys(VARIANTS);
+
 export function LevelBadge({ level, className }) {
   if (!level) return null;
   return <Badge variant={VARIANTS[level] ?? 'default'} className={className}>{level}</Badge>;

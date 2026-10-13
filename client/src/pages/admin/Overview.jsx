@@ -1,7 +1,53 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { api } from '../../lib/api.js';
-import { Alert, Badge, Card, CardBody, Progress } from '../../components/ui/index.js';
+import { Alert, Badge, Button, Card, CardBody, Input, Progress } from '../../components/ui/index.js';
+
+// RF-02: cadastro da empresa. Depois de criar, segue para a importação dos participantes.
+function NewCompanyForm() {
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (!name.trim()) {
+      setError('Informe o nome da empresa.');
+      return;
+    }
+    setError('');
+    setSaving(true);
+    try {
+      const company = await api.post('/companies', { name });
+      navigate(`/admin/empresas/${company.id}?aba=importar`, { state: { name: company.name } });
+    } catch (err) {
+      setError(err.message);
+      setSaving(false);
+    }
+  }
+
+  return (
+    <Card>
+      <CardBody>
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4 sm:flex-row sm:items-start">
+          <Input
+            label="Nova empresa"
+            placeholder="Nome da empresa"
+            value={name}
+            maxLength={160}
+            onChange={(e) => setName(e.target.value)}
+            error={error}
+            className="flex-1"
+          />
+          <Button type="submit" disabled={saving} className="sm:mt-[26px] sm:h-11">
+            {saving ? 'Cadastrando…' : 'Cadastrar empresa'}
+          </Button>
+        </form>
+      </CardBody>
+    </Card>
+  );
+}
 
 // RF-17 (base): lista as empresas com convidados, respondentes e cobertura.
 // Os números macro (distribuição por nível) entram na Fatia D.
@@ -24,12 +70,14 @@ export default function Overview() {
         </p>
       </div>
 
+      <NewCompanyForm />
+
       {error && <Alert variant="error" title="Não foi possível carregar as empresas">{error}</Alert>}
 
       {!companies && !error && <p role="status" className="text-sm text-code-blue/70">Carregando…</p>}
 
       {companies?.length === 0 && (
-        <Card><CardBody><p>Nenhuma empresa cadastrada ainda.</p></CardBody></Card>
+        <Card><CardBody><p>Nenhuma empresa cadastrada ainda. Cadastre a primeira acima.</p></CardBody></Card>
       )}
 
       {companies?.length > 0 && (
@@ -39,9 +87,9 @@ export default function Overview() {
               <Card variant="gradient" className="h-full transition-shadow duration-150 hover:shadow-lg">
                 <CardBody className="flex h-full flex-col gap-5">
                   <div className="flex items-start justify-between gap-3">
-                    <h2 className="text-xl">{company.name}</h2>
-                    <Badge variant={company.responded > 0 ? 'info' : 'default'}>
-                      {company.responded > 0 ? 'Em andamento' : 'Sem respostas'}
+                    <h2 className="min-w-0 break-words text-xl">{company.name}</h2>
+                    <Badge variant={company.invited === 0 ? 'default' : 'info'}>
+                      {company.invited === 0 ? 'Sem participantes' : company.responded > 0 ? 'Em andamento' : 'Sem respostas'}
                     </Badge>
                   </div>
                   <p className="text-sm text-code-blue/80">

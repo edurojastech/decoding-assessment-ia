@@ -36,9 +36,9 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] **Pronto quando:** PDF baixa e o link reabre a devolutiva — verificado no Chrome headless (desktop 1280px e celular 390px) com participantes do seed, incluindo a trava de consistência
 
 ### Fatia C · Admin: empresas, importação, links (C1)
-- [ ] CRUD empresa; import CSV (upload/colar), erros por linha, modelo para baixar
-- [ ] Lista de participantes com status/filtros; copiar link; exportar CSV
-- [ ] **Pronto quando:** CSV com 1 linha inválida importa as válidas e mostra o erro
+- [x] CRUD empresa (inclui `PATCH /api/companies/:id` para renomear); import CSV (upload/colar), erros por linha, modelo para baixar — `services/csvImport.js` (aspas, BOM, `,` `;` ou tab colado de planilha; arquivo lido no navegador, UTF-8 ou Windows-1252, e enviado como `{csv}`); linhas inválidas voltam para a área de texto para correção
+- [x] Lista de participantes com status/filtros (área, nível, status); copiar link (e todos, em formato de planilha); exportar CSV `nome,email,link`; excluir participante/empresa com confirmação (RF-18). Links usam `PUBLIC_URL` ou a origem acessada pelo admin (`trust proxy` → https no Replit)
+- [x] **Pronto quando:** CSV com 1 linha inválida importa as válidas e mostra o erro — 21 testes (`csvImport.test.js` + `companies.test.js`) e verificado no Chrome headless (desktop 1280px e celular 390px): cadastro → importação com linha inválida → lista → filtros → copiar → exportar → excluir
 
 ### Fatia D · Consolidado, grupos, turmas (C3, C4)
 - [ ] `/summary`: cobertura, distribuição, radar médio, área × dimensão (heatmap), forças/lacunas
@@ -50,7 +50,7 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 ## Fase 5 · Validar (C1–C7)
 | C | Teste | OK |
 |---|-------|----|
-| C1 | Importar CSV com linha inválida, exportar links | [ ] |
+| C1 | Importar CSV com linha inválida, exportar links | [x] |
 | C2 | Abrir link, responder, ver devolutiva, baixar PDF | [ ] |
 | C3 | Consolidado com cobertura, níveis, radar, mapa por área | [ ] |
 | C4 | Criar turma e mover pessoa | [ ] |

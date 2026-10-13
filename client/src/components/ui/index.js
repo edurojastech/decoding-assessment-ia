@@ -1,9 +1,12 @@
-// Componentes do DS Decoding (specs/06-design-system.md). Tag e Avatar entram nas Fatias C/D.
+// Componentes do DS Decoding (specs/06-design-system.md).
 export { Button } from './Button.jsx';
 export { Card, CardBody } from './Card.jsx';
 export { Input } from './Input.jsx';
 export { Select } from './Select.jsx';
+export { Textarea } from './Textarea.jsx';
 export { OptionCard } from './OptionCard.jsx';
 export { Badge } from './Badge.jsx';
 export { Alert } from './Alert.jsx';
+export { Tag } from './Tag.jsx';
 export { Progress } from './Progress.jsx';
+export { Avatar } from './Avatar.jsx';

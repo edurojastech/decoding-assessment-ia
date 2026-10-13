@@ -24,7 +24,7 @@ Grupos por maturidade = `GROUP BY overallLevel` (sem tabela).
 
 ### Empresas (admin)
 - `POST /api/companies` · `GET /api/companies` · `GET /api/companies/:id`
-- `DELETE /api/companies/:id`
+- `PATCH /api/companies/:id` body `{name}` (renomear; completa o CRUD da Fatia C) · `DELETE /api/companies/:id`
 - `GET /api/companies/:id/summary` → consolidado (cobertura, distribuição, médias por dimensão, área × dimensão, potencialidades, lacunas)
 
 ### Participantes (admin)

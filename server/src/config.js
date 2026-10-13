@@ -37,5 +37,7 @@ export const config = {
     password: env.ADMIN_PASSWORD || 'decoding-demo',
   },
   demoMode: env.DEMO_MODE !== 'false',
+  // Origem dos links pessoais (RF-05). Sem ela, usa a origem da requisição do admin.
+  publicUrl: (env.PUBLIC_URL || '').replace(/\/+$/, '') || null,
   clientDist: path.join(PROJECT_ROOT, 'client', 'dist'),
 };

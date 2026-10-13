@@ -1,4 +1,6 @@
+import { IconCheck } from '@tabler/icons-react';
 import { cx } from './cx.js';
+import { Icon } from './Icon.jsx';
 
 // Opção selecionável em card (radio ou checkbox nativo, acessível por teclado).
 // Usada nas alternativas do questionário, nas ferramentas (P0c) e no consentimento.
@@ -26,9 +28,8 @@ export function OptionCard({
       >
         {checked && type === 'radio' && <span className="h-2 w-2 rounded-full bg-canvas" />}
         {checked && type === 'checkbox' && (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="h-3.5 w-3.5 text-canvas">
-            <path d="M5 12l5 5 9-10" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          // Marca de 14px: traço mais grosso que o padrão 1.5 para continuar legível.
+          <Icon icon={IconCheck} stroke={3} className="h-3.5 w-3.5 text-canvas" />
         )}
       </span>
       <span className="min-w-0">

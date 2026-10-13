@@ -13,3 +13,4 @@ export { Avatar } from './Avatar.jsx';
 export { KpiCard } from './KpiCard.jsx';
 export { HeroCard } from './HeroCard.jsx';
 export { AttentionList } from './AttentionList.jsx';
+export { Icon } from './Icon.jsx';

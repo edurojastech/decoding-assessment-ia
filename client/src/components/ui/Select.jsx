@@ -1,5 +1,7 @@
 import { useId } from 'react';
+import { IconChevronDown } from '@tabler/icons-react';
 import { cx } from './cx.js';
+import { Icon } from './Icon.jsx';
 
 // DS: select com o mesmo visual do Input (label, dica e erro).
 export function Select({ label, hint, error, className, id, children, ...props }) {
@@ -27,12 +29,10 @@ export function Select({ label, hint, error, className, id, children, ...props }
         >
           {children}
         </select>
-        <svg
-          aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+        <Icon
+          icon={IconChevronDown}
           className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-insight"
-        >
-          <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        />
       </div>
       {hint && !error && <p id={hintId} className="text-sm text-code-blue/70">{hint}</p>}
       {error && (

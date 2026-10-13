@@ -1,6 +1,7 @@
 import { useCallback, useId, useRef, useState } from 'react';
 import { Link } from 'react-router';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { IconCheck, IconSelector } from '@tabler/icons-react';
+import { Icon } from '../ui/Icon.jsx';
 import { cx } from '../ui/cx.js';
 import { useDismiss } from './useDismiss.js';
 import { companyPath } from './nav.js';
@@ -27,7 +28,7 @@ export function WorkspaceSwitcher({ companies, selected }) {
           <span className="block truncate text-sm font-semibold text-canvas">{selected?.name ?? 'Selecione uma empresa'}</span>
           <span className="block truncate text-xs text-canvas/70">Assessment de IA</span>
         </span>
-        <ChevronsUpDown aria-hidden="true" className="h-4 w-4 shrink-0 text-canvas/70" />
+        <Icon icon={IconSelector} className="h-4 w-4 shrink-0 text-canvas/70" />
         <span className="sr-only">Trocar de empresa</span>
       </button>
 
@@ -49,7 +50,7 @@ export function WorkspaceSwitcher({ companies, selected }) {
                 >
                   <span className="min-w-0 flex-1 truncate">{c.name}</span>
                   <span className="shrink-0 text-xs text-code-blue/60">{c.coverage}%</span>
-                  {c.id === selected?.id && <Check aria-hidden="true" className="h-4 w-4 shrink-0" />}
+                  {c.id === selected?.id && <Icon icon={IconCheck} className="h-4 w-4 shrink-0" />}
                 </Link>
               </li>
             ))}

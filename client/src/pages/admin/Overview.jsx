@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useOutletContext } from 'react-router';
-import { ArrowRight, Building2, CircleCheck, PieChart, Plus, Users } from 'lucide-react';
+import {
+  IconArrowRight, IconBuilding, IconChartPie, IconCircleCheck, IconPlus, IconUsers,
+} from '@tabler/icons-react';
 import { api } from '../../lib/api.js';
 import { useAuth } from '../../lib/auth.jsx';
-import { Alert, Badge, Button, Card, CardBody, Input, KpiCard, Progress } from '../../components/ui/index.js';
+import { Alert, Badge, Button, Card, CardBody, Icon, Input, KpiCard, Progress } from '../../components/ui/index.js';
 import { LevelBars } from '../../components/charts/LevelBars.jsx';
 import { CompositionBar } from '../../components/charts/CompositionBar.jsx';
 import { PageHeader } from '../../components/layout/PageHeader.jsx';
@@ -71,11 +73,11 @@ function Totals({ totals }) {
   return (
     <>
       <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <li><KpiCard icon={Building2} label="Empresas" value={totals.companies} caption="no assessment" className="h-full" /></li>
-        <li><KpiCard icon={Users} label="Convidados" value={totals.invited} caption="pessoas com link pessoal" className="h-full" /></li>
-        <li><KpiCard icon={CircleCheck} label="Respondentes" value={totals.responded} caption="concluíram o questionário" className="h-full" /></li>
+        <li><KpiCard icon={IconBuilding} label="Empresas" value={totals.companies} caption="no assessment" className="h-full" /></li>
+        <li><KpiCard icon={IconUsers} label="Convidados" value={totals.invited} caption="pessoas com link pessoal" className="h-full" /></li>
+        <li><KpiCard icon={IconCircleCheck} label="Respondentes" value={totals.responded} caption="concluíram o questionário" className="h-full" /></li>
         <li>
-          <KpiCard icon={PieChart} label="Cobertura geral" value={`${totals.coverage}%`} caption={`${totals.responded} de ${totals.invited} convidados`} className="h-full">
+          <KpiCard icon={IconChartPie} label="Cobertura geral" value={`${totals.coverage}%`} caption={`${totals.responded} de ${totals.invited} convidados`} className="h-full">
             <Progress value={totals.coverage} showValue={false} hideLabel size="sm" label="Cobertura geral" />
           </KpiCard>
         </li>
@@ -120,7 +122,7 @@ function CompanyCard({ company }) {
           state={{ name: company.name }}
           className="mt-auto inline-flex items-center gap-1 self-start text-sm font-semibold hover:underline"
         >
-          Abrir painel<span className="sr-only"> de {company.name}</span> <ArrowRight aria-hidden="true" className="h-4 w-4" />
+          Abrir painel<span className="sr-only"> de {company.name}</span> <Icon icon={IconArrowRight} className="h-4 w-4" />
         </Link>
       </CardBody>
     </Card>
@@ -149,7 +151,7 @@ export default function Overview() {
         subtitle="Acompanhe o preenchimento de cada empresa. Os resultados aparecem sempre como visão dos respondentes, junto com a cobertura."
         actions={!creating && companies?.length > 0 && (
           <Button variant="accent" size="sm" onClick={() => setCreating(true)}>
-            <Plus aria-hidden="true" className="h-4 w-4" /> Nova empresa
+            <Icon icon={IconPlus} className="h-4 w-4" /> Nova empresa
           </Button>
         )}
       />

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
+import { IconX } from '@tabler/icons-react';
+import { Icon } from '../ui/Icon.jsx';
 import { Button } from '../ui/index.js';
 
 const LEVELS = [
@@ -35,7 +36,7 @@ export function HelpDialog({ onClose }) {
             <h2 id="ajuda-titulo" className="mt-2 text-2xl font-light tracking-normal">Como ler o assessment</h2>
           </div>
           <button ref={closeRef} type="button" onClick={onClose} className="rounded-full p-1 hover:bg-code-blue-50">
-            <X aria-hidden="true" className="h-5 w-5" />
+            <Icon icon={IconX} className="h-5 w-5" />
             <span className="sr-only">Fechar ajuda</span>
           </button>
         </div>

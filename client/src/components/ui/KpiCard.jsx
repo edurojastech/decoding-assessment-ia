@@ -1,13 +1,15 @@
 import { Link } from 'react-router';
 import { cx } from './cx.js';
+import { Icon } from './Icon.jsx';
 
 // KPI do dashboard (specs/07): ícone + label pequeno, número grande em peso leve e legenda.
-// Com `to`, o card inteiro vira link (ex.: lista de participantes filtrada pelo status).
-export function KpiCard({ icon: Icon, label, value, caption, to, children, className }) {
+// Ícone em Insight (DS: fundo claro → ícones Insight). Com `to`, o card inteiro vira link
+// (ex.: lista de participantes filtrada pelo status).
+export function KpiCard({ icon, label, value, caption, to, children, className }) {
   const body = (
     <>
       <p className="flex items-center gap-2 text-sm text-code-blue/80">
-        {Icon && <Icon aria-hidden="true" className="h-4 w-4 shrink-0 text-code-blue/70" />}
+        {icon && <Icon icon={icon} className="h-5 w-5 text-insight" />}
         {label}
       </p>
       <p className="mt-3 text-[40px] leading-none font-light">{value}</p>

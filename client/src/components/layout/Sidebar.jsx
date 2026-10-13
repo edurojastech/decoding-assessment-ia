@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router';
-import { MoreHorizontal, X } from 'lucide-react';
+import { IconDots, IconX } from '@tabler/icons-react';
+import { Icon } from '../ui/Icon.jsx';
 import { Logo } from '../Logo.jsx';
 import { Avatar } from '../ui/index.js';
 import { cx } from '../ui/cx.js';
@@ -10,7 +11,7 @@ import { COMPANY_PAGES, OVERVIEW_PAGE, companyPath } from './nav.js';
 const ITEM = 'relative flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold transition-colors duration-150';
 const NO_COMPANY = 'Selecione uma empresa no espaço de trabalho';
 
-function NavItem({ to, end, icon: Icon, label }) {
+function NavItem({ to, end, icon, label }) {
   return (
     <NavLink
       to={to}
@@ -23,7 +24,7 @@ function NavItem({ to, end, icon: Icon, label }) {
       {({ isActive }) => (
         <>
           {isActive && <span aria-hidden="true" className="absolute inset-y-2 -left-4 w-1 rounded-r-full bg-pulse-lime" />}
-          <Icon aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+          <Icon icon={icon} className="h-[18px] w-[18px]" />
           {label}
         </>
       )}
@@ -32,10 +33,10 @@ function NavItem({ to, end, icon: Icon, label }) {
 }
 
 // Sem empresa selecionada, os itens da empresa ficam visíveis, mas desabilitados (com dica).
-function DisabledItem({ icon: Icon, label }) {
+function DisabledItem({ icon, label }) {
   return (
     <span aria-disabled="true" title={NO_COMPANY} className={cx(ITEM, 'cursor-not-allowed text-canvas/40')}>
-      <Icon aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+      <Icon icon={icon} className="h-[18px] w-[18px]" />
       {label}
       <span className="sr-only"> ({NO_COMPANY.toLowerCase()})</span>
     </span>
@@ -60,7 +61,7 @@ export function Sidebar({ companies, selected, user, onLogout, open, onClose }) 
           <p className="text-label mt-2 text-[10px] text-canvas/70">Campus</p>
         </div>
         <button type="button" onClick={onClose} className="rounded-full p-1 text-canvas/80 hover:text-canvas lg:hidden">
-          <X aria-hidden="true" className="h-5 w-5" />
+          <Icon icon={IconX} className="h-5 w-5" />
           <span className="sr-only">Fechar menu</span>
         </button>
       </div>
@@ -97,7 +98,7 @@ export function Sidebar({ companies, selected, user, onLogout, open, onClose }) 
           onLogout={onLogout}
           placement="top"
           label="Opções da conta"
-          trigger={<MoreHorizontal aria-hidden="true" className="h-5 w-5 text-canvas/80 hover:text-canvas" />}
+          trigger={<Icon icon={IconDots} className="h-5 w-5 text-canvas/80 hover:text-canvas" />}
         />
       </div>
     </aside>

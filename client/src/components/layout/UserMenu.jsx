@@ -1,5 +1,6 @@
 import { useCallback, useId, useRef, useState } from 'react';
-import { LogOut } from 'lucide-react';
+import { IconLogout } from '@tabler/icons-react';
+import { Icon } from '../ui/Icon.jsx';
 import { cx } from '../ui/cx.js';
 import { useDismiss } from './useDismiss.js';
 
@@ -42,7 +43,7 @@ export function UserMenu({ user, onLogout, trigger, label, placement = 'bottom' 
             onClick={() => { close(); onLogout(); }}
             className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm font-semibold hover:bg-code-blue-50"
           >
-            <LogOut aria-hidden="true" className="h-4 w-4" /> Sair
+            <Icon icon={IconLogout} className="h-4 w-4" /> Sair
           </button>
         </div>
       )}

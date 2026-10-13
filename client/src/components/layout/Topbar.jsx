@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronRight, CircleHelp, Menu } from 'lucide-react';
+import { IconChevronDown, IconChevronRight, IconHelpCircle, IconMenu2 } from '@tabler/icons-react';
+import { Icon } from '../ui/Icon.jsx';
 import { Avatar } from '../ui/index.js';
 import { UserMenu, displayName } from './UserMenu.jsx';
 import { HelpDialog } from './HelpDialog.jsx';
@@ -16,22 +17,22 @@ export function Topbar({ page, user, onLogout, onMenu, menuOpen }) {
         aria-controls="admin-sidebar"
         className="-ml-1 rounded-full p-2 hover:bg-code-blue-50 lg:hidden"
       >
-        <Menu aria-hidden="true" className="h-5 w-5" />
+        <Icon icon={IconMenu2} className="h-5 w-5" />
         <span className="sr-only">Abrir menu</span>
       </button>
 
       <nav aria-label="Você está em" className="min-w-0 flex-1">
         <ol className="flex items-center gap-2 text-sm">
           <li className="hidden text-code-blue/60 md:block">Decoding Campus</li>
-          <li aria-hidden="true" className="hidden text-code-blue/40 md:block"><ChevronRight className="h-4 w-4" /></li>
+          <li aria-hidden="true" className="hidden text-code-blue/40 md:block"><Icon icon={IconChevronRight} className="h-4 w-4" /></li>
           <li className="hidden text-code-blue/60 sm:block">Assessment de IA</li>
-          <li aria-hidden="true" className="hidden text-code-blue/40 sm:block"><ChevronRight className="h-4 w-4" /></li>
+          <li aria-hidden="true" className="hidden text-code-blue/40 sm:block"><Icon icon={IconChevronRight} className="h-4 w-4" /></li>
           <li aria-current="page" className="truncate font-bold">{page}</li>
         </ol>
       </nav>
 
       <button type="button" onClick={() => setHelp(true)} className="rounded-full p-2 hover:bg-code-blue-50">
-        <CircleHelp aria-hidden="true" className="h-5 w-5" />
+        <Icon icon={IconHelpCircle} className="h-5 w-5" />
         <span className="sr-only">Ajuda: níveis e cobertura</span>
       </button>
 
@@ -43,7 +44,7 @@ export function Topbar({ page, user, onLogout, onMenu, menuOpen }) {
           <>
             <Avatar name={displayName(user)} tone="insight" size="sm" />
             <span className="hidden text-sm font-semibold md:inline">{displayName(user)}</span>
-            <ChevronDown aria-hidden="true" className="hidden h-4 w-4 md:block" />
+            <Icon icon={IconChevronDown} className="hidden h-4 w-4 md:block" />
           </>
         )}
       />

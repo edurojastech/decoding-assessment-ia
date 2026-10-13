@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
 import {
-  ArrowRight, CircleCheck, CircleDashed, CircleUser, Clock, Hourglass, PieChart, TriangleAlert, UserPlus,
-} from 'lucide-react';
+  IconAlertTriangle, IconArrowRight, IconChartPie, IconCircleCheck, IconCircleDashed, IconClock,
+  IconHourglass, IconUserCircle, IconUserPlus,
+} from '@tabler/icons-react';
 import { api } from '../../lib/api.js';
 import { copyText } from '../../lib/clipboard.js';
 import { saveLastCompany } from '../../lib/lastCompany.js';
 import {
-  Alert, AttentionList, Button, Card, CardBody, HeroCard, Input, KpiCard, Progress,
+  Alert, AttentionList, Button, Card, CardBody, HeroCard, Icon, Input, KpiCard, Progress,
 } from '../../components/ui/index.js';
 import { LevelBars } from '../../components/charts/LevelBars.jsx';
 import { PageHeader } from '../../components/layout/PageHeader.jsx';
@@ -138,28 +139,28 @@ function attentionItems(company, summary, unassigned, to) {
   const items = [];
   if (pendente > 0) {
     items.push({
-      id: 'pendentes', icon: Hourglass, to: to('participantes', '?status=pendente'),
+      id: 'pendentes', icon: IconHourglass, to: to('participantes', '?status=pendente'),
       title: `${plural(pendente, 'participante pendente', 'participantes pendentes')}`,
       text: 'Ainda não abriram o link. Copie os links e envie de novo.',
     });
   }
   if (inProgress > 0) {
     items.push({
-      id: 'andamento', icon: Clock, to: to('participantes', '?status=em_andamento'),
+      id: 'andamento', icon: IconClock, to: to('participantes', '?status=em_andamento'),
       title: `${plural(inProgress, 'questionário em andamento', 'questionários em andamento')}`,
       text: 'Começaram e ainda não concluíram.',
     });
   }
   if (incomplete > 0) {
     items.push({
-      id: 'incompletos', icon: TriangleAlert, to: to('grupos'),
+      id: 'incompletos', icon: IconAlertTriangle, to: to('grupos'),
       title: `${plural(incomplete, 'resposta com dados insuficientes', 'respostas com dados insuficientes')}`,
       text: 'Responderam menos de 70% do questionário, então o nível não foi calculado.',
     });
   }
   if (unassigned > 0) {
     items.push({
-      id: 'sem-turma', icon: UserPlus, to: to('turmas'),
+      id: 'sem-turma', icon: IconUserPlus, to: to('turmas'),
       title: `${plural(unassigned, 'respondente sem turma', 'respondentes sem turma')}`,
       text: 'Concluíram o questionário e ainda não estão em nenhuma turma.',
     });
@@ -254,7 +255,7 @@ export default function CompanyHome() {
           : <p>Nenhum participante importado ainda.</p>}
         actions={(
           <Button as={Link} to={to('diagnostico')} variant="accent">
-            Ver diagnóstico <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            Ver diagnóstico <Icon icon={IconArrowRight} className="h-4 w-4" />
           </Button>
         )}
         aside={{
@@ -262,7 +263,7 @@ export default function CompanyHome() {
           text: step.text,
           action: (
             <Link to={step.to} className="inline-flex items-center gap-1 self-start text-sm font-semibold text-pulse-lime hover:underline">
-              {step.cta} <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              {step.cta} <Icon icon={IconArrowRight} className="h-4 w-4" />
             </Link>
           ),
         }}
@@ -270,16 +271,16 @@ export default function CompanyHome() {
 
       <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <li>
-          <KpiCard icon={CircleCheck} label="Concluídos" value={concluido} caption="responderam o questionário" to={to('participantes', '?status=concluido')} className="h-full" />
+          <KpiCard icon={IconCircleCheck} label="Concluídos" value={concluido} caption="responderam o questionário" to={to('participantes', '?status=concluido')} className="h-full" />
         </li>
         <li>
-          <KpiCard icon={Clock} label="Em andamento" value={inProgress} caption="começaram e não concluíram" to={to('participantes', '?status=em_andamento')} className="h-full" />
+          <KpiCard icon={IconClock} label="Em andamento" value={inProgress} caption="começaram e não concluíram" to={to('participantes', '?status=em_andamento')} className="h-full" />
         </li>
         <li>
-          <KpiCard icon={CircleDashed} label="Pendentes" value={pendente} caption="ainda não abriram o link" to={to('participantes', '?status=pendente')} className="h-full" />
+          <KpiCard icon={IconCircleDashed} label="Pendentes" value={pendente} caption="ainda não abriram o link" to={to('participantes', '?status=pendente')} className="h-full" />
         </li>
         <li>
-          <KpiCard icon={PieChart} label="Cobertura" value={`${company.coverage}%`} caption={`${company.responded} de ${company.invited} convidados`} to={to('participantes')} className="h-full">
+          <KpiCard icon={IconChartPie} label="Cobertura" value={`${company.coverage}%`} caption={`${company.responded} de ${company.invited} convidados`} to={to('participantes')} className="h-full">
             <Progress value={company.coverage} showValue={false} hideLabel size="sm" label="Cobertura" />
           </KpiCard>
         </li>
@@ -298,7 +299,7 @@ export default function CompanyHome() {
                 </h2>
               </div>
               <Link to={to('grupos')} className="inline-flex items-center gap-1 text-sm font-semibold hover:underline">
-                Ver grupos <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                Ver grupos <Icon icon={IconArrowRight} className="h-4 w-4" />
               </Link>
             </div>
             {loading && <p role="status" className="text-sm text-code-blue/70">Carregando…</p>}
@@ -307,7 +308,7 @@ export default function CompanyHome() {
             )}
             {summary && summary.distribution.classified === 0 && (
               <p className="flex items-center gap-2 text-sm text-code-blue/70">
-                <CircleUser aria-hidden="true" className="h-4 w-4" /> Ainda não há respondentes com nível calculado.
+                <Icon icon={IconUserCircle} className="h-4 w-4" /> Ainda não há respondentes com nível calculado.
               </p>
             )}
             {summary?.distribution.incomplete > 0 && (

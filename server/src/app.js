@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { config } from './config.js';
 import { authRouter } from './routes/auth.js';
 import { companiesRouter } from './routes/companies.js';
+import { publicRouter } from './routes/public.js';
 
 export function createApp() {
   const app = express();
@@ -15,6 +16,7 @@ export function createApp() {
   app.get('/api/health', (req, res) => res.json({ ok: true }));
   app.use('/api/auth', authRouter);
   app.use('/api/companies', companiesRouter);
+  app.use('/api/r', publicRouter);
 
   app.use('/api', (req, res) => res.status(404).json({ error: 'Rota não encontrada.' }));
 

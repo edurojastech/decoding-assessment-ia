@@ -61,6 +61,15 @@ faixas: <=25 Iniciante · <=50 Básico · <=75 Intermediário · >75 Avançado
 ```
 Arredondar score para inteiro **depois** de classificar? Decisão: classificar com o valor arredondado (Math.round) para o que a tela mostra bater com o nível.
 
+Decisões de implementação (Fatia A, conferidas contra o `_00-prompt-original.pdf`):
+- **Resposta guardada** = chave da opção (`a`, `b`… ou `nao_sei`), não os pontos — o original pede "guarde a resposta e o peso do tipo" e "guarde o texto da opção escolhida"; duas opções podem valer o mesmo ponto (ex.: Q4). O motor devolve `{option, label, points, type, weight}` por questão.
+- **Geral** = média dos scores de dimensão já arredondados (os exibidos), arredondada.
+- **Empate na evidência**: maior peso (P > C > A, como a lógica de pesos da seção 3) e depois a ordem do questionário.
+- **Lacuna em Aplicação ou Autonomia** (RN-11) = estar entre as duas dimensões mais baixas (definição de "lacunas" do bloco 4 da devolutiva). Intermediário sem essa lacuna → "Do Problema ao Plano" pelo mapeamento da seção 7.
+- **Avançado "com interesse"**: o questionário não mede interesse; recomenda pelo nível e a devolutiva faz o convite.
+- **Foco curto**: só o de Revisão é literal do original; os outros 4 (`scoring/phrases.js`) aguardam validação da Decoding.
+- As questões não são obrigatórias: o participante pode pular, e as regras de 60%/70% tratam o incompleto.
+
 ## Casos de teste obrigatórios (Vitest)
 | # | Entrada | Esperado |
 |---|---------|----------|

@@ -9,7 +9,7 @@
 **Participant** — id, companyId → Company, name, email, area, token (único, UUID), status (`pendente` | `em_andamento` | `concluido`), consentAt, role (função, P0b), tools (JSON, P0c), createdAt
 - Índice único (companyId, email)
 
-**AssessmentResponse** — id, participantId → Participant (1:1), answers (JSON `{Q1: 3, Q4: 'nao_sei', ...}`), dimensionScores (JSON `{familiaridade: {score, level, status, strength, gap}, ...}`), overallScore, overallLevel, flags (JSON `{inconsistency: bool, incomplete: bool}`), selfAvg, practiceAvg, submittedAt
+**AssessmentResponse** — id, participantId → Participant (1:1), answers (JSON `{Q1: {option: 'd', label, points: 3, type: 'A', weight: 1}, Q4: {option: 'nao_sei', points: 0, ...}}` — entrada da API é `{Q1: 'd', Q4: 'nao_sei'}`; ver 04-pontuacao.md), dimensionScores (JSON `{familiaridade: {score, level, status, strength, gap}, ...}`), overallScore, overallLevel, flags (JSON `{inconsistency: bool, incomplete: bool}`), selfAvg, practiceAvg, submittedAt
 
 **Turma** — id, companyId, name, sourceLevel, offer (texto opcional)
 
@@ -35,9 +35,9 @@ Grupos por maturidade = `GROUP BY overallLevel` (sem tabela).
 - `GET /api/template.csv`
 
 ### Participante (público, por token)
-- `GET /api/r/:token` → identificação + questionário + status
-- `PATCH /api/r/:token` → consentimento e correção de identificação
-- `POST /api/r/:token/submit` → calcula e salva scores
+- `GET /api/r/:token` → `{participant: {name, email, area, role, tools, status, consented, companyName}, questionnaire}` (questionário sem pontos/pesos)
+- `PATCH /api/r/:token` body `{consent?, name?, email?, area?, role?, tools?}` → consentimento (LGPD) e correção de identificação/perfil. Sem consentimento → 400; e-mail repetido na empresa → 409; concluído → 409. Não consta na lista base do original (seção 13), mas o fluxo da seção 2 exige
+- `POST /api/r/:token/submit` body `{answers: {Q1: 'd', Q4: 'nao_sei', ...}}` → calcula pelo motor e salva; aceita envio parcial (RN-07/08 tratam). Sem consentimento → 400; resposta inválida → 400 com `details`; já concluído → 409
 - `GET /api/r/:token/result` → devolutiva montada
 
 ### Grupos e turmas (admin)

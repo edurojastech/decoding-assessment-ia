@@ -42,8 +42,8 @@ decoding-assessment-ia/
       ├─ models/              # Company, User, Participant, AssessmentResponse, Turma, TurmaParticipant
       ├─ routes/              # auth, companies, participants, public (r/:token), turmas, admin
       ├─ middleware/auth.js
-      ├─ services/            # csvImport, reportIndividual, reportCompany, recommendations
-      ├─ scoring/             # questions.js, score.js, phrases.js  (+ __tests__)
+      ├─ services/            # csvImport, reportIndividual, reportCompany, companyData
+      ├─ scoring/             # questions.js, score.js, recommend.js, aggregate.js, phrases.js  (+ __tests__)
       └─ seed/seed.js
 ```
 

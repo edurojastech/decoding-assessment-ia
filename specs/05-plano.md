@@ -41,19 +41,19 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] **Pronto quando:** CSV com 1 linha inválida importa as válidas e mostra o erro — 21 testes (`csvImport.test.js` + `companies.test.js`) e verificado no Chrome headless (desktop 1280px e celular 390px): cadastro → importação com linha inválida → lista → filtros → copiar → exportar → excluir
 
 ### Fatia D · Consolidado, grupos, turmas (C3, C4)
-- [ ] `/summary`: cobertura, distribuição, radar médio, área × dimensão (heatmap), forças/lacunas
-- [ ] Grupos por nível com listas
-- [ ] Turmas: criar, renomear, oferta sugerida, mover pessoas
-- [ ] Visão geral de todas as empresas
-- [ ] **Pronto quando:** dá para montar Turma A/B/C da empresa demo
+- [x] `/summary`: cobertura, distribuição, radar médio, área × dimensão (heatmap), forças/lacunas — agregação pura em `scoring/aggregate.js` (regra 1), blocos 1–6 em `services/reportCompany.js`; filtro por área (`?area=`) e ordenação do heatmap por dimensão
+- [x] Grupos por nível com listas (incompletos à parte; filtro por área; "criar turma com este grupo")
+- [x] Turmas: criar, renomear, oferta sugerida, mover pessoas, excluir (pessoas voltam para "sem turma"); composição por nível e foco por dimensão
+- [x] Visão geral de todas as empresas (`GET /api/admin/overview`: macro + distribuição por empresa)
+- [x] **Pronto quando:** dá para montar Turma A/B/C da empresa demo — 17 testes (`aggregate.test.js` + `turmas.test.js`, incluindo A/B/C e mover) e verificado no Chrome headless (desktop 1280px e celular 390px): diagnóstico, grupos → criar turma, turmas, visão geral
 
 ## Fase 5 · Validar (C1–C7)
 | C | Teste | OK |
 |---|-------|----|
 | C1 | Importar CSV com linha inválida, exportar links | [x] |
 | C2 | Abrir link, responder, ver devolutiva, baixar PDF | [ ] |
-| C3 | Consolidado com cobertura, níveis, radar, mapa por área | [ ] |
-| C4 | Criar turma e mover pessoa | [ ] |
+| C3 | Consolidado com cobertura, níveis, radar, mapa por área | [x] |
+| C4 | Criar turma e mover pessoa | [x] |
 | C5 | `npm test` verde | [ ] |
 | C6 | Banco zerado → start → dashboards populados | [ ] |
 | C7 | Celular OK; nenhum texto diz "e-mail enviado" | [ ] |

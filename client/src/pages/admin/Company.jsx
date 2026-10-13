@@ -5,8 +5,11 @@ import { Alert, Button, Card, CardBody, Input, Progress } from '../../components
 import { cx } from '../../components/ui/cx.js';
 import Participants from './Participants.jsx';
 import Import from './Import.jsx';
+import Diagnosis from './Diagnosis.jsx';
+import Groups from './Groups.jsx';
+import Turmas from './Turmas.jsx';
 
-// Abas de /admin/empresas/:id (specs/03-dados-e-api.md). Diagnóstico, Grupos e Turmas: Fatia D.
+// Abas de /admin/empresas/:id (specs/03-dados-e-api.md).
 const TABS = [
   { id: 'participantes', label: 'Participantes' },
   { id: 'importar', label: 'Importar' },
@@ -98,16 +101,6 @@ function DeleteConfirm({ company, onCancel }) {
   );
 }
 
-function ComingSoon({ children }) {
-  return (
-    <Card>
-      <CardBody>
-        <p className="text-code-blue/80">{children}</p>
-      </CardBody>
-    </Card>
-  );
-}
-
 export default function Company() {
   const { id } = useParams();
   const { state } = useLocation();
@@ -196,13 +189,9 @@ export default function Company() {
             {tab === 'importar' && (
               <Import company={company} onImported={load} onShowParticipants={() => selectTab('participantes')} />
             )}
-            {tab === 'diagnostico' && (
-              <ComingSoon>
-                Em construção: o diagnóstico consolidado (visão dos respondentes, com cobertura) entra na próxima etapa.
-              </ComingSoon>
-            )}
-            {tab === 'grupos' && <ComingSoon>Em construção: os grupos por maturidade entram na próxima etapa.</ComingSoon>}
-            {tab === 'turmas' && <ComingSoon>Em construção: a montagem de turmas entra na próxima etapa.</ComingSoon>}
+            {tab === 'diagnostico' && <Diagnosis company={company} onNavigate={selectTab} />}
+            {tab === 'grupos' && <Groups company={company} onNavigate={selectTab} />}
+            {tab === 'turmas' && <Turmas company={company} />}
           </div>
         </div>
       )}

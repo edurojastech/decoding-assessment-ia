@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { api } from '../../lib/api.js';
 import { Alert, Badge, Button, Card, CardBody, Input, Progress } from '../../components/ui/index.js';
+import { LevelBars } from '../../components/charts/LevelBars.jsx';
+import { CompositionBar } from '../../components/charts/CompositionBar.jsx';
 
 // RF-02: cadastro da empresa. Depois de criar, segue para a importação dos participantes.
 function NewCompanyForm() {
@@ -49,15 +51,61 @@ function NewCompanyForm() {
   );
 }
 
-// RF-17 (base): lista as empresas com convidados, respondentes e cobertura.
-// Os números macro (distribuição por nível) entram na Fatia D.
+// Composição por nível no formato da barra empilhada.
+const toComposition = (distribution) => ({
+  ...Object.fromEntries(distribution.levels.map((l) => [l.level, l.count])),
+  incomplete: distribution.incomplete,
+});
+
+function Stat({ label, value }) {
+  return (
+    <div>
+      <p className="text-label text-code-blue/70">{label}</p>
+      <p className="mt-1 text-2xl font-bold">{value}</p>
+    </div>
+  );
+}
+
+// Macro: soma de todas as empresas, como visão dos respondentes.
+function Totals({ totals }) {
+  return (
+    <Card as="section" variant="dark" aria-labelledby="macro">
+      <CardBody className="flex flex-col gap-6">
+        <div>
+          <p className="text-label text-code-blue/70">{totals.label} · todas as empresas</p>
+          <h2 id="macro" className="mt-2 text-2xl">Panorama geral</h2>
+        </div>
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
+          <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-3 gap-6">
+              <Stat label="Empresas" value={totals.companies} />
+              <Stat label="Convidados" value={totals.invited} />
+              <Stat label="Respondentes" value={totals.responded} />
+            </div>
+            <Progress label="Cobertura geral" value={totals.coverage} />
+          </div>
+          <div className="flex flex-col gap-4">
+            <h3 className="text-label text-code-blue/70">Distribuição por nível</h3>
+            {totals.distribution.classified > 0
+              ? <LevelBars levels={totals.distribution.levels} total={totals.distribution.classified} />
+              : <p className="text-sm text-code-blue/70">Ainda não há respondentes com nível calculado.</p>}
+          </div>
+        </div>
+      </CardBody>
+    </Card>
+  );
+}
+
+// RF-17: visão geral de todas as empresas — macro (soma) e micro (cada empresa).
 export default function Overview() {
-  const [companies, setCompanies] = useState(null);
+  const [data, setData] = useState(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    api.get('/companies').then(setCompanies).catch((err) => setError(err.message));
+    api.get('/admin/overview').then(setData).catch((err) => setError(err.message));
   }, []);
+
+  const companies = data?.companies;
 
   return (
     <div className="flex flex-col gap-8">
@@ -74,7 +122,9 @@ export default function Overview() {
 
       {error && <Alert variant="error" title="Não foi possível carregar as empresas">{error}</Alert>}
 
-      {!companies && !error && <p role="status" className="text-sm text-code-blue/70">Carregando…</p>}
+      {!data && !error && <p role="status" className="text-sm text-code-blue/70">Carregando…</p>}
+
+      {companies?.length > 0 && <Totals totals={data.totals} />}
 
       {companies?.length === 0 && (
         <Card><CardBody><p>Nenhuma empresa cadastrada ainda. Cadastre a primeira acima.</p></CardBody></Card>
@@ -93,9 +143,15 @@ export default function Overview() {
                     </Badge>
                   </div>
                   <p className="text-sm text-code-blue/80">
-                    {company.invited} convidados · {company.responded} respondentes
+                    {company.invited} convidados · {company.responded} respondentes · {company.turmas} {company.turmas === 1 ? 'turma' : 'turmas'}
                   </p>
                   <Progress label="Cobertura" value={company.coverage} />
+                  {company.responded > 0 && (
+                    <div className="flex flex-col gap-2">
+                      <p className="text-label text-code-blue/70">Níveis dos respondentes</p>
+                      <CompositionBar composition={toComposition(company.distribution)} />
+                    </div>
+                  )}
                   <Link
                     to={`/admin/empresas/${company.id}`}
                     state={{ name: company.name }}

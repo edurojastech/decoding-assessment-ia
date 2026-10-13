@@ -8,6 +8,23 @@ export const OFFERS = {
   avancado: 'Construa Soluções e Produtos Digitais com IA',
 };
 
+// Seção 7: mapeamento sugerido ao portfólio quando a Decoding cria a turma (RF-16).
+export const OFFER_BY_LEVEL = {
+  Iniciante: OFFERS.fundamentos,
+  'Básico': OFFERS.fundamentos,
+  'Intermediário': OFFERS.intermediario,
+  'Avançado': OFFERS.avancado,
+};
+
+// Composição sugerida de turmas por maturidade (seção 6, bloco 6 do consolidado; seção 7).
+export const TURMA_GROUPS = [
+  { id: 'fundamentos', name: 'Iniciante e Básico', levels: ['Iniciante', 'Básico'], offer: OFFERS.fundamentos },
+  { id: 'intermediario', name: 'Intermediário', levels: ['Intermediário'], offer: OFFERS.intermediario },
+  { id: 'avancado', name: 'Avançado', levels: ['Avançado'], offer: OFFERS.avancado },
+];
+
+export const offerForLevel = (level) => OFFER_BY_LEVEL[level] ?? null;
+
 const FOCUS_THRESHOLD = 40;
 
 // Dimensões pontuadas ordenadas por score (direction 1 = crescente, -1 = decrescente).

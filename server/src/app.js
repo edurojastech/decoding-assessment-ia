@@ -7,6 +7,8 @@ import { authRouter } from './routes/auth.js';
 import { companiesRouter } from './routes/companies.js';
 import { publicRouter } from './routes/public.js';
 import { participantsRouter, sendTemplate } from './routes/participants.js';
+import { turmasRouter } from './routes/turmas.js';
+import { adminRouter } from './routes/admin.js';
 import { requireAdmin } from './middleware/auth.js';
 
 export function createApp() {
@@ -21,6 +23,8 @@ export function createApp() {
   app.use('/api/auth', authRouter);
   app.use('/api/companies', companiesRouter);
   app.use('/api/participants', participantsRouter);
+  app.use('/api/turmas', turmasRouter);
+  app.use('/api/admin', adminRouter);
   app.get('/api/template.csv', requireAdmin, sendTemplate);
   app.use('/api/r', publicRouter);
 

@@ -2,9 +2,14 @@ import { Router } from 'express';
 import { UniqueConstraintError } from 'sequelize';
 import { config } from '../config.js';
 import { LEVELS, PARTICIPANT_STATUS } from '../constants.js';
-import { sequelize, Company, Participant, AssessmentResponse, TurmaParticipant } from '../models/index.js';
+import {
+  sequelize, Company, Participant, AssessmentResponse, Turma, TurmaParticipant,
+} from '../models/index.js';
 import { requireAdmin } from '../middleware/auth.js';
 import { CsvImportError, toCsv, validateImport } from '../services/csvImport.js';
+import { loadParticipants, loadTurmaBoard } from '../services/companyData.js';
+import { buildCompanySummary, buildGroups } from '../services/reportCompany.js';
+import { assignToTurma, companyParticipantIds, sendTurmaError, turmaFields } from './turmas.js';
 
 export const companiesRouter = Router();
 companiesRouter.use(requireAdmin);
@@ -193,3 +198,46 @@ companiesRouter.get('/:id/participants/export', async (req, res) => {
   res.send(csv);
 });
 
+
+// Opções do filtro por área (só áreas com participantes).
+async function companyAreas(companyId) {
+  const rows = await Participant.findAll({ where: { companyId }, attributes: ['area'] });
+  return [...new Set(rows.map((p) => p.area))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+}
+
+// RF-13 + RF-14: consolidado (visão dos respondentes, com cobertura). `?area=` filtra (seção 8).
+companiesRouter.get('/:id/summary', async (req, res) => {
+  const area = typeof req.query.area === 'string' && req.query.area ? req.query.area : null;
+  const allAreas = await companyAreas(req.company.id);
+  if (area && !allAreas.includes(area)) return res.status(400).json({ error: 'Área sem participantes nesta empresa.' });
+  const participants = await loadParticipants(req.company.id, { area });
+  res.json(buildCompanySummary(participants, { area, allAreas }));
+});
+
+// RF-15: grupos por maturidade (contagem + lista por nível).
+companiesRouter.get('/:id/groups', async (req, res) => {
+  res.json(buildGroups(await loadParticipants(req.company.id)));
+});
+
+// RF-16: quadro de turmas da empresa e respondentes sem turma.
+companiesRouter.get('/:id/turmas', async (req, res) => {
+  res.json(await loadTurmaBoard(req.company.id));
+});
+
+// RF-16: cria a turma (nome, nível de origem, oferta) e, se vierem, já coloca as pessoas.
+companiesRouter.post('/:id/turmas', async (req, res) => {
+  let turma;
+  try {
+    const fields = await turmaFields(req.body ?? {}, { companyId: req.company.id });
+    turma = await sequelize.transaction(async (transaction) => {
+      const ids = await companyParticipantIds(req.body?.participantIds, req.company.id, transaction);
+      const created = await Turma.create({ ...fields, companyId: req.company.id }, { transaction });
+      await assignToTurma(created.id, ids, transaction);
+      return created;
+    });
+  } catch (err) {
+    if (sendTurmaError(err, res)) return;
+    throw err;
+  }
+  res.status(201).json({ turmaId: turma.id, ...(await loadTurmaBoard(req.company.id)) });
+});

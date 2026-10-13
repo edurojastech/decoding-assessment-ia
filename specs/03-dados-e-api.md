@@ -55,4 +55,4 @@ Grupos por maturidade = `GROUP BY overallLevel` (sem tabela).
 
 ## Rotas do front
 - `/r/:token` → Welcome → Identify → Questionnaire → Result
-- `/admin/login`, `/admin`, `/admin/empresas/:id` (abas: Participantes · Importar · Diagnóstico · Grupos · Turmas)
+- `/admin/login`, `/admin` (visão geral), `/admin/empresas/:id` (painel da empresa) e `/admin/empresas/:id/{participantes,importar,diagnostico,grupos,turmas}` — dentro do shell de dashboard (`07-layout-dashboard.md`); `participantes?status=` filtra; links antigos com `?aba=` redirecionam

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { api } from '../../lib/api.js';
 import { copyText } from '../../lib/clipboard.js';
 import { Alert, Avatar, Badge, Button, Card, CardBody, Select, Tag } from '../../components/ui/index.js';
@@ -7,7 +8,14 @@ import { STATUS, StatusBadge } from '../../components/StatusBadge.jsx';
 
 // Cada linha é um grid próprio: a coluna de ações tem largura fixa para alinhar com o cabeçalho.
 const GRID = 'md:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)_232px]';
-const EMPTY_FILTERS = { area: '', level: '', status: '' };
+const EMPTY_FILTERS = { area: '', level: '' };
+
+// Chips de status no topo (specs/07), na ordem do painel; o filtro vive na URL (?status=).
+const STATUS_CHIPS = [
+  { value: 'concluido', label: 'Concluídos' },
+  { value: 'em_andamento', label: 'Em andamento' },
+  { value: 'pendente', label: 'Pendentes' },
+];
 
 function queryString(filters) {
   const params = new URLSearchParams(Object.entries(filters).filter(([, v]) => v));
@@ -94,13 +102,16 @@ function ParticipantRow({ participant, copied, onCopy, onDelete }) {
 
 // RF-05 + RF-06 + RF-07 + RF-18: lista com status e nível, filtros, links para copiar ou exportar.
 export default function Participants({ company, onChanged, onImport }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const status = STATUS.some((s) => s.value === searchParams.get('status')) ? searchParams.get('status') : '';
+  const setStatus = (value) => setSearchParams(value ? { status: value } : {}, { replace: true });
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [participants, setParticipants] = useState(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [flash, showFlash] = useFlash();
 
-  const qs = queryString(filters);
+  const qs = queryString({ ...filters, status });
   const load = useCallback(() => api.get(`/companies/${company.id}/participants${qs}`)
     .then((data) => { setParticipants(data); setError(''); })
     .catch((err) => setError(err.message)), [company.id, qs]);
@@ -108,7 +119,10 @@ export default function Participants({ company, onChanged, onImport }) {
   useEffect(() => { load(); }, [load]);
 
   const setFilter = (field, value) => setFilters((f) => ({ ...f, [field]: f[field] === value ? '' : value }));
-  const filtered = Object.values(filters).some(Boolean);
+  const filtered = Boolean(status) || Object.values(filters).some(Boolean);
+  // Com área ou nível, as contagens por status deixariam de bater com a lista: some com elas.
+  const showCounts = !filters.area && !filters.level;
+  const clearFilters = () => { setFilters(EMPTY_FILTERS); setStatus(''); };
 
   async function copy(text, flashKey) {
     setNotice('');
@@ -157,6 +171,20 @@ export default function Participants({ company, onChanged, onImport }) {
 
   return (
     <div className="flex flex-col gap-6">
+      <div role="group" aria-label="Filtrar por status" className="flex flex-wrap gap-2">
+        <Tag selected={!status} count={showCounts ? company.invited : undefined} onClick={() => setStatus('')}>Todos</Tag>
+        {STATUS_CHIPS.map((s) => (
+          <Tag
+            key={s.value}
+            selected={status === s.value}
+            count={showCounts ? company.statusCounts[s.value] : undefined}
+            onClick={() => setStatus(status === s.value ? '' : s.value)}
+          >
+            {s.label}
+          </Tag>
+        ))}
+      </div>
+
       <Alert variant="info">
         Os links não são enviados automaticamente. Copie ou exporte a lista para distribuir às pessoas.
       </Alert>
@@ -170,16 +198,6 @@ export default function Participants({ company, onChanged, onImport }) {
             </Select>
             <div className="flex flex-col gap-4">
               <fieldset className="flex flex-col gap-2">
-                <legend className="text-label mb-2 text-code-blue">Status</legend>
-                <div className="flex flex-wrap gap-2">
-                  {STATUS.map((s) => (
-                    <Tag key={s.value} selected={filters.status === s.value} count={filters.area || filters.level ? undefined : company.statusCounts[s.value]} onClick={() => setFilter('status', s.value)}>
-                      {s.label}
-                    </Tag>
-                  ))}
-                </div>
-              </fieldset>
-              <fieldset className="flex flex-col gap-2">
                 <legend className="text-label mb-2 text-code-blue">Nível</legend>
                 <div className="flex flex-wrap gap-2">
                   {LEVELS.map((level) => (
@@ -192,7 +210,7 @@ export default function Participants({ company, onChanged, onImport }) {
             </div>
           </div>
           {filtered && (
-            <Button variant="ghost" size="sm" className="self-start" onClick={() => setFilters(EMPTY_FILTERS)}>
+            <Button variant="ghost" size="sm" className="self-start" onClick={clearFilters}>
               Limpar filtros
             </Button>
           )}

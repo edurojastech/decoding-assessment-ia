@@ -144,7 +144,7 @@ export default function Import({ company, onImported, onShowParticipants }) {
             <div className="mt-6 flex flex-col gap-4" aria-live="polite">
               {result.imported > 0 && (
                 <Alert variant="success" title={`${result.imported} ${result.imported === 1 ? 'pessoa importada' : 'pessoas importadas'}`}>
-                  <p>Os links pessoais já foram gerados. Copie ou exporte na aba Participantes para distribuir.</p>
+                  <p>Os links pessoais já foram gerados. Copie ou exporte na tela Participantes para distribuir.</p>
                   <Button variant="secondary" size="sm" className="mt-3" onClick={onShowParticipants}>
                     Ver participantes e links
                   </Button>

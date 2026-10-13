@@ -30,10 +30,10 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] **Pronto quando:** responder salva scores/nível no banco e testes passam — verificado via API pelo proxy do Vite; revisão visual no navegador pendente
 
 ### Fatia B · Devolutiva + PDF (C2)
-- [ ] `services/reportIndividual.js` (7 blocos, frases + evidências, recomendação)
-- [ ] Tela Result com radar, forças, lacunas, próximos passos, aviso de consistência
-- [ ] Botão baixar PDF (jspdf + html2canvas) com assinatura
-- [ ] **Pronto quando:** PDF baixa e o link reabre a devolutiva
+- [x] `services/reportIndividual.js` (blocos 1–6, frases + evidências, recomendação) + `GET /api/r/:token/result` (16 testes em `reportIndividual.test.js` + 3 em `public.test.js`)
+- [x] Tela Result com radar, forças, lacunas, próximos passos, aviso de consistência (substitui a tela de conclusão)
+- [x] Botão baixar PDF (jspdf + html2canvas) com identificação e assinatura em todas as páginas (bloco 7)
+- [x] **Pronto quando:** PDF baixa e o link reabre a devolutiva — verificado no Chrome headless (desktop 1280px e celular 390px) com participantes do seed, incluindo a trava de consistência
 
 ### Fatia C · Admin: empresas, importação, links (C1)
 - [ ] CRUD empresa; import CSV (upload/colar), erros por linha, modelo para baixar

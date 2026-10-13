@@ -6,10 +6,10 @@ import { Alert } from '../../components/ui/index.js';
 import Welcome from './Welcome.jsx';
 import Identify from './Identify.jsx';
 import Questionnaire from './Questionnaire.jsx';
-import Done from './Done.jsx';
+import Result from './Result.jsx';
 
-// /r/:token → Welcome → Identify → Questionnaire → conclusão (RF-08 a RF-10).
-// A devolutiva (Result) entra na Fatia B.
+// /r/:token → Welcome → Identify → Questionnaire → Result (RF-08 a RF-12).
+// Concluído, o mesmo link abre direto a devolutiva.
 
 // Rascunho só no navegador desta aba, para um recarregamento não apagar as respostas.
 // Nada é enviado ao servidor antes do "Enviar respostas".
@@ -40,7 +40,7 @@ function clearDraft(token) {
 }
 
 function initialStep(participant) {
-  if (participant.status === 'concluido') return 'done';
+  if (participant.status === 'concluido') return 'result';
   return participant.consented ? 'identify' : 'welcome';
 }
 
@@ -50,6 +50,7 @@ export default function ParticipantFlow() {
   const [loadError, setLoadError] = useState('');
   const [step, setStep] = useState(null);
   const [answers, setAnswers] = useState(() => loadDraft(token));
+  const [justSubmitted, setJustSubmitted] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -79,7 +80,8 @@ export default function ParticipantFlow() {
   function handleSubmitted() {
     clearDraft(token);
     setData((d) => ({ ...d, participant: { ...d.participant, status: 'concluido' } }));
-    setStep('done');
+    setJustSubmitted(true);
+    setStep('result');
   }
 
   if (loadError) {
@@ -134,6 +136,6 @@ export default function ParticipantFlow() {
         />
       );
     default:
-      return <Done participant={participant} />;
+      return <Result token={token} justSubmitted={justSubmitted} />;
   }
 }

@@ -3,7 +3,7 @@
 ## Stack
 | Camada | Escolha |
 |--------|---------|
-| Frontend | React + Vite + Tailwind CSS · Recharts (radar/barras) · react-router |
+| Frontend | React + Vite + Tailwind CSS · react-router · radar da devolutiva em SVG próprio (Fatia B); Recharts fica para os gráficos do consolidado (Fatia D), se necessário |
 | PDF | Gerado no front (view imprimível + `html2canvas` + `jspdf`) |
 | Backend | Node.js 20 + Express (JavaScript ESM) |
 | ORM | **Sequelize** |
@@ -18,7 +18,7 @@
 - **ADR-03 · Motor de pontuação puro (`server/src/scoring/`).** Funções sem banco nem HTTP; recebem respostas, devolvem scores, níveis, flags e evidências. 100% coberto por testes. Atende C5.
 - **ADR-04 · Questionário como dado (`server/src/scoring/questions.js`).** Perguntas, opções, pontos e tipos num único arquivo; o front recebe via API. Fonte única de verdade.
 - **ADR-05 · Participante por token.** UUID v4 aleatório no link `/r/:token`; sem conta.
-- **ADR-06 · PDF no front.** Sem serviço externo (seção 13).
+- **ADR-06 · PDF no front.** Sem serviço externo (seção 13). `client/src/lib/pdf.js` captura uma versão A4 fora da tela (`ReportDocument`) com html2canvas, recorta por bloco (`data-pdf-block`, nunca quebrado entre páginas) e monta com jsPDF; cabeçalho de identificação e rodapé "IA First. Human Driven." em todas as páginas. Bibliotecas carregadas sob demanda. Radar em SVG próprio (sem animação nem medição assíncrona) para sair igual na tela e no PDF.
 - **ADR-07 · Monorepo simples** com `client/` e `server/`; em produção, `server` serve `client/dist`.
 - **ADR-08 · Grupos por maturidade derivados** do nível de cada `AssessmentResponse` (sem tabela).
 

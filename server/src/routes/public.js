@@ -4,6 +4,7 @@ import { sequelize, Company, Participant, AssessmentResponse } from '../models/i
 import { TOOLS, publicQuestionnaire } from '../scoring/questions.js';
 import { InvalidAnswersError } from '../scoring/score.js';
 import { buildResponseFields } from '../services/assessment.js';
+import { buildIndividualReport } from '../services/reportIndividual.js';
 
 // ADR-05: rotas do participante, acessadas só pelo token do link pessoal (sem conta).
 export const publicRouter = Router();
@@ -138,4 +139,27 @@ publicRouter.post('/:token/submit', async (req, res) => {
   }
 
   res.status(201).json({ status: 'concluido' });
+});
+
+// RF-11/RF-12: devolutiva montada a partir do resultado salvo. O mesmo link reabre a devolutiva
+// e permite baixar o PDF de novo (gerado no front, ADR-06).
+publicRouter.get('/:token/result', async (req, res) => {
+  const participant = req.participant;
+  const response = participant.status === 'concluido'
+    ? await AssessmentResponse.findOne({ where: { participantId: participant.id } })
+    : null;
+  if (!response) {
+    return res.status(409).json({ error: 'A devolutiva fica disponível depois que você envia as respostas.' });
+  }
+
+  res.json({
+    participant: {
+      name: participant.name,
+      email: participant.email,
+      area: participant.area,
+      role: participant.role,
+      companyName: participant.company.name,
+    },
+    report: buildIndividualReport(response),
+  });
 });

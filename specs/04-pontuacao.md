@@ -104,3 +104,14 @@ Decisões de implementação (Fatia A, conferidas contra o `_00-prompt-original.
 - Iniciante/Básico → **Escale sua produtividade com IA**
 - Intermediário → **Do Problema ao Plano**
 - Avançado → **Construa Soluções e Produtos Digitais com IA**
+
+## Decisões da devolutiva (Fatia B) — aguardam validação da Decoding
+Literais do original: frases de estágio, frases força/lacuna por dimensão, foco de Revisão. O resto do texto está em `server/src/scoring/phrases.js`.
+- **Frase da dimensão "conforme o nível"**: Intermediário/Avançado → frase de força; Iniciante/Básico → frase de lacuna.
+- **Evidência** (RN-10): "Sobre <tema da pergunta>, você respondeu “<opção>”" + leitura pela pontuação da resposta (3–4 → força, 0–1 → lacuna, 2 → só a citação). "Não sei" → "um bom ponto de partida para aprender" (RN-06). Q4 e Q23 (conhecimento) têm leitura própria, pois a resposta não descreve o comportamento da dimensão.
+- **Potencialidades** = 2 dimensões mais altas fora das lacunas (com 5 pontuadas, sem sobreposição). Se a dimensão ainda é Iniciante/Básico, o texto fala da posição relativa ("está entre as suas dimensões mais desenvolvidas"), não da frase de força.
+- **Lacunas** = as mesmas 2 dimensões da recomendação (RN-11). Se já Intermediário/Avançado, texto relativo ("comparada às outras dimensões…"). Cada lacuna traz um exemplo do dia a dia.
+- **Três ações**: 1ª ação de cada lacuna, depois a 2ª da principal (banco de 3 ações por dimensão).
+- **Percurso** apresentado como convite; Avançado condicionado ao interesse ("Se você tem interesse em construir soluções…").
+- **Estágio**: frase do nível + mais forte/mais fraca com score; dimensões empatadas → "mesmo patamar". Incompleto (RN-08) → sem estágio nem percurso, com a contagem respondida.
+- **Radar**: escala 0–100, anéis nas faixas de nível (25/50/75/100).

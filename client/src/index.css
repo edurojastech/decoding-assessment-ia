@@ -79,3 +79,9 @@
     outline-offset: 2px;
   }
 }
+
+/* PDF (lib/pdf.js): na versão A4, a sombra do card vira contorno, para o recorte por bloco não cortar a sombra. */
+[data-pdf-root] .shadow-md {
+  box-shadow: none;
+  border: 1px solid var(--code-blue-100);
+}

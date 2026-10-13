@@ -140,3 +140,29 @@ describe('POST /api/r/:token/submit (C2, C5)', () => {
     expect((await request(app).get(`/api/r/${p.token}`)).body.participant.status).toBe('concluido');
   });
 });
+
+describe('GET /api/r/:token/result (RF-11, RF-12)', () => {
+  it('só libera a devolutiva depois do envio', async () => {
+    const p = await newParticipant({ consentAt: new Date() });
+    expect((await request(app).get(`/api/r/${p.token}/result`)).status).toBe(409);
+  });
+
+  it('devolve identificação e devolutiva, e o mesmo link reabre a mesma devolutiva', async () => {
+    const p = await newParticipant({ consentAt: new Date() });
+    await request(app).post(`/api/r/${p.token}/submit`).send({ answers: bestAnswers() });
+
+    const first = await request(app).get(`/api/r/${p.token}/result`);
+    expect(first.status).toBe(200);
+    expect(first.body.participant).toMatchObject({ name: p.name, email: p.email, area: 'RH', companyName: 'Empresa Link' });
+    expect(first.body.participant).not.toHaveProperty('token');
+    expect(first.body.report.stage).toMatchObject({ status: 'calculado', level: 'Avançado', score: 100 });
+    expect(first.body.report.dimensions).toHaveLength(5);
+
+    const again = await request(app).get(`/api/r/${p.token}/result`);
+    expect(again.body).toEqual(first.body);
+  });
+
+  it('responde 404 para token inexistente', async () => {
+    expect((await request(app).get('/api/r/00000000-0000-4000-8000-000000000000/result')).status).toBe(404);
+  });
+});

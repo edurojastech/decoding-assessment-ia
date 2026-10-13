@@ -10,15 +10,26 @@ export const OFFERS = {
 
 const FOCUS_THRESHOLD = 40;
 
-// Lacunas = as duas dimensões pontuadas mais baixas (bloco 4 da devolutiva, seção 6).
+// Dimensões pontuadas ordenadas por score (direction 1 = crescente, -1 = decrescente).
 // Empate: ordem das dimensões.
-export function gapDimensions(result, count = 2) {
+export function rankDimensions(result, direction) {
   return DIMENSIONS
     .map((d, order) => ({ id: d.id, order, score: result.dimensions[d.id].score }))
-    .filter((d) => d.score !== null)
-    .sort((a, b) => a.score - b.score || a.order - b.order)
-    .slice(0, count)
+    .filter((d) => d.score !== null && d.score !== undefined)
+    .sort((a, b) => (a.score - b.score) * direction || a.order - b.order)
     .map((d) => d.id);
+}
+
+// Lacunas = as duas dimensões pontuadas mais baixas (bloco 4 da devolutiva, seção 6).
+export function gapDimensions(result, count = 2) {
+  return rankDimensions(result, 1).slice(0, count);
+}
+
+// Potencialidades = as duas dimensões pontuadas mais altas (bloco 3), fora das lacunas.
+// Com 5 dimensões pontuadas não há sobreposição; com menos, a lacuna tem prioridade.
+export function strengthDimensions(result, count = 2) {
+  const gaps = new Set(gapDimensions(result));
+  return rankDimensions(result, -1).filter((id) => !gaps.has(id)).slice(0, count);
 }
 
 /**

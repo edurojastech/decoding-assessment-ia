@@ -8,7 +8,7 @@ import Identify from './Identify.jsx';
 import Questionnaire from './Questionnaire.jsx';
 import Result from './Result.jsx';
 
-// /r/:token → Welcome → Identify → Questionnaire → Result (RF-08 a RF-12).
+// /r/:token → Welcome → Identify ("Seu perfil": identificação + P0b/P0c) → Questionnaire → Result (RF-08 a RF-12).
 // Concluído, o mesmo link abre direto a devolutiva.
 
 // Rascunho só no navegador desta aba, para um recarregamento não apagar as respostas.
@@ -130,7 +130,6 @@ export default function ParticipantFlow() {
           questionnaire={questionnaire}
           answers={answers}
           onAnswersChange={updateAnswers}
-          onParticipantChange={updateParticipant}
           onBackToIdentify={() => setStep('identify')}
           onSubmitted={handleSubmitted}
         />

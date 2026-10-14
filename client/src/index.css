@@ -155,3 +155,9 @@
   box-shadow: none;
   border: 1px solid var(--code-blue-100);
 }
+
+/* PDF: blocos escuros (hero e Trilha de IA) saem em Code Blue sólido, sem depender do html2canvas
+   desenhar os gradientes radiais do Mesh Escuro. */
+[data-pdf-root] [data-pdf-dark] {
+  background: var(--code-blue);
+}

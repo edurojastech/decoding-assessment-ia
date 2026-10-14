@@ -54,6 +54,15 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] Responsivo (drawer < 1024px) e testes verdes — 117 testes; verificado no Chrome headless (1280px e 390px), sem rolagem horizontal
 - [x] **Pronto quando:** todo o admin é navegável pela sidebar e os KPIs batem com a lista (mesma fonte: `statusCounts`; ex.: 2 pendentes → 2 linhas)
 
+## Fase 4.6 · Redesign do fluxo do participante (branch `feat/melhoria-visual-avaliacao-participante`)
+- [x] Jornada em 4 passos com indicador (`components/participant/StepIndicator.jsx`): boas-vindas → seu perfil → perguntas → devolutiva
+- [x] Boas-vindas (RF-08) em 2 colunas: hero Mesh Escuro + privacidade direto no fundo claro, botão de início visível sem rolar; aviso completo em "Ler detalhes"
+- [x] "Seu perfil" (RF-09 + P0b/P0c): identificação em modo leitura com "Editar", função e ferramentas em chips (`ui/ToggleChip.jsx`) numa só etapa
+- [x] Perguntas (RF-10): segue uma dimensão por vez (original, seção 2); barra lateral com dimensões e anel de progresso, alternativas em linhas limpas (`ui/ChoiceRow.jsx`), atalhos 1–N e rolagem para a próxima pergunta
+- [x] Devolutiva (RF-11/RF-12) em largura de painel: hero com medidor e régua de níveis; blocos 2–5 sem cards, separados por espaço e linhas finas; cada evidência (RN-10) aparece uma vez; bloco 7 vira uma linha no fim; numeração dos blocos removida (pulava de 05 para 07 sem o bloco 6)
+- [x] Evidência não duplica aspas de opções que já vêm entre aspas ("Faça do seu jeito") — teste em `reportIndividual.test.js`
+- [x] **Pronto quando:** fluxo completo e PDF verificados no Chrome headless (1316px e 390px, sem rolagem lateral) e 118 testes verdes
+
 ## Fase 5 · Validar (C1–C7)
 | C | Teste | OK |
 |---|-------|----|

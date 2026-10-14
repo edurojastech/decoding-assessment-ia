@@ -236,5 +236,5 @@ Para atualizar: `git push` → no Replit, **Git → Pull → Publicar**.
 ---
 
 <p align="center">
-  Desenvolvido por <a href="https://dev.eduardorojas.com.br/" target="_blank"><b>Eduardo Rojas</b></a>· Desafio técnico Decoding · Outubro de 2026
+  Desenvolvido por <a href="https://dev.eduardorojas.com.br/" target="_blank"><b>Eduardo Rojas</b></a> | Outubro de 2026
 </p>

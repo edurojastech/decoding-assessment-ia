@@ -21,9 +21,9 @@ sempre do backend e do questionário (`server/src/scoring/`), nunca do mockup.
 1. **Clean e respirável.** Card só onde faz sentido: blocos escuros (Mesh Escuro) no hero da devolutiva, na barra
    lateral das perguntas e no card da Trilha de IA; o card branco do perfil. O resto fica direto no fundo `surface`,
    separado por espaço e linhas finas (`border-code-blue-100`).
-2. **Fluidez.** Jornada em 4 passos (`components/participant/StepIndicator.jsx`): Boas-vindas → Seu perfil →
+2. **Fluidez com controle.** Jornada em 4 passos (`components/participant/StepIndicator.jsx`): Boas-vindas → Seu perfil →
    Perguntas → Devolutiva. O indicador aparece no topo de **todas** as etapas depois das boas-vindas
-   (perfil, perguntas e devolutiva), marcando as concluídas e a atual (na devolutiva, "Pronta"). Botão principal sempre visível, avanço automático nas perguntas, atalhos de teclado.
+   (perfil, perguntas e devolutiva), marcando as concluídas e a atual (na devolutiva, "Pronta"). Botão principal sempre visível, avanço só pelo botão (ou Enter), atalhos de teclado para marcar.
 3. **Cabe na tela.** Desktop com escala proporcional (ver "Escala") e conteúdo largo até `90rem`, sem faixas vazias.
    Boas-vindas e Seu perfil cabem inteiros em HD (1366 × 768, ~650px úteis no navegador); celular sem rolagem lateral.
 4. **Uma informação, um lugar.** Cada evidência (RN-10) aparece uma vez; detalhes abrem sob demanda.
@@ -52,7 +52,8 @@ sempre do backend e do questionário (`server/src/scoring/`), nunca do mockup.
   respondidas/total, clicáveis) e anel "X de 24 perguntas" com tempo restante estimado (25 s por pergunta).
 - Área principal: rótulo "Dimensão N de 5 · Nome · Pergunta X de 24", barra de progresso, pergunta grande e alternativas
   em linhas limpas (`ui/ChoiceRow.jsx`) com atalho numérico.
-- Escolher uma alternativa avança sozinho para a próxima pergunta; teclas 1–N respondem; "Anterior" / "Próxima".
+- Marcar uma alternativa **não avança sozinho**: só habilita "Próxima", e a pessoa pode trocar a resposta antes de seguir.
+  A navegação é sempre pelo botão "Próxima" (ou Enter); teclas 1–N marcam a alternativa; "Anterior" volta.
 - **Toda pergunta precisa de resposta para avançar** ("Não sei" conta como resposta): "Próxima" fica desabilitado até
   marcar, e a barra lateral só deixa ir até a primeira pergunta ainda sem resposta. O envio só acontece com as 24 respondidas.
   O backend continua tratando respostas parciais (RN-07/RN-08) por segurança, mas a tela não deixa enviar em branco.

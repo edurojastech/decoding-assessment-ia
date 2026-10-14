@@ -43,7 +43,8 @@ function ProgressRing({ value, total }) {
 }
 
 // RF-10: questionário progressivo — uma dimensão por vez (original, seção 2), com progresso e opção de voltar.
-// Redesign: dentro da dimensão, uma pergunta por tela, com avanço automático ao responder e atalhos 1–N.
+// Redesign: dentro da dimensão, uma pergunta por tela. Marcar uma alternativa só habilita "Próxima"
+// (dá para trocar antes de seguir); a navegação é sempre pelo botão (ou Enter). Atalhos 1–N marcam.
 // A barra lateral mostra só a dimensão em curso como ativa; as perguntas de outra dimensão nunca aparecem juntas.
 // As perguntas de perfil (P0a–P0c) ficam na etapa "Seu perfil" (Identify.jsx).
 // Toda pergunta precisa de uma resposta para avançar ("Não sei" conta como resposta). O backend segue tratando
@@ -62,7 +63,6 @@ export default function Questionnaire({
   });
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const advanceTimer = useRef(null);
   const groupRef = useRef(null);
 
   const question = allQuestions[index];
@@ -77,31 +77,28 @@ export default function Questionnaire({
   const maxReachable = firstOpen === -1 ? total - 1 : firstOpen;
   const allAnswered = firstOpen === -1;
 
-  useEffect(() => () => clearTimeout(advanceTimer.current), []);
   useEffect(() => {
     window.scrollTo(0, 0);
     groupRef.current?.focus({ preventScroll: true });
   }, [index]);
 
   function goTo(next) {
-    clearTimeout(advanceTimer.current);
     setError('');
     setIndex(Math.max(0, Math.min(maxReachable, total - 1, next)));
   }
 
   function choose(key) {
+    setError('');
     onAnswersChange({ ...answers, [question.id]: key });
-    clearTimeout(advanceTimer.current);
-    if (!isLast) {
-      advanceTimer.current = setTimeout(() => {
-        setError('');
-        setIndex(index + 1);
-      }, 350);
-    }
   }
 
   function handleKeyDown(event) {
     if (event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.key === 'Enter' && answered && !busy) {
+      event.preventDefault();
+      handleNext();
+      return;
+    }
     const n = Number(event.key) - 1;
     if (Number.isInteger(n) && n >= 0 && n < options.length) {
       event.preventDefault();
@@ -252,7 +249,7 @@ export default function Questionnaire({
             </div>
             <p className="hidden items-center gap-2 text-sm text-code-blue/70 md:flex">
               <Icon icon={IconKeyboard} size={18} />
-              {answered ? `Pressione 1 a ${options.length} para trocar a resposta.` : `Escolha uma opção para continuar. Pressione 1 a ${options.length} para responder.`}
+              {answered ? `Pode trocar a resposta (teclas 1 a ${options.length}). Enter ou "Próxima" para seguir.` : `Escolha uma opção para continuar. Teclas 1 a ${options.length} também marcam.`}
             </p>
           </div>
         </div>

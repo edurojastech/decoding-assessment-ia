@@ -37,22 +37,22 @@
 
 ## O que o app faz
 
-| Quem | O que faz |
-|---|---|
-| **Participante** (sem conta, via link pessoal) | Lê o aviso de privacidade (LGPD) e dá consentimento, confere a identificação, responde 24 perguntas em 5 dimensões com barra de progresso e recebe a **devolutiva individual** com radar, forças, lacunas, próximos passos e curso recomendado. Baixa em **PDF** e pode reabrir pelo mesmo link. |
-| **Administrador da Decoding** (com login) | Cadastra empresas, **importa participantes por CSV** (com erros por linha), gera e exporta os links, acompanha **concluídos / em andamento / pendentes**, vê o **diagnóstico consolidado** (cobertura, distribuição por nível, radar médio, mapa dimensão × área), os **grupos por maturidade** e monta **turmas** manualmente. |
+| Quem                                           | O que faz                                                                                                                                                                                                                                                                                                                       |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Participante** (sem conta, via link pessoal) | Lê o aviso de privacidade (LGPD) e dá consentimento, confere a identificação, responde 24 perguntas em 5 dimensões com barra de progresso e recebe a **devolutiva individual** com radar, forças, lacunas, próximos passos e curso recomendado. Baixa em **PDF** e pode reabrir pelo mesmo link.                                |
+| **Administrador da Decoding** (com login)      | Cadastra empresas, **importa participantes por CSV** (com erros por linha), gera e exporta os links, acompanha **concluídos / em andamento / pendentes**, vê o **diagnóstico consolidado** (cobertura, distribuição por nível, radar médio, mapa dimensão × área), os **grupos por maturidade** e monta **turmas** manualmente. |
 
 O painel do admin segue o padrão visual do **Decoding Campus**: menu lateral, seletor de empresa, visão geral com KPIs e lista "Pede atenção".
 
-> Escopo: este app é o **Diagnóstico**. As trilhas (*Escale sua produtividade com IA*, *Do Problema ao Plano*, *Construa Soluções e Produtos Digitais com IA*) aparecem como recomendação de percurso e como oferta associada às turmas.
+> Escopo: este app é o **Diagnóstico**. As trilhas (_Escale sua produtividade com IA_, _Do Problema ao Plano_, _Construa Soluções e Produtos Digitais com IA_) aparecem como recomendação de percurso e como oferta associada às turmas.
 
 ## Acesso de demonstração
 
-| | |
-|---|---|
-| URL | https://decoding-assessment-ia--edurojasdevelop.replit.app/admin |
-| E-mail | `admin@decoding.demo` |
-| Senha | `decoding-demo` |
+|        |                                                                  |
+| ------ | ---------------------------------------------------------------- |
+| URL    | https://decoding-assessment-ia--edurojasdevelop.replit.app/admin |
+| E-mail | `admin@decoding.demo`                                            |
+| Senha  | `decoding-demo`                                                  |
 
 O banco de demonstração traz **2 empresas fictícias** (18 e 22 participantes), respostas cobrindo os 4 níveis e uma turma de exemplo. As credenciais aparecem na tela de login enquanto `DEMO_MODE=true`.
 
@@ -68,30 +68,30 @@ O projeto foi construído com **SDD (desenvolvimento guiado por especificação)
 
 **Por que SDD:** a especificação é a fonte da verdade. A IA usada no desenvolvimento segue regras escritas em vez de improvisar, cada parte cresce sem quebrar as outras e um módulo novo começa por uma spec nova, seguindo o mesmo caminho. Isso torna o projeto rastreável, fácil de manter e escalável.
 
-| Documento | Responde |
-|---|---|
-| [`00-prompt-original.md`](specs/00-prompt-original.md) | O que o cliente pediu (fonte da verdade; PDF ao lado) |
-| [`01-requisitos.md`](specs/01-requisitos.md) | O que o sistema faz e quando está pronto |
-| [`02-arquitetura.md`](specs/02-arquitetura.md) | Stack, estrutura de pastas e decisões (ADRs) |
-| [`03-dados-e-api.md`](specs/03-dados-e-api.md) | Modelos e endpoints |
-| [`04-pontuacao.md`](specs/04-pontuacao.md) | Perguntas, pesos, algoritmo, casos de teste e textos |
-| [`05-plano.md`](specs/05-plano.md) | Fases, fatias e checklists |
-| [`06-design-system.md`](specs/06-design-system.md) | Tokens, tipografia, componentes e tom de voz da Decoding |
-| [`07-layout-dashboard.md`](specs/07-layout-dashboard.md) | Shell do admin no padrão Decoding Campus |
-| [`CLAUDE.md`](CLAUDE.md) / [`AGENTS.md`](AGENTS.md) | Regras para os agentes de IA (Claude Code / Codex) |
+| Documento                                                | Responde                                                 |
+| -------------------------------------------------------- | -------------------------------------------------------- |
+| [`00-prompt-original.md`](specs/00-prompt-original.md)   | O que o cliente pediu (fonte da verdade; PDF ao lado)    |
+| [`01-requisitos.md`](specs/01-requisitos.md)             | O que o sistema faz e quando está pronto                 |
+| [`02-arquitetura.md`](specs/02-arquitetura.md)           | Stack, estrutura de pastas e decisões (ADRs)             |
+| [`03-dados-e-api.md`](specs/03-dados-e-api.md)           | Modelos e endpoints                                      |
+| [`04-pontuacao.md`](specs/04-pontuacao.md)               | Perguntas, pesos, algoritmo, casos de teste e textos     |
+| [`05-plano.md`](specs/05-plano.md)                       | Fases, fatias e checklists                               |
+| [`06-design-system.md`](specs/06-design-system.md)       | Tokens, tipografia, componentes e tom de voz da Decoding |
+| [`07-layout-dashboard.md`](specs/07-layout-dashboard.md) | Shell do admin no padrão Decoding Campus                 |
+| [`CLAUDE.md`](CLAUDE.md) / [`AGENTS.md`](AGENTS.md)      | Regras para os agentes de IA (Claude Code / Codex)       |
 
 ## Stack e arquitetura
 
-| Camada | Tecnologia |
-|---|---|
-| Frontend | React 19, Vite, Tailwind CSS v4 (tokens via `@theme`), React Router, ícones Tabler |
-| PDF | jsPDF + html2canvas, gerado no navegador |
-| Backend | Node.js 20, Express 5 (JavaScript ESM) |
-| ORM | Sequelize 6 |
-| Banco | SQLite em desenvolvimento · PostgreSQL em produção (via `DATABASE_URL`) |
-| Autenticação | bcrypt + JWT em cookie httpOnly (admin) · token UUID no link (participante) |
-| Testes | Vitest + Supertest |
-| Deploy | GitHub → Replit (Express serve o build do React numa porta só) |
+| Camada       | Tecnologia                                                                         |
+| ------------ | ---------------------------------------------------------------------------------- |
+| Frontend     | React 19, Vite, Tailwind CSS v4 (tokens via `@theme`), React Router, ícones Tabler |
+| PDF          | jsPDF + html2canvas, gerado no navegador                                           |
+| Backend      | Node.js 20, Express 5 (JavaScript ESM)                                             |
+| ORM          | Sequelize 6                                                                        |
+| Banco        | SQLite em desenvolvimento · PostgreSQL em produção (via `DATABASE_URL`)            |
+| Autenticação | bcrypt + JWT em cookie httpOnly (admin) · token UUID no link (participante)        |
+| Testes       | Vitest + Supertest                                                                 |
+| Deploy       | GitHub → Replit (Express serve o build do React numa porta só)                     |
 
 ```
 decoding-assessment-ia/
@@ -130,26 +130,26 @@ npm run dev                 # API (Express) + front (Vite) juntos
 - No primeiro início, o banco SQLite (`server/data/dev.sqlite`) é criado e populado com os dados de demonstração.
 - Admin: abra `/admin/login` e use as credenciais de demonstração.
 
-| Script | O que faz |
-|---|---|
-| `npm run dev` | Servidor e front em modo desenvolvimento |
-| `npm test` | Testes do servidor |
-| `npm run seed` | Recria os dados de demonstração (não duplica) |
-| `npm run build` | Build de produção do front |
-| `npm start` | Express servindo a API e o front compilado |
+| Script          | O que faz                                     |
+| --------------- | --------------------------------------------- |
+| `npm run dev`   | Servidor e front em modo desenvolvimento      |
+| `npm test`      | Testes do servidor                            |
+| `npm run seed`  | Recria os dados de demonstração (não duplica) |
+| `npm run build` | Build de produção do front                    |
+| `npm start`     | Express servindo a API e o front compilado    |
 
 ## Variáveis de ambiente
 
 Veja [`.env.example`](.env.example). Em produção, configure como **Secrets**, nunca em arquivos versionados.
 
-| Variável | Uso |
-|---|---|
-| `PORT` | Porta do servidor (o Replit define) |
-| `DATABASE_URL` | PostgreSQL. Sem ela, usa SQLite local |
-| `JWT_SECRET` | **Obrigatório em produção**; assina o login do admin |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Admin criado pelo seed (só quando o banco está vazio) |
-| `PUBLIC_URL` | Endereço público usado nos links pessoais |
-| `DEMO_MODE` | Mostra as credenciais na tela de login (`true` por padrão) |
+| Variável                         | Uso                                                        |
+| -------------------------------- | ---------------------------------------------------------- |
+| `PORT`                           | Porta do servidor (o Replit define)                        |
+| `DATABASE_URL`                   | PostgreSQL. Sem ela, usa SQLite local                      |
+| `JWT_SECRET`                     | **Obrigatório em produção**; assina o login do admin       |
+| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Admin criado pelo seed (só quando o banco está vazio)      |
+| `PUBLIC_URL`                     | Endereço público usado nos links pessoais                  |
+| `DEMO_MODE`                      | Mostra as credenciais na tela de login (`true` por padrão) |
 
 ## Testes
 
@@ -193,37 +193,39 @@ Para atualizar: `git push` → no Replit, **Git → Pull → Publicar**.
 
 ## Decisões técnicas (ADRs)
 
-| Decisão | Motivo |
-|---|---|
-| **Sequelize** em vez de Prisma/Drizzle | O pedido exige "um ORM"; Sequelize é a ferramenta dominada e suporta SQLite e Postgres com o mesmo código |
-| **JavaScript** em vez de TypeScript | O pedido diz "de preferência"; JS acelerou a entrega, com validação nos models e testes |
-| **SQLite local, Postgres em produção** | Desenvolver sem instalar banco; só tipos portáveis entre os dois |
-| **Motor de pontuação puro** | É a regra que o cliente confere; isolado e 100% testável |
-| **Questionário como dado** | Perguntas, pesos e opções num único arquivo, fonte única para back e front |
-| **PDF no front** | Sem dependência de serviço externo |
-| **Design system oficial** | Prevalece sobre a seção 10 do pedido por ser mais detalhado |
-| **Escala 0–100** | O slide comercial mostra o radar de 0 a 5; o pedido técnico pede 0–100 e foi seguido. A exibição pode dividir por 20 |
+| Decisão                                | Motivo                                                                                                               |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **Sequelize** em vez de Prisma/Drizzle | O pedido exige "um ORM"; Sequelize é a ferramenta dominada e suporta SQLite e Postgres com o mesmo código            |
+| **JavaScript** em vez de TypeScript    | O pedido diz "de preferência"; JS acelerou a entrega, com validação nos models e testes                              |
+| **SQLite local, Postgres em produção** | Desenvolver sem instalar banco; só tipos portáveis entre os dois                                                     |
+| **Motor de pontuação puro**            | É a regra que o cliente confere; isolado e 100% testável                                                             |
+| **Questionário como dado**             | Perguntas, pesos e opções num único arquivo, fonte única para back e front                                           |
+| **PDF no front**                       | Sem dependência de serviço externo                                                                                   |
+| **Design system oficial**              | Prevalece sobre a seção 10 do pedido por ser mais detalhado                                                          |
+| **Escala 0–100**                       | O slide comercial mostra o radar de 0 a 5; o pedido técnico pede 0–100 e foi seguido. A exibição pode dividir por 20 |
 
 ## Critérios de aceite
 
-| # | Critério | Status |
-|---|---|---|
-| C1 | Cadastro de empresa, importação CSV com validação por linha, geração e exportação de links | ✅ |
-| C2 | Participante abre o link, confirma dados, responde, vê a devolutiva e baixa o PDF | ✅ |
-| C3 | Consolidado com cobertura, distribuição por nível, radar e necessidades por área | ✅ |
-| C4 | Agrupamento por nível; turmas criadas e editadas manualmente, com pessoas movíveis | ✅ |
-| C5 | Pontuação exatamente conforme as regras, calculada no backend | ✅ testes |
-| C6 | Dados de demonstração populam os dashboards no primeiro acesso | ✅ |
-| C7 | Design Decoding, responsivo, sem afirmar envio de e-mail | ✅ 1280px e 390px |
+| #   | Critério                                                                                   | Status            |
+| --- | ------------------------------------------------------------------------------------------ | ----------------- |
+| C1  | Cadastro de empresa, importação CSV com validação por linha, geração e exportação de links | ✅                |
+| C2  | Participante abre o link, confirma dados, responde, vê a devolutiva e baixa o PDF          | ✅                |
+| C3  | Consolidado com cobertura, distribuição por nível, radar e necessidades por área           | ✅                |
+| C4  | Agrupamento por nível; turmas criadas e editadas manualmente, com pessoas movíveis         | ✅                |
+| C5  | Pontuação exatamente conforme as regras, calculada no backend                              | ✅ testes         |
+| C6  | Dados de demonstração populam os dashboards no primeiro acesso                             | ✅                |
+| C7  | Design Decoding, responsivo, sem afirmar envio de e-mail                                   | ✅ 1280px e 390px |
 
 ## Limitações e próximos passos
 
 **Fora do escopo desta fase (por definição do pedido):**
+
 - Envio automático dos links por e-mail: hoje os links são copiados ou exportados, e a interface deixa isso claro.
 - Cobrança e qualquer modelo de IA externo.
 - Login da empresa cliente.
 
 **Próximos passos sugeridos:**
+
 - Disparo automático de e-mails e verificação de e-mail.
 - Acesso de leitura para a empresa cliente ver o diagnóstico.
 - Papéis e permissões mais finos; exportação e retenção de dados conforme LGPD.
@@ -234,5 +236,5 @@ Para atualizar: `git push` → no Replit, **Git → Pull → Publicar**.
 ---
 
 <p align="center">
-  Desenvolvido por <b>Eduardo Rojas</b> · Desafio técnico Decoding · Outubro de 2026
+  Desenvolvido por <a href="https://dev.eduardorojas.com.br/" target="_blank"><b>Eduardo Rojas</b></a>· Desafio técnico Decoding · Outubro de 2026
 </p>

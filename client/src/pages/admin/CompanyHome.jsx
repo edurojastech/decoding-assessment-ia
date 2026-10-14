@@ -294,7 +294,7 @@ export default function CompanyHome() {
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="text-label text-code-blue-300">Distribuição por nível</p>
-                <h2 id="distribuicao" className="mt-2 text-xl font-light tracking-normal">
+                <h2 id="distribuicao" className="mt-2 text-h3">
                   {summary ? plural(summary.distribution.classified, 'respondente com nível', 'respondentes com nível') : 'Respondentes por nível'}
                 </h2>
               </div>

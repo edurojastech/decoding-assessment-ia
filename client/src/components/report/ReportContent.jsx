@@ -12,7 +12,7 @@ function SectionTitle({ number, title, id, children }) {
   return (
     <div>
       <p className="text-label text-code-blue/70">{String(number).padStart(2, '0')} · {title}</p>
-      <h2 id={id} className="mt-2 text-2xl">{children}</h2>
+      <h2 id={id} className="mt-2 text-h3">{children}</h2>
     </div>
   );
 }
@@ -79,7 +79,7 @@ function DimensionCard({ dimension: d }) {
       <CardBody className="flex h-full flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h3 className="text-lg font-semibold">{d.name}</h3>
+            <h3 className="text-lg font-bold">{d.name}</h3>
             <p className="text-sm text-code-blue/70">{d.description}</p>
           </div>
           {scored ? <LevelBadge level={d.level} /> : <Badge variant="pending">Dados insuficientes</Badge>}
@@ -125,7 +125,7 @@ function HighlightList({ items, tone, empty }) {
       {items.map((item) => (
         <div key={item.id} className={cx('flex flex-col gap-3 rounded-lg p-4', tone === 'forca' ? 'bg-lime-50' : 'bg-insight-50')}>
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-lg font-semibold">{item.name}</h3>
+            <h3 className="text-lg font-bold">{item.name}</h3>
             <Score value={item.score} />
           </div>
           <p>{item.phrase}</p>

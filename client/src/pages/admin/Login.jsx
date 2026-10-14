@@ -61,7 +61,7 @@ export default function Login() {
             <CardBody className="flex flex-col gap-6 sm:p-8">
               <div>
                 <p className="text-label text-code-blue/70">Acesso Decoding</p>
-                <h2 className="mt-2 text-2xl">Entrar no painel</h2>
+                <h2 className="mt-2 text-h3">Entrar no painel</h2>
               </div>
 
               {demo && (

@@ -13,7 +13,7 @@ export function AttentionList({ items, loading, className }) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-label text-code-blue-300">Pede atenção</p>
-            <h2 id="pede-atencao" className="mt-2 text-xl font-light tracking-normal">O que precisa de você</h2>
+            <h2 id="pede-atencao" className="mt-2 text-h3">O que precisa de você</h2>
           </div>
           {items.length > 0 && <Badge variant="pending">{items.length}<span className="sr-only"> itens</span></Badge>}
         </div>

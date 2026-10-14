@@ -1,13 +1,20 @@
 import { cx } from './cx.js';
 
-const SIZES = { sm: 'h-8 w-8 text-xs', md: 'h-10 w-10 text-sm', lg: 'h-12 w-12 text-base', xl: 'h-16 w-16 text-lg' };
+// Fiel ao DS: https://design-system-decoding.vercel.app/componentes/avatares
+// 4 tamanhos (28/40/56/80px) e 4 tons de marca (Code Blue, Lime, Insight, Root).
+const SIZES = {
+  sm: 'h-7 w-7 text-[11px]',
+  md: 'h-10 w-10 text-[15px]',
+  lg: 'h-14 w-14 text-xl',
+  xl: 'h-20 w-20 text-[28px]',
+};
 const TONES = {
   blue: 'bg-code-blue text-canvas',
-  insight: 'bg-insight-100 text-code-blue',
   lime: 'bg-pulse-lime text-code-blue',
-  neutral: 'bg-code-blue-50 text-code-blue',
+  insight: 'bg-insight text-code-blue',
+  root: 'bg-root text-pulse-lime',
 };
-const TONE_ORDER = ['insight', 'lime', 'neutral', 'blue'];
+const TONE_ORDER = ['insight', 'lime', 'blue', 'root'];
 
 export function initials(name = '') {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -24,13 +31,13 @@ function toneFor(name) {
   return TONE_ORDER[hash % TONE_ORDER.length];
 }
 
-// DS: avatar com iniciais, 4 tamanhos e 4 tons. Decorativo: o nome aparece ao lado.
+// Decorativo: o nome aparece ao lado.
 export function Avatar({ name = '', size = 'md', tone, className }) {
   return (
     <span
       aria-hidden="true"
       className={cx(
-        'inline-flex shrink-0 items-center justify-center rounded-full font-semibold',
+        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full font-semibold leading-none shadow-sm',
         SIZES[size],
         TONES[tone ?? toneFor(name)],
         className,

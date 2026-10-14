@@ -118,3 +118,22 @@ Claro · ousado · empático · estratégico.
 - Erros explicam o que houve e o que fazer ("Algo deu errado. Verifique sua conexão e tente novamente.").
 - CTAs diretos com a voz da marca (ex.: "Decodifique seu potencial em IA — comece agora").
 - ⚠️ O exemplo de sucesso do DS menciona "relatório enviado para o e-mail": **não usar neste app**, porque aqui nada é enviado por e-mail (RNF-05). Use "Feito! Sua devolutiva está pronta para baixar."
+
+## Validação contra o DS (13/10, branch `fix-validar-design-system`)
+Varredura de cada página do DS (`/componentes/*`, `/tipografia`, `/tokens`, `/movimento`) contra `client/src`. O que estava diferente e foi corrigido:
+
+| Componente | Antes | Agora (igual ao DS) |
+|---|---|---|
+| Botões | pílula (`rounded-full`), secondary em contorno branco, Excluir em contorno | raios de 8px e 12px, secondary ciano, ghost com borda de 1.5px, destructive #DC2626 com ícone |
+| Badges | 12px, caixa normal, texto Code Blue | 10px em caixa alta (0.05em), pares de cor do DS (ex.: #DCFCE7/#166534) |
+| Alertas | raio 12px, texto Code Blue | raio 16px, fundo tint, título e texto nos tons semânticos do DS |
+| Cards / KPIs | raio 16px, sem borda, faixa de 6px | raio 24px, borda #E0E5FA, sombra de card, faixa de 8px (dark = Mesh Escuro) |
+| Inputs / Select / Textarea | label em caixa alta, borda 1px, erro com bolinha | label 14px medium, borda 1.5px #BAC6F2, erro em #DC2626 (12px) |
+| Tags (filtros) | branco, 14px semibold, selecionado com texto branco | #F0F3FD com texto #2338A8, 12px medium, selecionado com texto Lime |
+| Progresso | alturas 6/8/12px, label em caixa alta | alturas 4/8/12px, label 14px medium e valor em #5B78DA |
+| Avatares | 32/40/48/64px, tom "neutral" | 28/40/56/80px, tons Code Blue, Lime, Insight e Root |
+| Tipografia | Just Sans nunca usada; títulos em Aileron Light | H1/H2 Aileron Bold (48/36px); H3/H4 Just Sans Light (24/20px) nos títulos de seção |
+
+Tokens novos: `--text-secondary`, `--text-muted`, `--border-default`, `--border-strong`, `--shadow-card`, curvas de easing; utilitários `text-h1..h4`.
+
+**Desvios intencionais (acessibilidade, WCAG AA 4.5:1):** dicas e textos de apoio continuam em Code Blue 70% em vez de #8AA0E8/#5B78DA, e o texto do alerta Info usa #1A6FA8 em vez de #3D94CC. Campos usam 16px no celular (14px a partir de `sm`) para o iOS não dar zoom ao focar.

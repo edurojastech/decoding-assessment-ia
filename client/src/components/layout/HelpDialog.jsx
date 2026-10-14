@@ -33,7 +33,7 @@ export function HelpDialog({ onClose }) {
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-label text-code-blue-300">Ajuda</p>
-            <h2 id="ajuda-titulo" className="mt-2 text-2xl font-light tracking-normal">Como ler o assessment</h2>
+            <h2 id="ajuda-titulo" className="mt-2 text-h3">Como ler o assessment</h2>
           </div>
           <button ref={closeRef} type="button" onClick={onClose} className="rounded-full p-1 hover:bg-code-blue-50">
             <Icon icon={IconX} className="h-5 w-5" />

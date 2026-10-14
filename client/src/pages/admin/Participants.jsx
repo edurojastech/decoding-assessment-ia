@@ -163,7 +163,7 @@ export default function Participants({ company, onChanged, onImport }) {
     return (
       <Card>
         <CardBody className="flex flex-col items-start gap-4">
-          <h2 className="text-xl">Nenhum participante ainda</h2>
+          <h2 className="text-h3">Nenhum participante ainda</h2>
           <p className="text-code-blue/80">
             Importe a lista enviada pela empresa (nome, email, area). Cada pessoa recebe um link pessoal para responder.
           </p>
@@ -202,7 +202,7 @@ export default function Participants({ company, onChanged, onImport }) {
             </Select>
             <div className="flex flex-col gap-4">
               <fieldset className="flex flex-col gap-2">
-                <legend className="text-label mb-2 text-code-blue">Nível</legend>
+                <legend className="mb-1.5 text-sm font-medium text-code-blue">Nível</legend>
                 <div className="flex flex-wrap gap-2">
                   {LEVELS.map((level) => (
                     <Tag key={level} selected={filters.level === level} onClick={() => setFilter('level', level)}>

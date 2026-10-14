@@ -9,7 +9,8 @@ export function PageHeader({ eyebrow, title, subtitle, actions }) {
         <h1 className="mt-2 text-[1.75rem] leading-tight font-bold break-words sm:text-h2">{title}</h1>
         {subtitle && <p className="mt-2 max-w-2xl text-sm text-code-blue/70">{subtitle}</p>}
       </div>
-      {actions && <div className="flex shrink-0 flex-wrap gap-2">{actions}</div>}
+      {/* No celular, as ações ocupam 50% cada (uma 3ª ação desce para a linha de baixo, inteira); no desktop ficam no tamanho natural. */}
+      {actions && <div className="flex shrink-0 flex-wrap gap-2 [&>*]:flex-[1_1_calc(50%-0.25rem)] md:[&>*]:flex-none">{actions}</div>}
     </div>
   );
 }

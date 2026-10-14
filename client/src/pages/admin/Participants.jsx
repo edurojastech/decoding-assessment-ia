@@ -129,7 +129,8 @@ function ParticipantRow({ participant, copied, onCopy, onDelete }) {
           <div><StatusBadge status={participant.status} /></div>
           <div><LevelCell participant={participant} /></div>
         </div>
-        <div className="flex flex-wrap gap-2 md:justify-end">
+        {/* No celular, os botões dividem a largura (50% cada); no desktop voltam ao tamanho natural. */}
+        <div className="flex gap-2 md:justify-end [&>*]:flex-1 md:[&>*]:flex-none">
           <Button variant="ghost" size="sm" onClick={() => onCopy(participant)} title={participant.link}>
             {copied ? <IconCheck size={16} stroke={2} aria-hidden="true" /> : <IconCopy size={16} stroke={2} aria-hidden="true" />}
             {copied ? 'Link copiado' : 'Copiar link'}

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import {
-  IconArrowRight, IconChartRadar, IconClock, IconDatabase, IconListNumbers, IconSettings, IconTarget, IconTrash,
+  IconArrowRight, IconChartBar, IconClock, IconDatabase, IconFileText, IconSettings, IconTarget, IconTrash,
 } from '@tabler/icons-react';
 import { api } from '../../lib/api.js';
 import { Logo } from '../../components/Logo.jsx';
 import { Footer } from '../../components/Footer.jsx';
 import { Alert, Button, Icon, OptionCard } from '../../components/ui/index.js';
+import { DIMENSION_ICONS } from '../../components/participant/dimensionIcons.js';
 
 // RF-08: boas-vindas, tempo estimado, aviso de privacidade (LGPD) e consentimento (seção 11 do original).
 // Redesign: hero e consentimento lado a lado, com o botão de início visível sem rolar (desktop).
@@ -53,7 +54,7 @@ function Chip({ icon, tone, children }) {
 }
 
 export default function Welcome({ token, participant, questionnaire, onConsented }) {
-  const [accepted, setAccepted] = useState(false);
+  const [accepted, setAccepted] = useState(Boolean(participant.consented));
   const [error, setError] = useState('');
   const [sending, setSending] = useState(false);
   const firstName = participant.name.split(' ')[0];
@@ -82,7 +83,7 @@ export default function Welcome({ token, participant, questionnaire, onConsented
 
           <div className="flex flex-col gap-5">
             <p className="text-label text-insight">Assessment de Maturidade em IA</p>
-            <h1 className="text-4xl leading-[1.05] sm:text-5xl xl:text-6xl">
+            <h1 className="max-w-[13ch] text-4xl leading-[1.05] sm:text-5xl xl:text-6xl">
               Decodifique seu potencial em <span className="text-pulse-lime">IA.</span>
             </h1>
             <div className="flex max-w-xl flex-col gap-2">
@@ -94,21 +95,24 @@ export default function Welcome({ token, participant, questionnaire, onConsented
             </div>
             <div className="flex flex-wrap gap-2">
               <Chip icon={IconClock} tone="lime">{questionnaire.estimatedTime}</Chip>
-              <Chip icon={IconListNumbers} tone="insight">{questionCount} perguntas</Chip>
-              <Chip icon={IconChartRadar} tone="light">{dimensions.length} dimensões</Chip>
+              <Chip icon={IconFileText} tone="insight">{questionCount} perguntas</Chip>
+              <Chip icon={IconChartBar} tone="light">{dimensions.length} dimensões</Chip>
             </div>
 
-            {/* As cinco dimensões em linha do tempo */}
+            {/* As cinco dimensões em linha do tempo, com ícone e número */}
             <ol aria-label="Dimensões avaliadas" className="mt-4 grid max-w-xl grid-cols-5 gap-2">
               {dimensions.map((d, i) => (
                 <li key={d.id} className="relative flex flex-col items-center gap-2 text-center">
                   {i < dimensions.length - 1 && (
-                    <span aria-hidden="true" className="absolute top-4 left-1/2 h-px w-full bg-insight/40" />
+                    <span aria-hidden="true" className="absolute top-8 left-1/2 h-px w-full bg-insight/50" />
                   )}
-                  <span className="relative flex h-8 w-8 items-center justify-center rounded-full border border-insight/60 bg-code-blue text-sm font-semibold text-canvas">
+                  <span aria-hidden="true" className="relative flex h-6 w-6 items-center justify-center rounded-full border border-canvas/60 bg-code-blue text-xs font-semibold">
                     {i + 1}
                   </span>
-                  <span className="text-xs text-canvas/80 sm:text-sm">{d.name}</span>
+                  <span aria-hidden="true" className="relative -mt-2 flex h-11 w-11 items-center justify-center rounded-full border border-insight/60 bg-code-blue text-canvas">
+                    <Icon icon={DIMENSION_ICONS[d.id] ?? IconChartBar} size={20} />
+                  </span>
+                  <span className="text-xs text-canvas/85 sm:text-sm">{d.name}</span>
                 </li>
               ))}
             </ol>
@@ -142,8 +146,8 @@ export default function Welcome({ token, participant, questionnaire, onConsented
             </ul>
 
             <details className="group -mt-2">
-              <summary className="cursor-pointer text-sm font-semibold text-code-blue-700 underline underline-offset-4">
-                Ler detalhes
+              <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-sm font-semibold text-code-blue-700 underline underline-offset-4 [&::-webkit-details-marker]:hidden">
+                Ler detalhes <Icon icon={IconArrowRight} size={16} className="transition-transform group-open:rotate-90" />
               </summary>
               <dl className="mt-4 flex flex-col gap-3 text-sm text-code-blue/80">
                 {items.map((item) => (

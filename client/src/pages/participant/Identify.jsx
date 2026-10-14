@@ -1,30 +1,62 @@
 import { useState } from 'react';
-import { IconArrowRight, IconBriefcase, IconPencil, IconSparkles, IconUser } from '@tabler/icons-react';
+import { IconArrowRight, IconBriefcase, IconCheck, IconPencil, IconSparkles, IconUser } from '@tabler/icons-react';
 import { api } from '../../lib/api.js';
 import { ParticipantShell } from '../../components/ParticipantShell.jsx';
-import { Alert, Button, Icon, Input, Select, ToggleChip } from '../../components/ui/index.js';
+import { Alert, Button, Card, Icon, Input, Select } from '../../components/ui/index.js';
+import { TOOL_ICONS } from '../../components/participant/toolIcons.js';
+import { cx } from '../../components/ui/cx.js';
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NONE_TOOL = 'Nenhuma';
 
-function SectionHeading({ icon, title, children }) {
+function SectionHeading({ icon, title, id, action, children }) {
   return (
-    <div className="flex gap-3">
-      <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-insight-50 text-insight-700">
-        <Icon icon={icon} size={22} />
+    <div className="flex items-start gap-4">
+      <span aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-code-blue-50 text-code-blue">
+        <Icon icon={icon} size={24} />
       </span>
-      <div>
-        <h2 className="text-lg leading-snug font-bold tracking-normal">{title}</h2>
-        {children && <p className="text-sm text-code-blue/70">{children}</p>}
+      <div className="min-w-0 flex-1">
+        <h2 id={id} className="text-xl leading-snug font-bold tracking-normal">{title}</h2>
+        {children && <p className="mt-0.5 text-sm text-code-blue/70">{children}</p>}
       </div>
+      {action}
     </div>
   );
 }
 
+// Ferramenta de IA em card com checkbox e ícone (P0c). Checkbox nativo escondido, acessível por teclado.
+function ToolOption({ tool, checked, onChange, className }) {
+  const ToolIcon = TOOL_ICONS[tool] ?? IconSparkles;
+  return (
+    <label
+      className={cx(
+        'flex cursor-pointer items-center gap-4 rounded-xl border px-4 py-3.5 transition-colors duration-150',
+        'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-insight',
+        checked ? 'border-insight bg-insight-50' : 'border-code-blue-100 bg-canvas hover:border-code-blue-200',
+        className,
+      )}
+    >
+      <input type="checkbox" name="tools" value={tool} checked={checked} onChange={onChange} className="sr-only" />
+      <span
+        aria-hidden="true"
+        className={cx(
+          'flex h-5 w-5 shrink-0 items-center justify-center rounded-sm border-2',
+          checked ? 'border-code-blue bg-code-blue text-canvas' : 'border-code-blue-200 bg-canvas',
+        )}
+      >
+        {checked && <Icon icon={IconCheck} size={14} stroke={3} />}
+      </span>
+      <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-code-blue-50 text-code-blue">
+        <Icon icon={ToolIcon} size={20} />
+      </span>
+      <span className="font-medium">{tool}</span>
+    </label>
+  );
+}
+
 // RF-09 + perguntas de perfil (RF-10, P0a–P0c) numa única etapa "Seu perfil":
-// a identificação importada aparece em modo leitura (com "Editar"), seguida da função e das ferramentas.
-// O perfil contextualiza o diagnóstico e não pontua (RN-12).
-export default function Identify({ token, participant, questionnaire, onConfirmed }) {
+// identificação importada em modo leitura (com "Editar"), função e ferramentas. O perfil não pontua (RN-12).
+export default function Identify({ token, participant, questionnaire, onConfirmed, onBack }) {
   const [form, setForm] = useState({ name: participant.name, email: participant.email, area: participant.area });
   const [editing, setEditing] = useState(false);
   const [role, setRole] = useState(participant.role ?? '');
@@ -37,6 +69,7 @@ export default function Identify({ token, participant, questionnaire, onConfirme
   // P0a: lista do original; mantém a área importada se ela não estiver na lista.
   const areaOptions = profile.P0a.options;
   const areas = areaOptions.includes(participant.area) ? areaOptions : [participant.area, ...areaOptions];
+  const questionCount = questionnaire.dimensions.reduce((s, d) => s + d.questions.length, 0);
 
   const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
@@ -77,25 +110,25 @@ export default function Identify({ token, participant, questionnaire, onConfirme
   ];
 
   return (
-    <ParticipantShell wide step="profile">
-      <div className="flex flex-col gap-3">
+    <ParticipantShell wide step="profile" questionCount={questionCount}>
+      <div className="flex flex-col gap-2">
         <p className="text-label text-code-blue/70">Antes das perguntas</p>
-        <h1 className="text-3xl lg:text-4xl">Complete seu perfil</h1>
-        <p className="max-w-3xl text-lg text-code-blue/80">
+        <h1 className="text-4xl lg:text-h1">Complete seu <span className="text-lime-900">perfil</span></h1>
+        <p className="text-lg text-code-blue/80">
           Estas informações ajudam a contextualizar o diagnóstico e não entram na pontuação.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col gap-8">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <form onSubmit={handleSubmit} noValidate className="mt-6">
+        <Card className="grid gap-10 p-6 sm:p-8 lg:grid-cols-2 lg:gap-0">
           {/* Coluna 1 · Seus dados + função */}
-          <div className="flex flex-col gap-8">
-            <section aria-labelledby="dados-titulo" className="flex flex-col gap-5">
-              <div className="flex items-start justify-between gap-4">
-                <SectionHeading icon={IconUser} title={<span id="dados-titulo">Seus dados</span>}>
-                  Vieram da {participant.companyName}. Se algo estiver diferente, corrija antes de seguir.
-                </SectionHeading>
-                {!editing && (
+          <div className="flex flex-col gap-6 lg:pr-10">
+            <section aria-labelledby="dados-titulo" className="flex flex-col gap-4">
+              <SectionHeading
+                icon={IconUser}
+                id="dados-titulo"
+                title="Seus dados"
+                action={!editing && (
                   <button
                     type="button"
                     onClick={() => setEditing(true)}
@@ -105,10 +138,12 @@ export default function Identify({ token, participant, questionnaire, onConfirme
                     Editar
                   </button>
                 )}
-              </div>
+              >
+                Estes dados vieram da {participant.companyName}. Se algo estiver diferente, corrija antes de seguir.
+              </SectionHeading>
 
               {editing ? (
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-4">
                   <Input label="Nome" autoComplete="name" value={form.name} onChange={set('name')} error={errors.name} />
                   <Input
                     label="E-mail" type="email" autoComplete="email" value={form.email} onChange={set('email')} error={errors.email}
@@ -118,9 +153,9 @@ export default function Identify({ token, participant, questionnaire, onConfirme
                   </Select>
                 </div>
               ) : (
-                <dl className="flex flex-col">
+                <dl className="flex flex-col gap-2">
                   {readRows.map((r) => (
-                    <div key={r.label} className="flex flex-col gap-0.5 border-b border-code-blue-100 py-2.5 first:pt-0">
+                    <div key={r.label} className="rounded-xl bg-code-blue-50 px-4 py-2.5">
                       <dt className="text-xs text-code-blue/70">{r.label}</dt>
                       <dd className="break-words">{r.value}</dd>
                     </div>
@@ -129,13 +164,13 @@ export default function Identify({ token, participant, questionnaire, onConfirme
               )}
             </section>
 
-            <section aria-labelledby="funcao-titulo" className="flex flex-col gap-4">
-              <SectionHeading icon={IconBriefcase} title={<span id="funcao-titulo">Sua função</span>}>
-                Opcional. Só contextualiza a sua devolutiva.
+            <section aria-labelledby="funcao-titulo" className="flex flex-col gap-4 border-t border-code-blue-100 pt-6">
+              <SectionHeading icon={IconBriefcase} id="funcao-titulo" title="Sua função">
+                Descreva o papel que você exerce hoje.
               </SectionHeading>
               <Input
                 aria-labelledby="funcao-titulo"
-                placeholder="Ex.: Analista financeiro"
+                placeholder="Ex.: Gerente de operações"
                 maxLength={120}
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
@@ -143,35 +178,37 @@ export default function Identify({ token, participant, questionnaire, onConfirme
             </section>
           </div>
 
-          {/* Coluna 2 · Ferramentas de IA (P0c) */}
-          <fieldset className="flex flex-col gap-5 lg:border-l lg:border-code-blue-100 lg:pl-16">
-            <legend className="sr-only">{profile.P0c.text}</legend>
-            <SectionHeading icon={IconSparkles} title={profile.P0c.text}>Marque todas as que se aplicam.</SectionHeading>
-            <div className="flex flex-wrap gap-3">
-              {profile.P0c.options.map((tool) => (
-                <ToggleChip
-                  key={tool}
-                  name="tools"
-                  value={tool}
-                  checked={tools.includes(tool)}
-                  onChange={(e) => toggleTool(tool, e.target.checked)}
-                >
-                  {tool}
-                </ToggleChip>
-              ))}
+          {/* Coluna 2 · Ferramentas de IA (P0c) + ações */}
+          <div className="flex flex-col gap-6 lg:border-l lg:border-code-blue-100 lg:pl-10">
+            <fieldset className="flex flex-col gap-4">
+              <legend className="sr-only">{profile.P0c.text}</legend>
+              <SectionHeading icon={IconSparkles} title={profile.P0c.text}>Marque todas as que se aplicam.</SectionHeading>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {profile.P0c.options.map((tool, i, all) => (
+                  <ToolOption
+                    key={tool}
+                    tool={tool}
+                    checked={tools.includes(tool)}
+                    onChange={(e) => toggleTool(tool, e.target.checked)}
+                    className={i === all.length - 1 && all.length % 2 === 1 ? 'sm:col-span-2' : undefined}
+                  />
+                ))}
+              </div>
+            </fieldset>
+
+            {error && <Alert variant="error">{error}</Alert>}
+
+            <div className="mt-auto flex flex-col-reverse gap-3 border-t border-code-blue-100 pt-6 sm:flex-row sm:justify-between">
+              {onBack && (
+                <Button variant="ghost" size="lg" disabled={saving} onClick={onBack}>Voltar</Button>
+              )}
+              <Button type="submit" size="lg" disabled={saving} className="sm:ml-auto">
+                {saving ? 'Salvando…' : 'Começar as perguntas'}
+                {!saving && <Icon icon={IconArrowRight} size={20} />}
+              </Button>
             </div>
-          </fieldset>
-        </div>
-
-        {error && <Alert variant="error">{error}</Alert>}
-
-        <div className="flex flex-col gap-3 border-t border-code-blue-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-code-blue/70">Próximo passo: {questionnaire.dimensions.length} dimensões, uma de cada vez.</p>
-          <Button type="submit" size="lg" disabled={saving} className="w-full sm:w-auto">
-            {saving ? 'Salvando…' : 'Começar as perguntas'}
-            {!saving && <Icon icon={IconArrowRight} size={20} />}
-          </Button>
-        </div>
+          </div>
+        </Card>
       </form>
     </ParticipantShell>
   );

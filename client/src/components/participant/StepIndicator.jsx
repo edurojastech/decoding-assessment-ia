@@ -10,38 +10,44 @@ export const PARTICIPANT_STEPS = [
   { key: 'result', label: 'Devolutiva' },
 ];
 
-export function StepIndicator({ current, className }) {
+export function StepIndicator({ current, questionCount = 24, className }) {
   const currentIndex = PARTICIPANT_STEPS.findIndex((s) => s.key === current);
+  const hint = (step, i) => {
+    if (i < currentIndex) return 'Concluído';
+    if (i === currentIndex) return 'Em andamento';
+    if (step.key === 'questions') return `${questionCount} perguntas`;
+    if (step.key === 'result') return 'Seu diagnóstico';
+    return '';
+  };
   return (
     <nav aria-label="Etapas do diagnóstico" className={className}>
-      <ol className="flex items-center gap-2 sm:gap-3">
+      <ol className="flex items-center gap-3">
         {PARTICIPANT_STEPS.map((step, i) => {
-          const done = i < currentIndex || current === 'result';
-          const active = i === currentIndex && current !== 'result';
+          const done = i < currentIndex;
+          const active = i === currentIndex;
           return (
-            <li key={step.key} className="flex flex-1 items-center gap-2 sm:gap-3 last:flex-none">
-              <span
-                aria-current={active ? 'step' : undefined}
-                className="flex items-center gap-2"
-              >
+            <li key={step.key} className="flex flex-1 items-center gap-3 last:flex-none">
+              <span aria-current={active ? 'step' : undefined} className="flex items-center gap-3">
                 <span
                   aria-hidden="true"
                   className={cx(
-                    'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold',
+                    'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold',
                     done && 'bg-pulse-lime text-code-blue',
                     active && 'bg-code-blue text-canvas',
                     !done && !active && 'bg-code-blue-100 text-code-blue/70',
                   )}
                 >
-                  {done ? <Icon icon={IconCheck} size={16} stroke={2.5} /> : i + 1}
+                  {done ? <Icon icon={IconCheck} size={18} stroke={2.5} /> : i + 1}
                 </span>
-                <span className={cx('text-sm whitespace-nowrap', active ? 'font-semibold text-code-blue' : 'hidden text-code-blue/70 md:inline')}>
-                  {step.label}
-                  {done && <span className="sr-only"> (concluída)</span>}
+                <span className={cx('flex-col leading-tight', active ? 'flex' : 'hidden md:flex')}>
+                  <span className={cx('text-sm whitespace-nowrap', active || done ? 'font-semibold text-code-blue' : 'text-code-blue/80')}>
+                    {step.label}
+                  </span>
+                  <span className="text-xs whitespace-nowrap text-code-blue/70">{hint(step, i)}</span>
                 </span>
               </span>
               {i < PARTICIPANT_STEPS.length - 1 && (
-                <span aria-hidden="true" className={cx('h-px flex-1', done ? 'bg-lime-900/40' : 'bg-code-blue-100')} />
+                <span aria-hidden="true" className={cx('h-0.5 flex-1 rounded-full', done ? 'bg-pulse-lime' : 'bg-code-blue-100')} />
               )}
             </li>
           );

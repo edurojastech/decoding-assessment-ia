@@ -126,6 +126,7 @@ export default function ParticipantFlow() {
           participant={participant}
           questionnaire={questionnaire}
           onConfirmed={(p) => { updateParticipant(p); setStep('questionnaire'); }}
+          onBack={() => setStep('welcome')}
         />
       );
     case 'questionnaire':

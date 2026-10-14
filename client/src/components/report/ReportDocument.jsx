@@ -36,7 +36,7 @@ export const ReportDocument = forwardRef(function ReportDocument({ participant, 
         </div>
       </header>
 
-      <ReportContent report={report} />
+      <ReportContent report={report} expanded />
 
       <footer data-pdf-footer className="mt-6 flex flex-col gap-1 border-t border-code-blue-100 pt-4 pb-6 pr-28">
         <p className="text-label text-code-blue">

@@ -67,6 +67,6 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 
 ## Fase 6 · Entregar
 - [ ] Deploy no Replit, link público
-- [ ] README: stack, como rodar, regras de pontuação, ADRs, credenciais demo
-- [ ] Limitações e próximos passos (e-mail automático, acesso do cliente, calibrar pesos)
+- [x] README: stack, como rodar, regras de pontuação, ADRs, credenciais demo
+- [x] Limitações e próximos passos (e-mail automático, acesso do cliente, calibrar pesos) — no README
 - [ ] Ensaio da demo: participante → admin → critérios

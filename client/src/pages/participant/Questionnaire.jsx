@@ -5,6 +5,7 @@ import { Logo } from '../../components/Logo.jsx';
 import { Alert, Button, ChoiceRow, Icon, Progress } from '../../components/ui/index.js';
 import { cx } from '../../components/ui/cx.js';
 import { DIMENSION_ICONS } from '../../components/participant/dimensionIcons.js';
+import { StepIndicator } from '../../components/participant/StepIndicator.jsx';
 
 const SECONDS_PER_QUESTION = 25; // 24 perguntas ≈ 10 min, dentro dos "9 a 12 minutos" do original
 
@@ -45,7 +46,8 @@ function ProgressRing({ value, total }) {
 // Redesign: dentro da dimensão, uma pergunta por tela, com avanço automático ao responder e atalhos 1–N.
 // A barra lateral mostra só a dimensão em curso como ativa; as perguntas de outra dimensão nunca aparecem juntas.
 // As perguntas de perfil (P0a–P0c) ficam na etapa "Seu perfil" (Identify.jsx).
-// Nenhuma pergunta é obrigatória (RN-07/RN-08). O front só coleta escolhas; a pontuação é no backend (regra 1).
+// Toda pergunta precisa de uma resposta para avançar ("Não sei" conta como resposta). O backend segue tratando
+// respostas parciais (RN-07/RN-08) por segurança. O front só coleta escolhas; a pontuação é no backend (regra 1).
 export default function Questionnaire({
   token, questionnaire, answers, onAnswersChange, onBackToIdentify, onSubmitted,
 }) {
@@ -60,7 +62,6 @@ export default function Questionnaire({
   });
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [confirmBlank, setConfirmBlank] = useState(false);
   const advanceTimer = useRef(null);
   const groupRef = useRef(null);
 
@@ -70,10 +71,11 @@ export default function Questionnaire({
   const options = question.allowsNotSure ? [...question.options, notSure] : question.options;
   const answeredCount = allQuestions.filter((q) => answers[q.id]).length;
   const isLast = index === total - 1;
-  const blanksByDimension = dimensions
-    .map((d) => ({ id: d.id, name: d.name, count: d.questions.filter((q) => !answers[q.id]).length }))
-    .filter((d) => d.count > 0);
-  const blankCount = blanksByDimension.reduce((s, d) => s + d.count, 0);
+  const answered = Boolean(answers[question.id]);
+  // Só dá para ir até a primeira pergunta ainda sem resposta (não se pula pergunta).
+  const firstOpen = allQuestions.findIndex((q) => !answers[q.id]);
+  const maxReachable = firstOpen === -1 ? total - 1 : firstOpen;
+  const allAnswered = firstOpen === -1;
 
   useEffect(() => () => clearTimeout(advanceTimer.current), []);
   useEffect(() => {
@@ -84,14 +86,18 @@ export default function Questionnaire({
   function goTo(next) {
     clearTimeout(advanceTimer.current);
     setError('');
-    setConfirmBlank(false);
-    setIndex(Math.max(0, Math.min(total - 1, next)));
+    setIndex(Math.max(0, Math.min(maxReachable, total - 1, next)));
   }
 
   function choose(key) {
     onAnswersChange({ ...answers, [question.id]: key });
     clearTimeout(advanceTimer.current);
-    if (!isLast) advanceTimer.current = setTimeout(() => goTo(index + 1), 350);
+    if (!isLast) {
+      advanceTimer.current = setTimeout(() => {
+        setError('');
+        setIndex(index + 1);
+      }, 350);
+    }
   }
 
   function handleKeyDown(event) {
@@ -117,8 +123,9 @@ export default function Questionnaire({
   }
 
   function handleNext() {
+    if (!answered) return setError('Escolha uma opção para continuar.');
     if (!isLast) return goTo(index + 1);
-    if (blankCount > 0 && !confirmBlank) return setConfirmBlank(true);
+    if (!allAnswered) return goTo(firstOpen);
     return submit();
   }
 
@@ -145,10 +152,12 @@ export default function Questionnaire({
                   <button
                     type="button"
                     onClick={() => goTo(firstIndexOf(d.id))}
+                    disabled={firstIndexOf(d.id) > maxReachable}
                     aria-current={active ? 'step' : undefined}
                     className={cx(
-                      'flex w-full cursor-pointer items-center gap-3 rounded-xl px-2 py-2 text-left transition-colors duration-150',
-                      active ? 'bg-canvas/10' : 'hover:bg-canvas/5',
+                      'flex w-full items-center gap-3 rounded-xl px-2 py-2 text-left transition-colors duration-150',
+                      'cursor-pointer disabled:cursor-default',
+                      active ? 'bg-canvas/10' : 'enabled:hover:bg-canvas/5',
                     )}
                   >
                     <span
@@ -185,6 +194,8 @@ export default function Questionnaire({
 
       <main className="flex flex-1 flex-col px-4 py-8 sm:px-8 lg:px-16 lg:py-10">
         <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
+          {/* Jornada em 4 passos: mesma barra das outras etapas */}
+          <StepIndicator current="questions" questionCount={total} className="mb-8 lg:mb-10" />
           <div className="flex flex-col gap-3">
             <p className="text-label text-code-blue/70">
               Dimensão {dimIndex + 1} de {dimensions.length} · {dimension.name} · Pergunta {index + 1} de {total}
@@ -198,7 +209,7 @@ export default function Questionnaire({
             tabIndex={-1}
             onKeyDown={handleKeyDown}
             aria-labelledby={`${question.id}-texto`}
-            className="mt-8 flex flex-col gap-6 outline-none lg:mt-10"
+            className="mt-6 flex flex-col gap-6 outline-none lg:mt-8"
           >
             <div className="flex flex-col gap-2">
               <p className="text-sm text-code-blue/70">{dimension.name} · {positionInDimension} de {dimension.questions.length}</p>
@@ -221,24 +232,6 @@ export default function Questionnaire({
             </div>
           </section>
 
-          {confirmBlank && (
-            <Alert variant="warning" title={`Você deixou ${blankCount} ${blankCount === 1 ? 'pergunta' : 'perguntas'} em branco`} className="mt-6">
-              <p>
-                Quanto mais respostas, mais completa fica a sua devolutiva. Se faltar muita coisa, o resultado
-                geral aparece como preenchimento incompleto.
-              </p>
-              <ul className="mt-2 list-disc pl-5">
-                {blanksByDimension.map((d) => <li key={d.name}>{d.name}: {d.count} em branco</li>)}
-              </ul>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <Button variant="secondary" size="sm" onClick={() => goTo(allQuestions.findIndex((q) => !answers[q.id]))}>
-                  Revisar perguntas em branco
-                </Button>
-                <Button variant="ghost" size="sm" disabled={busy} onClick={submit}>Enviar assim mesmo</Button>
-              </div>
-            </Alert>
-          )}
-
           {error && <Alert variant="error" className="mt-6">{error}</Alert>}
 
           <div className="mt-8 flex flex-col gap-4 border-t border-code-blue-100 pt-6">
@@ -252,14 +245,14 @@ export default function Questionnaire({
                 <Icon icon={IconArrowLeft} size={20} />
                 {index === 0 ? 'Seu perfil' : 'Anterior'}
               </button>
-              <Button variant={isLast ? 'accent' : 'primary'} size="lg" disabled={busy || confirmBlank} onClick={handleNext} className="sm:min-w-48">
+              <Button variant={isLast ? 'accent' : 'primary'} size="lg" disabled={busy || !answered} onClick={handleNext} className="sm:min-w-48">
                 {busy ? 'Enviando…' : isLast ? 'Enviar respostas' : 'Próxima'}
                 {!busy && <Icon icon={IconArrowRight} size={20} />}
               </Button>
             </div>
             <p className="hidden items-center gap-2 text-sm text-code-blue/70 md:flex">
               <Icon icon={IconKeyboard} size={18} />
-              Pressione 1 a {options.length} para responder.
+              {answered ? `Pressione 1 a ${options.length} para trocar a resposta.` : `Escolha uma opção para continuar. Pressione 1 a ${options.length} para responder.`}
             </p>
           </div>
         </div>

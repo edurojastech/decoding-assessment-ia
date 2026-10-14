@@ -22,7 +22,8 @@ sempre do backend e do questionário (`server/src/scoring/`), nunca do mockup.
    lateral das perguntas e no card da Trilha de IA; o card branco do perfil. O resto fica direto no fundo `surface`,
    separado por espaço e linhas finas (`border-code-blue-100`).
 2. **Fluidez.** Jornada em 4 passos (`components/participant/StepIndicator.jsx`): Boas-vindas → Seu perfil →
-   Perguntas → Devolutiva. Botão principal sempre visível, avanço automático nas perguntas, atalhos de teclado.
+   Perguntas → Devolutiva. O indicador aparece no topo de **todas** as etapas depois das boas-vindas
+   (perfil, perguntas e devolutiva), marcando as concluídas e a atual (na devolutiva, "Pronta"). Botão principal sempre visível, avanço automático nas perguntas, atalhos de teclado.
 3. **Cabe na tela.** Desktop com escala proporcional (ver "Escala") e conteúdo largo até `90rem`, sem faixas vazias.
    Boas-vindas e Seu perfil cabem inteiros em HD (1366 × 768, ~650px úteis no navegador); celular sem rolagem lateral.
 4. **Uma informação, um lugar.** Cada evidência (RN-10) aparece uma vez; detalhes abrem sob demanda.
@@ -40,6 +41,8 @@ sempre do backend e do questionário (`server/src/scoring/`), nunca do mockup.
 - Identificação e perfil numa única etapa, dentro de um `Card` branco em duas colunas.
 - Esquerda: "Seus dados" em modo leitura (caixas `code-blue-50`), com "Editar" que abre os campos; "Sua função" (P0b, texto livre).
 - Direita: ferramentas de IA (P0c) em grade de cards com checkbox e ícone (`toolIcons.js`); "Nenhuma" exclui as demais.
+  **Obrigatório marcar pelo menos uma** (pode marcar várias); sem nenhuma, a etapa não avança e mostra o erro abaixo da grade.
+  "Sua função" continua opcional.
 - Rodapé do card: "Voltar" (ghost, volta às boas-vindas) e "Começar as perguntas" (primary). Um único `PATCH /api/r/:token`.
 
 ### 3 · Perguntas (RF-10)
@@ -50,7 +53,9 @@ sempre do backend e do questionário (`server/src/scoring/`), nunca do mockup.
 - Área principal: rótulo "Dimensão N de 5 · Nome · Pergunta X de 24", barra de progresso, pergunta grande e alternativas
   em linhas limpas (`ui/ChoiceRow.jsx`) com atalho numérico.
 - Escolher uma alternativa avança sozinho para a próxima pergunta; teclas 1–N respondem; "Anterior" / "Próxima".
-- Nenhuma pergunta é obrigatória (RN-07/RN-08). Ao enviar com perguntas em branco, aviso com "Revisar" e "Enviar assim mesmo".
+- **Toda pergunta precisa de resposta para avançar** ("Não sei" conta como resposta): "Próxima" fica desabilitado até
+  marcar, e a barra lateral só deixa ir até a primeira pergunta ainda sem resposta. O envio só acontece com as 24 respondidas.
+  O backend continua tratando respostas parciais (RN-07/RN-08) por segurança, mas a tela não deixa enviar em branco.
 - Rascunho no `sessionStorage` (ParticipantFlow); ao reabrir, começa na primeira pergunta sem resposta.
 - Celular: sem barra lateral; topo com logo e "X de 24".
 

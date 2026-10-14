@@ -22,7 +22,7 @@
 | RF-07 | Lista de participantes com status, filtros por área e nível | 8 | C1 |
 | RF-08 | Participante: boas-vindas + aviso LGPD + consentimento; mostrar "9 a 12 minutos" | 2, 11 | C2 |
 | RF-09 | Participante confere/corrige identificação pré-preenchida | 2 | C2 |
-| RF-10 | Questionário progressivo: 1 dimensão por vez, barra de progresso, voltar; perguntas de perfil P0a–P0c (telas em `08-fluxo-participante.md`: perfil numa etapa própria e uma pergunta por tela dentro da dimensão) | 2, 4 | C2 |
+| RF-10 | Questionário progressivo: 1 dimensão por vez, barra de progresso, voltar; perguntas de perfil P0a–P0c (telas em `08-fluxo-participante.md`: perfil numa etapa própria, uma pergunta por tela dentro da dimensão; na interface toda pergunta e P0c exigem resposta) | 2, 4 | C2 |
 | RF-11 | Devolutiva individual (7 blocos da seção 6) com radar | 6 | C2 |
 | RF-12 | Exportar devolutiva em PDF (no front) com identificação e assinatura; reabrir pelo mesmo link | 6, 13 | C2 |
 | RF-13 | Diagnóstico consolidado da empresa (6 blocos da seção 6), sempre como "visão dos respondentes" com cobertura | 6 | C3 |

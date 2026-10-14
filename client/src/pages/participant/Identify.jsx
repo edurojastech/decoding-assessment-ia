@@ -74,6 +74,7 @@ export default function Identify({ token, participant, questionnaire, onConfirme
   const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
   function toggleTool(tool, checked) {
+    if (checked) setErrors(({ tools: _ignored, ...rest }) => rest);
     if (!checked) return setTools(tools.filter((t) => t !== tool));
     // "Nenhuma" não se combina com as demais ferramentas.
     return setTools(tool === NONE_TOOL ? [NONE_TOOL] : [...tools.filter((t) => t !== NONE_TOOL), tool]);
@@ -84,8 +85,10 @@ export default function Identify({ token, participant, questionnaire, onConfirme
     if (!form.name.trim()) next.name = 'Informe seu nome.';
     if (!EMAIL.test(form.email.trim())) next.email = 'Informe um e-mail válido.';
     if (!form.area) next.area = 'Selecione sua área.';
+    // P0c: pelo menos uma opção (quem não usa nenhuma marca "Nenhuma").
+    if (tools.length === 0) next.tools = 'Marque pelo menos uma opção. Se não usa nenhuma, marque "Nenhuma".';
     setErrors(next);
-    if (Object.keys(next).length > 0) setEditing(true);
+    if (next.name || next.email || next.area) setEditing(true);
     return Object.keys(next).length === 0;
   }
 
@@ -180,9 +183,9 @@ export default function Identify({ token, participant, questionnaire, onConfirme
 
           {/* Coluna 2 · Ferramentas de IA (P0c) + ações */}
           <div className="flex flex-col gap-6 lg:border-l lg:border-code-blue-100 lg:pl-10">
-            <fieldset className="flex flex-col gap-4">
+            <fieldset className="flex flex-col gap-4" aria-describedby={errors.tools ? 'ferramentas-erro' : undefined} aria-invalid={errors.tools ? true : undefined}>
               <legend className="sr-only">{profile.P0c.text}</legend>
-              <SectionHeading icon={IconSparkles} title={profile.P0c.text}>Marque todas as que se aplicam.</SectionHeading>
+              <SectionHeading icon={IconSparkles} title={profile.P0c.text}>Marque pelo menos uma; pode marcar várias.</SectionHeading>
               <div className="grid gap-3 sm:grid-cols-2">
                 {profile.P0c.options.map((tool, i, all) => (
                   <ToolOption
@@ -194,6 +197,9 @@ export default function Identify({ token, participant, questionnaire, onConfirme
                   />
                 ))}
               </div>
+              {errors.tools && (
+                <p id="ferramentas-erro" role="alert" className="text-sm font-medium text-destructive">{errors.tools}</p>
+              )}
             </fieldset>
 
             {error && <Alert variant="error">{error}</Alert>}

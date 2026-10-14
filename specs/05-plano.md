@@ -62,6 +62,7 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 - [x] Telas refeitas fiéis aos mockups aprovados (apresentação "Decoding Assessment — Antes e Depois"): perfil em card com dados em caixas, ferramentas com ícone, Voltar/Começar; devolutiva com Copiar link + Baixar PDF no cabeçalho, ponto forte / maior lacuna, "Ver por quê" e "Ver exemplo" (abertos no PDF), foco curto dentro do card da Trilha
 - [x] Devolutiva (RF-11/RF-12) em largura de painel: hero com medidor e régua de níveis; blocos 2–5 sem cards, separados por espaço e linhas finas; cada evidência (RN-10) aparece uma vez; bloco 7 vira uma linha no fim; numeração dos blocos removida (pulava de 05 para 07 sem o bloco 6)
 - [x] Evidência não duplica aspas de opções que já vêm entre aspas ("Faça do seu jeito") — teste em `reportIndividual.test.js`
+- [x] Respostas obrigatórias na interface: cada pergunta precisa de uma resposta para avançar e P0c exige ao menos uma ferramenta (ou "Nenhuma")
 - [x] Escala proporcional `html.participant-scale`: boas-vindas e perfil cabem inteiros em HD (1366 × 768)
 - [x] Documentação: `08-fluxo-participante.md` (telas, desvios conscientes, checklist) e mockups em `specs/ref-participante/`
 - [x] **Pronto quando:** fluxo completo e PDF verificados no Chrome headless (1920, 1366 e 390px, sem rolagem lateral) e 118 testes verdes

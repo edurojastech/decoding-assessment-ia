@@ -78,7 +78,7 @@ export default function Import({ company, onImported, onShowParticipants }) {
     <div className="grid gap-6 lg:grid-cols-[1fr_2fr] lg:items-start">
       <Card variant="gradient">
         <CardBody className="flex flex-col gap-4">
-          <h2 className="text-xl">Formato da lista</h2>
+          <h2 className="text-h3">Formato da lista</h2>
           <ul className="flex list-disc flex-col gap-2 pl-5 text-sm text-code-blue/80">
             <li>Colunas obrigatórias, nesta ordem: <strong className="font-semibold text-code-blue">nome, email, area</strong>.</li>
             <li>Cabeçalho na primeira linha e uma pessoa por linha.</li>
@@ -94,7 +94,7 @@ export default function Import({ company, onImported, onShowParticipants }) {
         <CardBody>
           <form onSubmit={handleImport} noValidate className="flex flex-col gap-5">
             <div>
-              <h2 className="text-xl">Importar participantes</h2>
+              <h2 className="text-h3">Importar participantes</h2>
               <p className="mt-1 text-sm text-code-blue/80">
                 Para {company.name}. Só as linhas válidas são importadas; cada pessoa recebe um link pessoal.
               </p>

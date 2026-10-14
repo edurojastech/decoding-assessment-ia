@@ -25,6 +25,27 @@
   --color-error: var(--error);
   --color-info: var(--info);
   --color-destructive: var(--destructive);
+  --color-code-blue-700: var(--code-blue-700);
+  --color-insight-700: var(--insight-700);
+  --color-lime-100: var(--lime-100);
+  --color-lime-200: var(--lime-200);
+  --color-lime-800: var(--lime-800);
+  --color-success-50: var(--success-50);
+  --color-success-100: var(--success-100);
+  --color-success-700: var(--success-700);
+  --color-success-800: var(--success-800);
+  --color-warning-50: var(--warning-50);
+  --color-warning-100: var(--warning-100);
+  --color-warning-700: var(--warning-700);
+  --color-warning-800: var(--warning-800);
+  --color-error-50: var(--error-50);
+  --color-error-100: var(--error-100);
+  --color-error-700: var(--error-700);
+  --color-error-800: var(--error-800);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
 
   --font-sans: Aileron, Inter, system-ui, sans-serif;
   --font-display: 'Just Sans', Inter, system-ui, sans-serif;
@@ -36,6 +57,7 @@
   --shadow-sm: 0 1px 3px rgba(11,27,86,.08);
   --shadow-md: 0 4px 16px rgba(11,27,86,.12);
   --shadow-lg: 0 10px 32px rgba(11,27,86,.16);
+  --shadow-card: 0 4px 16px rgba(11,27,86,.08), 0 2px 6px rgba(11,27,86,.06);
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -47,10 +69,48 @@
 
 /* Labels, navegação e categorias: uppercase + 0.2em (DS). */
 @utility text-label {
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
+}
+
+/* Escala tipográfica do DS (/tipografia): H1 48 Bold e H2 36 Bold em Aileron; H3 24 e H4 20 em Just Sans Light.
+   Em rem (base 16px), para acompanhar a escala proporcional do admin. */
+@utility text-h1 {
+  font-family: var(--font-sans);
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+@utility text-h2 {
+  font-family: var(--font-sans);
+  font-size: 2.25rem;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+@utility text-h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 300;
+  letter-spacing: 0;
+}
+
+@utility text-h4 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.3;
+  font-weight: 300;
+  letter-spacing: 0;
+}
+
+/* Barra de rolagem fina em Code Blue, visível sobre o fundo branco das listas. */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--code-blue) transparent;
 }
 
 @utility bg-mesh-dark {
@@ -69,6 +129,14 @@
   html {
     -webkit-font-smoothing: antialiased;
   }
+  /* Admin no desktop: a escala acompanha o tamanho da janela, com o FullHD como base (1920 × ~950 = 16px).
+     Em HD (1366 × 768) tudo encolhe junto (textos, espaçamentos, sidebar) e a tela mantém a mesma
+     visão proporcional. Usa o menor entre largura e altura; mínimo 12px, máximo 16px. */
+  @media (min-width: 1024px) {
+    html.admin-scale {
+      font-size: clamp(12px, min(100vw / 120, 100vh / 59), 16px);
+    }
+  }
   body {
     @apply bg-surface font-sans text-code-blue;
   }
@@ -82,7 +150,8 @@
 }
 
 /* PDF (lib/pdf.js): na versão A4, a sombra do card vira contorno, para o recorte por bloco não cortar a sombra. */
-[data-pdf-root] .shadow-md {
+[data-pdf-root] .shadow-md,
+[data-pdf-root] .shadow-card {
   box-shadow: none;
   border: 1px solid var(--code-blue-100);
 }

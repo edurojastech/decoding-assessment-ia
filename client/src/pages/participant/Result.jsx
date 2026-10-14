@@ -103,7 +103,7 @@ export default function Result({ token, justSubmitted }) {
         <CardBody className="flex flex-col gap-4 sm:p-8">
           <div>
             <p className="text-label text-code-blue/70">07 · Sua devolutiva em PDF</p>
-            <h2 id="bloco-pdf" className="mt-2 text-2xl">Leve esta devolutiva com você</h2>
+            <h2 id="bloco-pdf" className="mt-2 text-h3">Leve esta devolutiva com você</h2>
           </div>
           <p>
             O PDF traz a sua identificação e todos os blocos desta página. Este link continua valendo:

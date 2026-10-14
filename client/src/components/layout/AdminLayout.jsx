@@ -25,6 +25,10 @@ export function AdminLayout() {
     .catch(() => {}), []);
 
   useEffect(() => { refreshCompanies(); }, [refreshCompanies]);
+  // Escala proporcional do admin (index.css, html.admin-scale). Entra já na renderização, antes das telas
+  // medirem o próprio tamanho; sai ao deixar o painel.
+  if (typeof document !== 'undefined') document.documentElement.classList.add('admin-scale');
+  useEffect(() => () => document.documentElement.classList.remove('admin-scale'), []);
   useEffect(() => { if (routeId) saveLastCompany(routeId); }, [routeId]);
   useEffect(() => { setDrawer(false); }, [location.pathname, location.search]);
   useEffect(() => {
@@ -64,10 +68,11 @@ export function AdminLayout() {
           menuOpen={drawer}
           onMenu={() => setDrawer(true)}
         />
-        <main className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-8 sm:px-8">
+        {/* Largura total: o painel ocupa todo o espaço ao lado da sidebar, com margens mínimas. */}
+        <main className="w-full min-w-0 flex-1 px-4 py-6 sm:px-6">
           <Outlet context={{ refreshCompanies }} />
         </main>
-        <Footer />
+        <Footer wide />
       </div>
     </div>
   );

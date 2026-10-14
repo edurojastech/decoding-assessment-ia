@@ -13,7 +13,7 @@ export function AttentionList({ items, loading, className }) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-label text-code-blue-300">Pede atenção</p>
-            <h2 id="pede-atencao" className="mt-2 text-xl font-light tracking-normal">O que precisa de você</h2>
+            <h2 id="pede-atencao" className="mt-2 text-h3">O que precisa de você</h2>
           </div>
           {items.length > 0 && <Badge variant="pending">{items.length}<span className="sr-only"> itens</span></Badge>}
         </div>
@@ -36,7 +36,7 @@ export function AttentionList({ items, loading, className }) {
               <li key={id} className="border-b border-code-blue-100 last:border-b-0">
                 <Link to={to} className="-mx-2 flex items-center gap-3 rounded-lg px-2 py-3 hover:bg-code-blue-50">
                   <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-insight-50">
-                    <Icon icon={icon} className="h-[18px] w-[18px]" />
+                    <Icon icon={icon} className="h-[1.125rem] w-[1.125rem]" />
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-semibold">{title}</span>

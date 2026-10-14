@@ -152,7 +152,7 @@ export default function Questionnaire({
                 onChange={(e) => setRole(e.target.value)}
               />
               <fieldset className="flex flex-col gap-3">
-                <legend className="text-label text-code-blue">{profile.find((p) => p.id === 'P0c').text}</legend>
+                <legend className="text-sm font-medium text-code-blue">{profile.find((p) => p.id === 'P0c').text}</legend>
                 <p className="text-sm text-code-blue/70">Marque todas as que se aplicam.</p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {profile.find((p) => p.id === 'P0c').options.map((tool) => (

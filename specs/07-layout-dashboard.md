@@ -24,7 +24,7 @@
 - Breadcrumb: `Decoding Campus › Assessment de IA › <página>` (último item em Code Blue bold).
 - Direita: ícone de ajuda (abre modal curto explicando níveis e cobertura), avatar + nome + chevron (menu com Sair). Sem sino de notificações falso (regra de honestidade: não mostrar notificação que não existe).
 
-**Área de conteúdo:** fundo Surface `#F8F9FE`, largura máx. ~1200px, padding 32px.
+**Área de conteúdo:** fundo Surface `#F8F9FE`, largura total ao lado da sidebar, padding 16px (24px a partir de `sm`).
 
 **Responsivo:** < 1024px a sidebar vira drawer (botão hambúrguer na topbar); cards empilham em 1 coluna no celular.
 
@@ -67,3 +67,18 @@
 - KPIs de concluídos / em andamento / pendentes batem com a lista de participantes.
 - Visual fiel ao print (sidebar navy, item ativo lime, hero escuro, KPI cards) e responsivo (1280px e 390px).
 - Testes existentes continuam verdes; nenhuma rota de API alterada.
+
+## Tela de Participantes (redesenho, 13/10)
+- Cabeçalho: eyebrow, nome da empresa e subtítulo; à direita, **Copiar todos os links** (ghost) e **Baixar CSV de links** (primary). Com filtro ativo, o primeiro vira "Copiar links filtrados".
+- Aviso "Os links não são enviados automaticamente" logo abaixo (RNF-05).
+- Card da lista: contagem "X de Y participantes" e botão **Filtros (n)**, que abre um painel com status (com contagens), área e nível. n = filtros ativos. O `?status=` vindo dos KPIs continua funcionando.
+- Tabela: Pessoa (avatar, nome, e-mail) · Área · Status · Nível · Ações (Copiar link com ícone, Excluir em vermelho com confirmação).
+- Rodapé: "Exibindo X a Y de Z participantes", páginas e seletor 8/16/32 por página (paginação no cliente; copiar e CSV usam a lista filtrada inteira).
+- No celular, cada pessoa vira um bloco empilhado; sem rolagem lateral (C7).
+
+## Largura do painel (13/10)
+- O conteúdo do admin ocupa toda a largura ao lado da sidebar (sem `max-width`), com margens de 16px no celular e 24px a partir de `sm`, e 24px entre blocos. Topbar e rodapé seguem as mesmas margens.
+
+## Escala proporcional e lista sem rolagem (13/10)
+- No desktop (≥1024px) o admin usa `html.admin-scale`: o tamanho base acompanha a janela, com o FullHD como referência (`clamp(12px, min(100vw/120, 100vh/59), 16px)`). Em HD (1366×768) tudo encolhe junto e a tela fica com a mesma visão proporcional do FullHD. Tamanhos de texto e colunas fixas foram passados para `rem`.
+- Participantes: a opção padrão de paginação é **Ajustar à tela**, que calcula quantas linhas cabem na janela, para a página não ganhar barra de rolagem (com 8/16/32 por página, o que passar da tela rola dentro da tabela, com o cabeçalho da tabela e a paginação fixos; a página em si não rola). O aviso duplicado sobre links saiu: o subtítulo já diz que os links não são enviados automaticamente.

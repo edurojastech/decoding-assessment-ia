@@ -86,7 +86,7 @@ function Totals({ totals }) {
         <CardBody className="flex flex-col gap-5">
           <div>
             <p className="text-label text-code-blue-300">Distribuição por nível · {totals.label}</p>
-            <h2 id="macro" className="mt-2 text-xl font-light tracking-normal">Todas as empresas</h2>
+            <h2 id="macro" className="mt-2 text-h3">Todas as empresas</h2>
           </div>
           {totals.distribution.classified > 0
             ? <LevelBars levels={totals.distribution.levels} total={totals.distribution.classified} />
@@ -102,7 +102,7 @@ function CompanyCard({ company }) {
     <Card className="h-full transition-shadow duration-150 hover:shadow-lg">
       <CardBody className="flex h-full flex-col gap-5">
         <div className="flex items-start justify-between gap-3">
-          <h2 className="min-w-0 text-xl font-light tracking-normal break-words">{company.name}</h2>
+          <h2 className="min-w-0 text-lg font-bold break-words">{company.name}</h2>
           <Badge variant={company.invited === 0 ? 'default' : 'info'}>
             {company.invited === 0 ? 'Sem participantes' : company.responded > 0 ? 'Em andamento' : 'Sem respostas'}
           </Badge>
@@ -145,7 +145,7 @@ export default function Overview() {
   const firstName = user?.name?.split(' ')[0] || 'Administrador';
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <PageHeader
         title={`Olá, ${firstName}`}
         subtitle="Acompanhe o preenchimento de cada empresa. Os resultados aparecem sempre como visão dos respondentes, junto com a cobertura."

@@ -12,7 +12,7 @@ function SectionTitle({ number, title, id, children }) {
   return (
     <div>
       <p className="text-label text-code-blue/70">{String(number).padStart(2, '0')} · {title}</p>
-      <h2 id={id} className="mt-2 text-2xl">{children}</h2>
+      <h2 id={id} className="mt-2 text-h3">{children}</h2>
     </div>
   );
 }
@@ -161,7 +161,7 @@ export default function Diagnosis({ company, onNavigate }) {
     return (
       <Card>
         <CardBody className="flex flex-col items-start gap-4">
-          <h2 className="text-xl">Sem participantes ainda</h2>
+          <h2 className="text-h3">Sem participantes ainda</h2>
           <p className="text-code-blue/80">O diagnóstico aparece quando houver pessoas importadas e respostas enviadas.</p>
           <Button variant="accent" onClick={() => onNavigate('importar')}>Importar participantes</Button>
         </CardBody>
@@ -176,7 +176,7 @@ export default function Diagnosis({ company, onNavigate }) {
       {summary.empty ? (
         <Card>
           <CardBody className="flex flex-col items-start gap-3">
-            <h2 className="text-xl">Ainda não há respostas</h2>
+            <h2 className="text-h3">Ainda não há respostas</h2>
             <p className="text-code-blue/80">
               Quando as pessoas concluírem o questionário, o perfil dos respondentes aparece aqui. Confira os links na tela Participantes.
             </p>

@@ -69,7 +69,7 @@ function GroupCard({ group, company, open, onToggle, onCreated }) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-label text-code-blue/70">Grupo</p>
-            <h2 id={`${listId}-titulo`} className="mt-1 text-xl">{group.level}</h2>
+            <h2 id={`${listId}-titulo`} className="mt-1 text-lg font-bold">{group.level}</h2>
           </div>
           <LevelBadge level={group.level} />
         </div>
@@ -178,7 +178,7 @@ export default function Groups({ company, onNavigate }) {
       {incomplete.length > 0 && (
         <Card>
           <CardBody className="flex flex-col gap-3">
-            <h2 className="text-xl">Sem nível: preenchimento incompleto</h2>
+            <h2 className="text-lg font-bold">Sem nível: preenchimento incompleto</h2>
             <p className="text-sm text-code-blue/80">
               Essas pessoas responderam menos de 70% do questionário, então o estágio geral não foi calculado.
             </p>

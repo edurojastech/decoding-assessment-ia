@@ -12,15 +12,15 @@ export function KpiCard({ icon, label, value, caption, to, children, className }
         {icon && <Icon icon={icon} className="h-5 w-5 text-insight" />}
         {label}
       </p>
-      <p className="mt-3 text-[40px] leading-none font-light">{value}</p>
+      <p className="mt-3 text-[2.5rem] leading-none font-light">{value}</p>
       {caption && <p className="mt-2 text-xs text-code-blue/70">{caption}</p>}
       {children && <div className="mt-4">{children}</div>}
     </>
   );
-  const base = cx('block rounded-xl border border-code-blue-100 bg-canvas p-5 shadow-sm', className);
+  const base = cx('block rounded-2xl border border-border-default bg-canvas p-5 shadow-card', className);
   if (!to) return <div className={base}>{body}</div>;
   return (
-    <Link to={to} className={cx(base, 'transition-[box-shadow,border-color] duration-150 hover:border-insight hover:shadow-md')}>
+    <Link to={to} className={cx(base, 'transition-[box-shadow,border-color] duration-150 hover:border-insight hover:shadow-lg')}>
       {body}
     </Link>
   );

@@ -24,7 +24,7 @@ function NavItem({ to, end, icon, label }) {
       {({ isActive }) => (
         <>
           {isActive && <span aria-hidden="true" className="absolute inset-y-2 -left-4 w-1 rounded-r-full bg-pulse-lime" />}
-          <Icon icon={icon} className="h-[18px] w-[18px]" />
+          <Icon icon={icon} className="h-[1.125rem] w-[1.125rem]" />
           {label}
         </>
       )}
@@ -36,7 +36,7 @@ function NavItem({ to, end, icon, label }) {
 function DisabledItem({ icon, label }) {
   return (
     <span aria-disabled="true" title={NO_COMPANY} className={cx(ITEM, 'cursor-not-allowed text-canvas/40')}>
-      <Icon icon={icon} className="h-[18px] w-[18px]" />
+      <Icon icon={icon} className="h-[1.125rem] w-[1.125rem]" />
       {label}
       <span className="sr-only"> ({NO_COMPANY.toLowerCase()})</span>
     </span>
@@ -58,7 +58,7 @@ export function Sidebar({ companies, selected, user, onLogout, open, onClose }) 
       <div className="flex items-start justify-between px-6 pt-6 pb-8">
         <div>
           <Logo tone="onDark" className="h-8" />
-          <p className="text-label mt-2 text-[10px] text-canvas/70">Campus</p>
+          <p className="text-label mt-2 text-[0.625rem] text-canvas/70">Campus</p>
         </div>
         <button type="button" onClick={onClose} className="rounded-full p-1 text-canvas/80 hover:text-canvas lg:hidden">
           <Icon icon={IconX} className="h-5 w-5" />
@@ -68,12 +68,12 @@ export function Sidebar({ companies, selected, user, onLogout, open, onClose }) 
 
       <div className="flex flex-1 flex-col gap-8 overflow-y-auto px-4 pb-4">
         <div className="flex flex-col gap-3">
-          <p className="text-label px-2 text-[10px] text-canvas/60">Espaço de trabalho</p>
+          <p className="text-label px-2 text-[0.625rem] text-canvas/60">Espaço de trabalho</p>
           <WorkspaceSwitcher companies={companies} selected={selected} />
         </div>
 
         <nav aria-label="Principal" className="flex flex-col gap-3">
-          <p className="text-label px-2 text-[10px] text-canvas/60">Administradora</p>
+          <p className="text-label px-2 text-[0.625rem] text-canvas/60">Administradora</p>
           <ul className="flex flex-col gap-1">
             <li><NavItem to="/admin" end icon={OVERVIEW_PAGE.icon} label={OVERVIEW_PAGE.label} /></li>
             {COMPANY_PAGES.map((page) => (

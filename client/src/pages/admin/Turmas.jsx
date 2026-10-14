@@ -150,7 +150,7 @@ function TurmaCard({ turma, board, onBoard }) {
               <p className="text-label text-code-blue/70">
                 Turma{turma.sourceLevel && ` · origem ${turma.sourceLevel}`}
               </p>
-              <h2 id={`turma-${turma.id}`} className="mt-1 break-words text-xl">{turma.name}</h2>
+              <h2 id={`turma-${turma.id}`} className="mt-1 break-words text-lg font-bold">{turma.name}</h2>
               <p className="mt-2 text-sm">
                 {turma.offer ? <>Percurso: <strong>{turma.offer}</strong></> : 'Sem oferta associada'}
               </p>
@@ -158,7 +158,7 @@ function TurmaCard({ turma, board, onBoard }) {
             {!mode && (
               <div className="flex flex-wrap gap-2">
                 <Button variant="secondary" size="sm" onClick={() => setMode('edit')}>Editar</Button>
-                <Button variant="ghost" size="sm" onClick={() => setMode('delete')}>Excluir</Button>
+                <Button variant="destructive" size="sm" onClick={() => setMode('delete')}>Excluir</Button>
               </div>
             )}
           </div>
@@ -247,7 +247,7 @@ function Unassigned({ board, onBoard }) {
       <CardBody className="flex flex-col gap-4">
         <div>
           <p className="text-label text-code-blue/70">Respondentes</p>
-          <h2 id="sem-turma" className="mt-1 text-xl">Sem turma · {board.unassigned.length}</h2>
+          <h2 id="sem-turma" className="mt-1 text-lg font-bold">Sem turma · {board.unassigned.length}</h2>
         </div>
         {board.unassigned.length === 0 ? (
           <p className="text-sm text-code-blue/80">Todos os respondentes já estão em uma turma.</p>

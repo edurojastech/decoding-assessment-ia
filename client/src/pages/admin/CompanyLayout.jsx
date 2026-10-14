@@ -42,7 +42,7 @@ export default function CompanyLayout() {
   }
   if (!company) {
     return (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6">
         <PageHeader eyebrow="Assessment de IA" title={state?.name ?? 'Empresa'} />
         <p role="status" className="text-sm text-code-blue/70">Carregando…</p>
       </div>
@@ -65,7 +65,7 @@ function CompanyPage({ path, children }) {
   const { company } = useCompany();
   const page = COMPANY_PAGES.find((p) => p.path === path);
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <PageHeader eyebrow={`${page.label} · Assessment de IA`} title={company.name} subtitle={SUBTITLES[path]} />
       {children}
     </div>
@@ -75,11 +75,9 @@ function CompanyPage({ path, children }) {
 // Telas existentes, agora como rotas dentro do shell (specs/07): mesmo conteúdo, cabeçalho padrão.
 export function ParticipantsPage() {
   const { company, reload, go } = useCompany();
-  return (
-    <CompanyPage path="participantes">
-      <Participants company={company} onChanged={reload} onImport={() => go('importar')} />
-    </CompanyPage>
-  );
+  // Participantes monta o próprio cabeçalho, porque as ações (copiar links, CSV) dependem da lista filtrada.
+  const header = { eyebrow: 'Participantes · Assessment de IA', title: company.name, subtitle: SUBTITLES.participantes };
+  return <Participants company={company} header={header} onChanged={reload} onImport={() => go('importar')} />;
 }
 
 export function ImportPage() {

@@ -9,7 +9,7 @@ import { HelpDialog } from './HelpDialog.jsx';
 export function Topbar({ page, user, onLogout, onMenu, menuOpen }) {
   const [help, setHelp] = useState(false);
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-code-blue-100 bg-canvas px-4 sm:px-8">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-code-blue-100 bg-canvas px-4 sm:px-6">
       <button
         type="button"
         onClick={onMenu}

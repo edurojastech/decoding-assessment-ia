@@ -50,7 +50,7 @@ export default function Welcome({ token, participant, questionnaire, onConsented
           <CardBody className="flex flex-col gap-6 sm:p-8">
             <div>
               <p className="text-label text-code-blue/70">Antes de começar</p>
-              <h2 className="mt-2 text-2xl">Privacidade e uso dos seus dados</h2>
+              <h2 className="mt-2 text-h3">Privacidade e uso dos seus dados</h2>
             </div>
 
             <dl className="flex flex-col gap-4 text-base">

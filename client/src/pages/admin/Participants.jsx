@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { IconCheck, IconCopy, IconTrash } from '@tabler/icons-react';
 import { api } from '../../lib/api.js';
 import { copyText } from '../../lib/clipboard.js';
 import { Alert, Avatar, Badge, Button, Card, CardBody, Select, Tag } from '../../components/ui/index.js';
@@ -75,10 +76,12 @@ function ParticipantRow({ participant, copied, onCopy, onDelete }) {
         </div>
         <div className="flex flex-wrap gap-2 md:justify-end">
           <Button variant="secondary" size="sm" onClick={() => onCopy(participant)} title={participant.link}>
+            {copied ? <IconCheck size={16} stroke={2} aria-hidden="true" /> : <IconCopy size={16} stroke={2} aria-hidden="true" />}
             {copied ? 'Link copiado' : 'Copiar link'}
           </Button>
           {!confirming && (
-            <Button variant="ghost" size="sm" onClick={() => setConfirming(true)}>
+            <Button variant="destructive" size="sm" onClick={() => setConfirming(true)}>
+              <IconTrash size={16} stroke={2} aria-hidden="true" />
               Excluir<span className="sr-only"> {participant.name}</span>
             </Button>
           )}
@@ -90,6 +93,7 @@ function ParticipantRow({ participant, copied, onCopy, onDelete }) {
           {error && <p className="mt-2 font-semibold">{error}</p>}
           <div className="mt-3 flex flex-wrap gap-2">
             <Button variant="destructive" size="sm" onClick={handleDelete} disabled={deleting}>
+              <IconTrash size={16} stroke={2} aria-hidden="true" />
               {deleting ? 'Excluindo…' : 'Excluir definitivamente'}
             </Button>
             <Button variant="ghost" size="sm" onClick={() => setConfirming(false)} disabled={deleting}>Cancelar</Button>

@@ -58,12 +58,12 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 | C | Teste | OK |
 |---|-------|----|
 | C1 | Importar CSV com linha inválida, exportar links | [x] |
-| C2 | Abrir link, responder, ver devolutiva, baixar PDF | [ ] |
+| C2 | Abrir link, responder, ver devolutiva, baixar PDF (testado no app publicado: desktop e celular, PDF de 6 páginas) | [x] |
 | C3 | Consolidado com cobertura, níveis, radar, mapa por área | [x] |
 | C4 | Criar turma e mover pessoa | [x] |
 | C5 | `npm test` verde (117/117) | [x] |
 | C6 | Banco zerado → start → dashboards populados (seed no start do deploy) | [x] |
-| C7 | Celular OK; nenhum texto diz "e-mail enviado" | [ ] |
+| C7 | Celular OK (390px, sem rolagem lateral, menu em gaveta); nenhum texto diz "e-mail enviado" | [x] |
 
 ## Fase 6 · Entregar
 - [x] Deploy no Replit, link público (decoding-assessment-ia--edurojasdevelop.replit.app)

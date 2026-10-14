@@ -61,12 +61,12 @@ Cada fatia termina com: teste manual + `git commit` + (após Fase 3) `git push` 
 | C2 | Abrir link, responder, ver devolutiva, baixar PDF | [ ] |
 | C3 | Consolidado com cobertura, níveis, radar, mapa por área | [x] |
 | C4 | Criar turma e mover pessoa | [x] |
-| C5 | `npm test` verde | [ ] |
-| C6 | Banco zerado → start → dashboards populados | [ ] |
+| C5 | `npm test` verde (117/117) | [x] |
+| C6 | Banco zerado → start → dashboards populados (seed no start do deploy) | [x] |
 | C7 | Celular OK; nenhum texto diz "e-mail enviado" | [ ] |
 
 ## Fase 6 · Entregar
-- [ ] Deploy no Replit, link público
+- [x] Deploy no Replit, link público (decoding-assessment-ia--edurojasdevelop.replit.app)
 - [x] README: stack, como rodar, regras de pontuação, ADRs, credenciais demo
 - [x] Limitações e próximos passos (e-mail automático, acesso do cliente, calibrar pesos) — no README
 - [ ] Ensaio da demo: participante → admin → critérios

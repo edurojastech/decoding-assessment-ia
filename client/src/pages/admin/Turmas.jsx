@@ -158,7 +158,7 @@ function TurmaCard({ turma, board, onBoard }) {
             {!mode && (
               <div className="flex flex-wrap gap-2">
                 <Button variant="secondary" size="sm" onClick={() => setMode('edit')}>Editar</Button>
-                <Button variant="ghost" size="sm" onClick={() => setMode('delete')}>Excluir</Button>
+                <Button variant="destructive" size="sm" onClick={() => setMode('delete')}>Excluir</Button>
               </div>
             )}
           </div>

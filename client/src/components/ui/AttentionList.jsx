@@ -36,7 +36,7 @@ export function AttentionList({ items, loading, className }) {
               <li key={id} className="border-b border-code-blue-100 last:border-b-0">
                 <Link to={to} className="-mx-2 flex items-center gap-3 rounded-lg px-2 py-3 hover:bg-code-blue-50">
                   <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-insight-50">
-                    <Icon icon={icon} className="h-[18px] w-[18px]" />
+                    <Icon icon={icon} className="h-[1.125rem] w-[1.125rem]" />
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-sm font-semibold">{title}</span>

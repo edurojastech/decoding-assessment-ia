@@ -124,7 +124,7 @@ Varredura de cada página do DS (`/componentes/*`, `/tipografia`, `/tokens`, `/m
 
 | Componente | Antes | Agora (igual ao DS) |
 |---|---|---|
-| Botões | pílula (`rounded-full`), secondary em contorno branco, Excluir em contorno | raios de 8px e 12px, secondary ciano, ghost com borda de 1.5px, destructive #DC2626 com ícone |
+| Botões | pílula (`rounded-full`), secondary em contorno branco, Excluir em contorno | raios de 8px e 12px, secondary ciano, ghost com borda de 1.5px, destructive #EF4444 (Error) sempre com ícone de lixeira, embutido no `Button` |
 | Badges | 12px, caixa normal, texto Code Blue | 10px em caixa alta (0.05em), pares de cor do DS (ex.: #DCFCE7/#166534) |
 | Alertas | raio 12px, texto Code Blue | raio 16px, fundo tint, título e texto nos tons semânticos do DS |
 | Cards / KPIs | raio 16px, sem borda, faixa de 6px | raio 24px, borda #E0E5FA, sombra de card, faixa de 8px (dark = Mesh Escuro) |

@@ -78,3 +78,7 @@
 
 ## Largura do painel (13/10)
 - O conteúdo do admin ocupa toda a largura ao lado da sidebar (sem `max-width`), com margens de 16px no celular e 24px a partir de `sm`, e 24px entre blocos. Topbar e rodapé seguem as mesmas margens.
+
+## Escala proporcional e lista sem rolagem (13/10)
+- No desktop (≥1024px) o admin usa `html.admin-scale`: o tamanho base acompanha a janela, com o FullHD como referência (`clamp(12px, min(100vw/120, 100vh/59), 16px)`). Em HD (1366×768) tudo encolhe junto e a tela fica com a mesma visão proporcional do FullHD. Tamanhos de texto e colunas fixas foram passados para `rem`.
+- Participantes: a opção padrão de paginação é **Ajustar à tela**, que calcula quantas linhas cabem na janela, para a página não ganhar barra de rolagem (com 8/16/32 por página, o que passar da tela rola dentro da tabela, com o cabeçalho da tabela e a paginação fixos; a página em si não rola). O aviso duplicado sobre links saiu: o subtítulo já diz que os links não são enviados automaticamente.

@@ -15,7 +15,7 @@ export function Badge({ variant = 'default', className, ...props }) {
   return (
     <span
       className={cx(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-[0.05em] uppercase whitespace-nowrap',
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-[0.625rem] font-semibold tracking-[0.05em] uppercase whitespace-nowrap',
         VARIANTS[variant],
         className,
       )}

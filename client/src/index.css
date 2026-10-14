@@ -69,30 +69,31 @@
 
 /* Labels, navegação e categorias: uppercase + 0.2em (DS). */
 @utility text-label {
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
 }
 
-/* Escala tipográfica do DS (/tipografia): H1 48 Bold e H2 36 Bold em Aileron; H3 24 e H4 20 em Just Sans Light. */
+/* Escala tipográfica do DS (/tipografia): H1 48 Bold e H2 36 Bold em Aileron; H3 24 e H4 20 em Just Sans Light.
+   Em rem (base 16px), para acompanhar a escala proporcional do admin. */
 @utility text-h1 {
   font-family: var(--font-sans);
-  font-size: 48px;
+  font-size: 3rem;
   line-height: 1.1;
   font-weight: 700;
 }
 
 @utility text-h2 {
   font-family: var(--font-sans);
-  font-size: 36px;
+  font-size: 2.25rem;
   line-height: 1.15;
   font-weight: 700;
 }
 
 @utility text-h3 {
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: 1.5rem;
   line-height: 1.3;
   font-weight: 300;
   letter-spacing: 0;
@@ -100,10 +101,16 @@
 
 @utility text-h4 {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.3;
   font-weight: 300;
   letter-spacing: 0;
+}
+
+/* Barra de rolagem fina em Code Blue, visível sobre o fundo branco das listas. */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--code-blue) transparent;
 }
 
 @utility bg-mesh-dark {
@@ -121,6 +128,14 @@
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
+  }
+  /* Admin no desktop: a escala acompanha o tamanho da janela, com o FullHD como base (1920 × ~950 = 16px).
+     Em HD (1366 × 768) tudo encolhe junto (textos, espaçamentos, sidebar) e a tela mantém a mesma
+     visão proporcional. Usa o menor entre largura e altura; mínimo 12px, máximo 16px. */
+  @media (min-width: 1024px) {
+    html.admin-scale {
+      font-size: clamp(12px, min(100vw / 120, 100vh / 59), 16px);
+    }
   }
   body {
     @apply bg-surface font-sans text-code-blue;

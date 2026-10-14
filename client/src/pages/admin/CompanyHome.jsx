@@ -226,7 +226,7 @@ export default function CompanyHome() {
               </Button>
             )}
             <Button variant="ghost" size="sm" onClick={() => setMode('rename')}>Renomear</Button>
-            <Button variant="ghost" size="sm" onClick={() => setMode('delete')}>Excluir empresa</Button>
+            <Button variant="destructive" size="sm" onClick={() => setMode('delete')}>Excluir empresa</Button>
           </>
         )}
       />

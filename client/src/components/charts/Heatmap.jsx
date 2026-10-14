@@ -69,7 +69,7 @@ export function Heatmap({ dimensions, rows }) {
                       <span className="sr-only">{label}</span>
                       <span aria-hidden="true" className="flex flex-col items-center gap-0.5">
                         <span className="text-base font-bold">{cell.average ?? '—'}</span>
-                        {focus && <span className="rounded-full bg-pulse-lime px-2 text-code-blue text-[10px] font-semibold uppercase tracking-[0.2em]">foco</span>}
+                        {focus && <span className="rounded-full bg-pulse-lime px-2 text-code-blue text-[0.625rem] font-semibold uppercase tracking-[0.2em]">foco</span>}
                       </span>
                     </td>
                   );

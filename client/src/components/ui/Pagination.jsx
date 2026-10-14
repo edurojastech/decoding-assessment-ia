@@ -15,7 +15,8 @@ const square = 'inline-flex h-10 min-w-10 cursor-pointer items-center justify-ce
 
 // Rodapé de lista: "Exibindo X a Y de Z", páginas e itens por página.
 // Botões no padrão do DS: página atual em Code Blue (primary), demais em tint (code-blue-50), setas em ghost.
-export function Pagination({ page, pageSize, total, onPage, onPageSize, sizes = [8, 16, 32], noun = 'itens' }) {
+// `sizes`: números ou { value, label }; `sizeValue` = opção escolhida (ex.: 0 = ajustar à tela), se diferente de pageSize.
+export function Pagination({ page, pageSize, total, onPage, onPageSize, sizes = [8, 16, 32], sizeValue, noun = 'itens' }) {
   const sizeId = useId();
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
@@ -67,11 +68,14 @@ export function Pagination({ page, pageSize, total, onPage, onPageSize, sizes = 
           <label htmlFor={sizeId} className="sr-only">Itens por página</label>
           <select
             id={sizeId}
-            value={pageSize}
+            value={sizeValue ?? pageSize}
             onChange={(e) => onPageSize(Number(e.target.value))}
             className="h-10 cursor-pointer appearance-none rounded-lg border-[1.5px] border-border-strong bg-canvas pl-4 pr-10 text-sm text-code-blue outline-none transition-all duration-150 focus:border-insight focus:ring-4 focus:ring-insight-100"
           >
-            {sizes.map((n) => <option key={n} value={n}>{n} por página</option>)}
+            {sizes.map((opt) => {
+              const { value, label } = typeof opt === 'number' ? { value: opt, label: `${opt} por página` } : opt;
+              return <option key={value} value={value}>{label}</option>;
+            })}
           </select>
           <Icon icon={IconChevronDown} className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
         </div>

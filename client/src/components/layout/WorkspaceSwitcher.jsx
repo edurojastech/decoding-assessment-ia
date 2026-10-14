@@ -34,7 +34,7 @@ export function WorkspaceSwitcher({ companies, selected }) {
 
       {open && (
         <div id={menuId} className="absolute inset-x-0 top-full z-50 mt-2 overflow-hidden rounded-lg bg-canvas text-code-blue shadow-lg">
-          <p className="text-label px-4 pt-3 pb-2 text-[10px] text-code-blue/60">Empresas</p>
+          <p className="text-label px-4 pt-3 pb-2 text-[0.625rem] text-code-blue/60">Empresas</p>
           <ul className="max-h-64 overflow-y-auto pb-2">
             {companies.length === 0 && <li className="px-4 py-2 text-sm text-code-blue/70">Nenhuma empresa cadastrada.</li>}
             {companies.map((c) => (

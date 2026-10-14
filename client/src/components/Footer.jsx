@@ -4,7 +4,7 @@ import { Logo } from './Logo.jsx';
 export function Footer({ wide = false }) {
   return (
     <footer className="border-t border-code-blue-100 bg-canvas">
-      <div className={`flex flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 ${wide ? 'py-6' : 'mx-auto max-w-6xl py-8'}`}>
+      <div className={`flex flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 ${wide ? 'py-4' : 'mx-auto max-w-6xl py-8'}`}>
         <Logo className="sm:self-center" />
         <div className="flex flex-col gap-1 sm:items-end">
           <p className="text-label text-code-blue">

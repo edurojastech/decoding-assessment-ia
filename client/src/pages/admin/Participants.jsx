@@ -1,18 +1,70 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { IconCheck, IconChevronDown, IconCopy, IconFilter, IconTrash } from '@tabler/icons-react';
+import { IconCheck, IconChevronDown, IconCopy, IconFilter } from '@tabler/icons-react';
 import { api } from '../../lib/api.js';
 import { copyText } from '../../lib/clipboard.js';
 import { Alert, Avatar, Badge, Button, Card, CardBody, Icon, Pagination, Select, Tag } from '../../components/ui/index.js';
+import { cx } from '../../components/ui/cx.js';
 import { PageHeader } from '../../components/layout/PageHeader.jsx';
 import { useDismiss } from '../../components/layout/useDismiss.js';
 import { LEVELS, LevelBadge } from '../../components/report/LevelBadge.jsx';
 import { STATUS, StatusBadge } from '../../components/StatusBadge.jsx';
 
 // Cada linha é um grid próprio: a coluna de ações tem largura fixa para alinhar com o cabeçalho.
-const GRID = 'md:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)_232px]';
+const GRID = 'md:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.2fr)_14.5rem]';
 const EMPTY_FILTERS = { area: '', level: '' };
 const PAGE_SIZES = [8, 16, 32];
+const AUTO = 0; // "Ajustar à tela": quantas linhas cabem sem rolar a página
+
+// true quando a lista tem mais conteúdo do que a altura visível (a barra de rolagem aparece).
+function useOverflowing(ref, deps) {
+  const [over, setOver] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+    const check = () => setOver(el.scrollHeight > el.clientHeight + 1);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    [...el.children].forEach((child) => ro.observe(child));
+    return () => ro.disconnect();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+  return over;
+}
+
+// Espaço da lista na janela sem rolar a página (só no desktop, onde a lista é tabela).
+// Mede a altura de uma linha e o que vem depois da lista (rodapé do card, margem, rodapé do site).
+// `rows` = linhas que cabem (modo "Ajustar à tela"); `maxHeight` = altura da lista: com 8/16/32 por página,
+// o que passar disso rola dentro da tabela, e não na página.
+function useFitRows(listRef, cardRef, enabled, deps) {
+  const [fit, setFit] = useState({ rows: 8, maxHeight: undefined });
+  useEffect(() => {
+    if (!enabled) return undefined;
+    const measure = () => {
+      const list = listRef.current;
+      const card = cardRef.current;
+      const first = list?.firstElementChild;
+      if (!list || !card || !first || !window.matchMedia('(min-width: 768px)').matches) return setFit({ rows: 8, maxHeight: undefined });
+      const rowH = first.getBoundingClientRect().height;
+      const listTop = list.getBoundingClientRect().top + window.scrollY;
+      const rowsH = list.getBoundingClientRect().height;
+      const afterList = card.getBoundingClientRect().bottom - list.getBoundingClientRect().top - rowsH;
+      const main = card.closest('main');
+      const mainPad = main ? parseFloat(getComputedStyle(main).paddingBottom) : 0;
+      const footer = document.querySelector('footer')?.offsetHeight ?? 0;
+      const available = window.innerHeight - listTop - afterList - mainPad - footer;
+      const rows = Math.max(3, Math.floor(available / rowH));
+      setFit({ rows, maxHeight: Math.max(available, rows * rowH) });
+    };
+    measure();
+    document.fonts?.ready.then(measure); // as fontes da marca mudam a altura das linhas
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enabled, ...deps]);
+  return fit;
+}
 
 // Status no painel de filtros, na ordem do painel; o filtro vive na URL (?status=, vindo dos KPIs).
 const STATUS_CHIPS = [
@@ -62,7 +114,7 @@ function ParticipantRow({ participant, copied, onCopy, onDelete }) {
   }
 
   return (
-    <li className="border-b border-code-blue-100 py-3 last:border-b-0">
+    <li className="border-b border-code-blue-100 py-2.5 last:border-b-0">
       <div className={`grid gap-3 ${GRID} md:items-center md:gap-4`}>
         <div className="flex min-w-0 items-center gap-3">
           <Avatar name={participant.name} size="sm" />
@@ -84,7 +136,6 @@ function ParticipantRow({ participant, copied, onCopy, onDelete }) {
           </Button>
           {!confirming && (
             <Button variant="destructive" size="sm" onClick={() => setConfirming(true)}>
-              <IconTrash size={16} stroke={2} aria-hidden="true" />
               Excluir<span className="sr-only"> {participant.name}</span>
             </Button>
           )}
@@ -96,7 +147,6 @@ function ParticipantRow({ participant, copied, onCopy, onDelete }) {
           {error && <p className="mt-2 font-semibold">{error}</p>}
           <div className="mt-3 flex flex-wrap gap-2">
             <Button variant="destructive" size="sm" onClick={handleDelete} disabled={deleting}>
-              <IconTrash size={16} stroke={2} aria-hidden="true" />
               {deleting ? 'Excluindo…' : 'Excluir definitivamente'}
             </Button>
             <Button variant="ghost" size="sm" onClick={() => setConfirming(false)} disabled={deleting}>Cancelar</Button>
@@ -180,7 +230,9 @@ export default function Participants({ company, header, onChanged, onImport }) {
   const [notice, setNotice] = useState('');
   const [flash, showFlash] = useFlash();
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+  const [sizeChoice, setSizeChoice] = useState(AUTO);
+  const listRef = useRef(null);
+  const cardRef = useRef(null);
 
   const qs = queryString({ ...filters, status });
   const load = useCallback(() => api.get(`/companies/${company.id}/participants${qs}`)
@@ -188,8 +240,6 @@ export default function Participants({ company, header, onChanged, onImport }) {
     .catch((err) => setError(err.message)), [company.id, qs]);
 
   useEffect(() => { load(); }, [load]);
-  // Filtro ou tamanho de página novo: volta para a primeira página.
-  useEffect(() => { setPage(1); }, [qs, pageSize]);
 
   const activeCount = [status, filters.area, filters.level].filter(Boolean).length;
   const filtered = activeCount > 0;
@@ -198,6 +248,12 @@ export default function Participants({ company, header, onChanged, onImport }) {
   const clearFilters = () => { setFilters(EMPTY_FILTERS); setStatus(''); };
 
   const total = participants?.length ?? 0;
+  const fit = useFitRows(listRef, cardRef, total > 0, [total > 0]);
+  const pageSize = sizeChoice === AUTO ? fit.rows : sizeChoice;
+  // A tabela rola por dentro quando o conteúdo passa da altura (mais linhas que cabem, ou uma confirmação aberta).
+  const scrolls = useOverflowing(listRef, [fit.maxHeight, pageSize, total]);
+  // Filtro ou tamanho de página novo: volta para a primeira página.
+  useEffect(() => { setPage(1); }, [qs, pageSize]);
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const current = Math.min(page, pages);
   const visible = participants?.slice((current - 1) * pageSize, current * pageSize) ?? [];
@@ -259,13 +315,9 @@ export default function Participants({ company, header, onChanged, onImport }) {
         </Card>
       ) : (
         <div className="flex flex-col gap-6">
-          <Alert variant="info">
-            Os links não são enviados automaticamente. Copie ou exporte a lista para distribuir às pessoas.
-          </Alert>
-
           {notice && <Alert variant="error">{notice}</Alert>}
 
-          <Card>
+          <Card ref={cardRef}>
             <CardBody className="flex flex-col">
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-code-blue-100 pb-4">
                 <p className="text-sm text-code-blue/80" role="status">
@@ -297,9 +349,16 @@ export default function Participants({ company, header, onChanged, onImport }) {
               {total > 0 && (
                 <>
                   <div aria-hidden="true" className={`text-label hidden gap-4 pt-4 pb-1 text-code-blue/60 md:grid ${GRID}`}>
-                    <span>Pessoa</span><span>Área</span><span>Status</span><span>Nível</span><span className="text-right">Ações</span>
+                    <span>Pessoa</span><span>Área</span><span>Status</span><span>Nível</span><span className="text-center">Ações</span>
                   </div>
-                  <ul>
+                  <ul
+                    ref={listRef}
+                    style={{ maxHeight: fit.maxHeight }}
+                    // relative: textos sr-only (position: absolute) ficam presos à lista e não esticam a página.
+                    className={cx(fit.maxHeight && 'relative overflow-y-auto overscroll-contain', scrolls && 'scrollbar-thin pr-4')}
+                    tabIndex={scrolls ? 0 : undefined}
+                    aria-label="Lista de participantes"
+                  >
                     {visible.map((p) => (
                       <ParticipantRow
                         key={p.id}
@@ -316,8 +375,9 @@ export default function Participants({ company, header, onChanged, onImport }) {
                       pageSize={pageSize}
                       total={total}
                       onPage={setPage}
-                      onPageSize={setPageSize}
-                      sizes={PAGE_SIZES}
+                      onPageSize={setSizeChoice}
+                      sizeValue={sizeChoice}
+                      sizes={[{ value: AUTO, label: 'Ajustar à tela' }, ...PAGE_SIZES]}
                       noun={total === 1 ? 'participante' : 'participantes'}
                     />
                   </div>

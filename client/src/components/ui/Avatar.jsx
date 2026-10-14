@@ -3,10 +3,10 @@ import { cx } from './cx.js';
 // Fiel ao DS: https://design-system-decoding.vercel.app/componentes/avatares
 // 4 tamanhos (28/40/56/80px) e 4 tons de marca (Code Blue, Lime, Insight, Root).
 const SIZES = {
-  sm: 'h-7 w-7 text-[11px]',
-  md: 'h-10 w-10 text-[15px]',
+  sm: 'h-7 w-7 text-[0.6875rem]',
+  md: 'h-10 w-10 text-[0.9375rem]',
   lg: 'h-14 w-14 text-xl',
-  xl: 'h-20 w-20 text-[28px]',
+  xl: 'h-20 w-20 text-[1.75rem]',
 };
 const TONES = {
   blue: 'bg-code-blue text-canvas',

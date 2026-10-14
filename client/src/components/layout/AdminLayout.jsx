@@ -25,6 +25,10 @@ export function AdminLayout() {
     .catch(() => {}), []);
 
   useEffect(() => { refreshCompanies(); }, [refreshCompanies]);
+  // Escala proporcional do admin (index.css, html.admin-scale). Entra já na renderização, antes das telas
+  // medirem o próprio tamanho; sai ao deixar o painel.
+  if (typeof document !== 'undefined') document.documentElement.classList.add('admin-scale');
+  useEffect(() => () => document.documentElement.classList.remove('admin-scale'), []);
   useEffect(() => { if (routeId) saveLastCompany(routeId); }, [routeId]);
   useEffect(() => { setDrawer(false); }, [location.pathname, location.search]);
   useEffect(() => {

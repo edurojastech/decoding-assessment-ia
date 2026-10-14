@@ -20,5 +20,8 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.5"
+  },
+  "dependencies": {
+    "@tabler/icons-react": "^3.49.0"
   }
 }

@@ -90,6 +90,9 @@ Espelhar esses tokens no `tailwind.config.js` (`theme.extend.colors/boxShadow/bo
 | Alert | feedback | erros de importação por linha, aviso de consistência, preenchimento incompleto |
 | Tag | chips e filtros | filtros por área, nível e dimensão |
 | Progress | barras de progresso | barra do questionário, cobertura |
+| OptionCard | card (padrão) · `variant="plain"` (sem borda) | alternativas, consentimento nas boas-vindas |
+| ChoiceRow *(do app)* | linha com atalho numérico e check | alternativas do questionário (uma pergunta por tela) |
+| ToggleChip *(do app)* | pílula marcável | disponível para escolhas múltiplas curtas (não usado nas telas atuais) |
 | Avatar | 4 tamanhos, 4 tons, iniciais, empilhamento | listas de participantes e turmas |
 
 Criar em `client/src/components/ui/` com a mesma API do DS (ex.: `<Button variant="accent" size="lg">`).
@@ -137,3 +140,9 @@ Varredura de cada página do DS (`/componentes/*`, `/tipografia`, `/tokens`, `/m
 Tokens novos: `--text-secondary`, `--text-muted`, `--border-default`, `--border-strong`, `--shadow-card`, curvas de easing; utilitários `text-h1..h4`.
 
 **Desvios intencionais (acessibilidade, WCAG AA 4.5:1):** dicas e textos de apoio continuam em Code Blue 70% em vez de #8AA0E8/#5B78DA, e o texto do alerta Info usa #1A6FA8 em vez de #3D94CC. Campos usam 16px no celular (14px a partir de `sm`) para o iOS não dar zoom ao focar.
+
+## Redesign do participante (14/10, branch `feat/melhoria-visual-avaliacao-participante`)
+Detalhes, mockups e checklist em [`08-fluxo-participante.md`](08-fluxo-participante.md). No DS, o que mudou:
+- Menos cards: blocos escuros (Mesh Escuro) só onde há destaque; o resto direto no fundo `surface` com linhas `code-blue-100`.
+- Escala proporcional `html.participant-scale` (como `html.admin-scale` no admin), para caber em HD.
+- Ícones por dimensão (`components/participant/dimensionIcons.js`) e por ferramenta de IA (`toolIcons.js`), sempre Tabler.

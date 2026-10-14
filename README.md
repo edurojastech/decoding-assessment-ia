@@ -39,7 +39,7 @@
 
 | Quem                                           | O que faz                                                                                                                                                                                                                                                                                                                       |
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Participante** (sem conta, via link pessoal) | Lê o aviso de privacidade (LGPD) e dá consentimento, confere a identificação, responde 24 perguntas em 5 dimensões com barra de progresso e recebe a **devolutiva individual** com radar, forças, lacunas, próximos passos e curso recomendado. Baixa em **PDF** e pode reabrir pelo mesmo link.                                |
+| **Participante** (sem conta, via link pessoal) | Em 4 passos: lê o aviso de privacidade (LGPD) e dá consentimento, completa o perfil (identificação, função e ferramentas de IA), responde 24 perguntas em 5 dimensões (uma por tela, com atalhos de teclado e progresso) e recebe a **devolutiva individual** com nota, radar, forças, lacunas, próximos passos e curso recomendado. Baixa em **PDF**, copia o link e pode reabrir pelo mesmo endereço. |
 | **Administrador da Decoding** (com login)      | Cadastra empresas, **importa participantes por CSV** (com erros por linha), gera e exporta os links, acompanha **concluídos / em andamento / pendentes**, vê o **diagnóstico consolidado** (cobertura, distribuição por nível, radar médio, mapa dimensão × área), os **grupos por maturidade** e monta **turmas** manualmente. |
 
 O painel do admin segue o padrão visual do **Decoding Campus**: menu lateral, seletor de empresa, visão geral com KPIs e lista "Pede atenção".
@@ -78,6 +78,7 @@ O projeto foi construído com **SDD (desenvolvimento guiado por especificação)
 | [`05-plano.md`](specs/05-plano.md)                       | Fases, fatias e checklists                               |
 | [`06-design-system.md`](specs/06-design-system.md)       | Tokens, tipografia, componentes e tom de voz da Decoding |
 | [`07-layout-dashboard.md`](specs/07-layout-dashboard.md) | Shell do admin no padrão Decoding Campus                 |
+| [`08-fluxo-participante.md`](specs/08-fluxo-participante.md) | Telas do participante, mockups aprovados e checklist de ajustes |
 | [`CLAUDE.md`](CLAUDE.md) / [`AGENTS.md`](AGENTS.md)      | Regras para os agentes de IA (Claude Code / Codex)       |
 
 ## Stack e arquitetura
@@ -99,7 +100,9 @@ decoding-assessment-ia/
 ├─ assets/                fontes e logos oficiais da Decoding
 ├─ client/                React + Vite + Tailwind
 │  └─ src/
-│     ├─ pages/participant/   boas-vindas, identificação, questionário, devolutiva
+│     ├─ pages/participant/   boas-vindas, seu perfil, perguntas, devolutiva
+│     ├─ components/participant/  indicador de etapas, ícones de dimensão e ferramentas
+│     ├─ components/report/   devolutiva (tela e PDF), radar, medidor da nota
 │     ├─ pages/admin/         login, visão geral, participantes, importar, diagnóstico, grupos, turmas
 │     ├─ components/layout/   sidebar, topbar, seletor de empresa
 │     ├─ components/ui/       componentes do design system
@@ -129,6 +132,8 @@ npm run dev                 # API (Express) + front (Vite) juntos
 
 - No primeiro início, o banco SQLite (`server/data/dev.sqlite`) é criado e populado com os dados de demonstração.
 - Admin: abra `/admin/login` e use as credenciais de demonstração.
+- Em `npm run dev`, o front fica em **http://localhost:5000** (Vite, recarrega a cada alteração) e a API em 3000. A porta 3000 serve o build de `client/dist`: depois de mexer no front, rode `npm run build` para vê-lo ali.
+- Participante de teste: no admin, abra uma empresa → Participantes → copie o link de alguém **pendente**. Para recriar o banco do zero, apague `server/data/dev.sqlite` e rode `npm run seed`.
 
 | Script          | O que faz                                     |
 | --------------- | --------------------------------------------- |
@@ -214,7 +219,7 @@ Para atualizar: `git push` → no Replit, **Git → Pull → Publicar**.
 | C4  | Agrupamento por nível; turmas criadas e editadas manualmente, com pessoas movíveis         | ✅                |
 | C5  | Pontuação exatamente conforme as regras, calculada no backend                              | ✅ testes         |
 | C6  | Dados de demonstração populam os dashboards no primeiro acesso                             | ✅                |
-| C7  | Design Decoding, responsivo, sem afirmar envio de e-mail                                   | ✅ 1280px e 390px |
+| C7  | Design Decoding, responsivo, sem afirmar envio de e-mail                                   | ✅ 1920, 1366 (HD) e 390px |
 
 ## Limitações e próximos passos
 

@@ -3,17 +3,19 @@ import { cx } from './cx.js';
 import { Icon } from './Icon.jsx';
 
 // Opção selecionável em card (radio ou checkbox nativo, acessível por teclado).
-// Usada nas alternativas do questionário, nas ferramentas (P0c) e no consentimento.
+// `variant="plain"`: sem borda nem fundo, para linhas soltas no fundo claro (ex.: consentimento).
 export function OptionCard({
-  type = 'radio', checked = false, hint, className, children, ...props
+  type = 'radio', checked = false, hint, variant = 'card', className, children, ...props
 }) {
   return (
     <label
       className={cx(
-        'flex cursor-pointer items-start gap-3 rounded-lg border p-4 text-base text-code-blue',
+        'flex cursor-pointer items-start gap-3 rounded-lg text-base text-code-blue',
         'transition-[border-color,background-color] duration-150',
         'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-insight',
-        checked ? 'border-insight bg-insight-50' : 'border-code-blue-100 bg-canvas hover:border-code-blue-200',
+        variant === 'plain'
+          ? 'py-1'
+          : cx('border p-4', checked ? 'border-insight bg-insight-50' : 'border-code-blue-100 bg-canvas hover:border-code-blue-200'),
         className,
       )}
     >

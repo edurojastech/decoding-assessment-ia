@@ -34,7 +34,9 @@ export function evidenceText(dimensionId, evidence) {
   let reading = '';
   if (evidence.points >= 3) reading = `, ${meaning.strength}`;
   else if (evidence.points <= 1) reading = `, ${meaning.gap}`;
-  return `${quote} respondeu “${evidence.label}”${reading}.`;
+  // Opções que já trazem aspas no texto ("Faça do seu jeito") não ganham aspas duplicadas.
+  const label = evidence.label.replace(/^["“](.*)["”]$/, '$1');
+  return `${quote} respondeu “${label}”${reading}.`;
 }
 
 function evidenceOf(dimensionId, evidence) {

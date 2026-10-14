@@ -30,7 +30,9 @@ decoding-assessment-ia/
 ├─ package.json               # scripts raiz: dev, build, start, test, seed
 ├─ client/                    # React + Vite + Tailwind
 │  └─ src/
-│     ├─ pages/participant/   # Welcome, Identify, Questionnaire, Result
+│     ├─ pages/participant/   # Welcome, Identify (Seu perfil), Questionnaire, Result — ver 08-fluxo-participante.md
+│     ├─ components/participant/ # StepIndicator, dimensionIcons, toolIcons
+│     ├─ components/report/   # ReportContent, ReportDocument (PDF), RadarChart, ScoreGauge, LevelScale
 │     ├─ pages/admin/         # Login, Overview, Company, Import, Participants, Diagnosis, Groups, Turmas
 │     ├─ components/          # RadarChart, LevelBars, CoverageBadge, Heatmap, Pill...
 │     ├─ lib/api.js

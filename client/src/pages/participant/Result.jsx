@@ -4,7 +4,9 @@ import { api } from '../../lib/api.js';
 import { ParticipantShell } from '../../components/ParticipantShell.jsx';
 import { ReportContent } from '../../components/report/ReportContent.jsx';
 import { ReportDocument, formatDate } from '../../components/report/ReportDocument.jsx';
-import { Alert, Button, Card, CardBody } from '../../components/ui/index.js';
+import { IconCheck, IconDownload, IconLink } from '@tabler/icons-react';
+import { copyText } from '../../lib/clipboard.js';
+import { Alert, Button, Icon } from '../../components/ui/index.js';
 
 // RF-11 + RF-12: devolutiva individual (blocos 1–6) e bloco 7, o PDF.
 // O mesmo link reabre esta tela e permite baixar o PDF de novo.
@@ -15,9 +17,10 @@ const slug = (text) => text
   .normalize('NFD').replace(/[̀-ͯ]/g, '')
   .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-function DownloadButton({ busy, onClick, size = 'lg' }) {
+function DownloadButton({ busy, onClick, size = 'lg', className }) {
   return (
-    <Button variant="accent" size={size} disabled={busy} onClick={onClick} className="sm:self-start">
+    <Button variant="accent" size={size} disabled={busy} onClick={onClick} className={className}>
+      {!busy && <Icon icon={IconDownload} size={size === 'lg' ? 20 : 18} />}
       {busy ? 'Gerando PDF…' : 'Baixar PDF'}
     </Button>
   );
@@ -28,6 +31,7 @@ export default function Result({ token, justSubmitted }) {
   const [loadError, setLoadError] = useState('');
   const [pdfBusy, setPdfBusy] = useState(false);
   const [pdfError, setPdfError] = useState('');
+  const [copied, setCopied] = useState(false);
   const documentRef = useRef(null);
 
   useEffect(() => {
@@ -75,44 +79,54 @@ export default function Result({ token, justSubmitted }) {
   const firstName = participant.name.split(' ')[0];
   const details = [participant.companyName, participant.area].filter(Boolean).join(' · ');
 
-  return (
-    <ParticipantShell>
-      <p className="text-label text-code-blue/70">Devolutiva individual</p>
-      <h1 className="mt-2 text-3xl sm:text-4xl">{firstName}, esta é a sua devolutiva</h1>
-      <p className="mt-3 text-code-blue/80">
-        {details} · respondido em {formatDate(report.submittedAt)}
-      </p>
+  async function copyLink() {
+    try {
+      await copyText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      setCopied(false);
+    }
+  }
 
+  const actions = (
+    <div className="flex items-center gap-3">
+      <Button variant="ghost" size="md" onClick={copyLink} aria-live="polite">
+        <Icon icon={copied ? IconCheck : IconLink} size={18} />
+        {copied ? 'Link copiado' : 'Copiar link'}
+      </Button>
+      <DownloadButton busy={pdfBusy} onClick={startPdf} size="md" />
+    </div>
+  );
+
+  return (
+    <ParticipantShell wide headerLabel="Devolutiva individual" headerSlot={actions}>
       {justSubmitted && (
-        <Alert variant="success" title="Feito! Sua devolutiva está pronta para baixar." className="mt-6">
+        <Alert variant="success" title="Feito! Sua devolutiva está pronta." className="mb-6">
           <p>Suas respostas foram registradas. Leia com calma: o diagnóstico mostra onde você está hoje e por onde seguir.</p>
         </Alert>
       )}
+      {pdfError && <Alert variant="error" className="mb-6">{pdfError}</Alert>}
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <DownloadButton busy={pdfBusy} onClick={startPdf} size="md" />
-        <p className="text-sm text-code-blue/70">Baixe uma cópia em PDF ou volte a este link quando quiser.</p>
-      </div>
+      <ReportContent
+        report={report}
+        heading={<>{firstName}, esta é a sua <span className="text-pulse-lime">devolutiva.</span></>}
+        details={`${details} · ${formatDate(report.submittedAt)}`}
+      />
 
-      <div className="mt-8">
-        <ReportContent report={report} />
-      </div>
-
-      {/* Bloco 7 · Exportação em PDF (RF-12). */}
-      <Card as="section" variant="gradient" aria-labelledby="bloco-pdf" className="mt-6">
-        <CardBody className="flex flex-col gap-4 sm:p-8">
-          <div>
-            <p className="text-label text-code-blue/70">07 · Sua devolutiva em PDF</p>
-            <h2 id="bloco-pdf" className="mt-2 text-h3">Leve esta devolutiva com você</h2>
-          </div>
-          <p>
-            O PDF traz a sua identificação e todos os blocos desta página. Este link continua valendo:
-            volte a ele quando quiser rever a devolutiva e baixar o PDF de novo.
+      {/* Bloco 7 · Exportação em PDF (RF-12): uma linha discreta no fim, sem repetir um bloco inteiro. */}
+      <section
+        aria-labelledby="bloco-pdf"
+        className="mt-10 flex flex-col gap-4 rounded-2xl bg-code-blue-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div className="flex flex-col gap-1">
+          <h2 id="bloco-pdf" className="text-lg font-bold tracking-normal">Leve esta devolutiva com você</h2>
+          <p className="text-sm text-code-blue/70">
+            O PDF traz a sua identificação e todos os blocos desta página. Este link continua valendo: volte a ele quando quiser.
           </p>
-          <DownloadButton busy={pdfBusy} onClick={startPdf} />
-          {pdfError && <Alert variant="error">{pdfError}</Alert>}
-        </CardBody>
-      </Card>
+        </div>
+        <DownloadButton busy={pdfBusy} onClick={startPdf} />
+      </section>
 
       {pdfBusy && <ReportDocument ref={documentRef} participant={participant} report={report} />}
     </ParticipantShell>

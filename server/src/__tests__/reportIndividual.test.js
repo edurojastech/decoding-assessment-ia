@@ -167,6 +167,12 @@ describe('evidenceText (RN-10)', () => {
     expect(evidenceText('contexto', { ...base, label: 'Às vezes', points: 2 })).toMatch(/“Às vezes”\.$/);
   });
 
+  it('não duplica as aspas de opções que já vêm entre aspas', () => {
+    const text = evidenceText('contexto', { questionId: 'Q5', type: 'P', label: '"Faça do seu jeito"', points: 0 });
+    expect(text).toContain('você respondeu “Faça do seu jeito”');
+    expect(text).not.toContain('“"');
+  });
+
   it('perguntas de conhecimento fora do comportamento da dimensão têm leitura própria', () => {
     expect(evidenceText('autonomia', { questionId: 'Q23', type: 'C', label: 'É só um nome diferente', points: 1 }))
       .toMatch(/um ponto de conhecimento que vale aprofundar\.$/);

@@ -39,6 +39,14 @@ function normalizeForCapture(clonedDoc) {
       const value = style[prop];
       if (value && UNSUPPORTED_COLOR.test(value)) el.style[prop] = toRgba(value);
     }
+    // Qualquer outra propriedade de cor (outline, text-stroke, caret...) que ainda venha em oklab/oklch.
+    for (let i = 0; i < style.length; i += 1) {
+      const name = style[i];
+      if (!name.endsWith('color') || name.startsWith('--')) continue;
+      const value = style.getPropertyValue(name);
+      if (value && UNSUPPORTED_COLOR.test(value)) el.style.setProperty(name, toRgba(value));
+    }
+    if (UNSUPPORTED_COLOR.test(style.textShadow)) el.style.textShadow = 'none';
     if (UNSUPPORTED_COLOR.test(style.boxShadow)) el.style.boxShadow = 'none';
     if (UNSUPPORTED_COLOR.test(style.backgroundImage)) el.style.backgroundImage = 'none';
     if (parseFloat(style.borderTopLeftRadius) > 9999) el.style.borderRadius = '9999px';

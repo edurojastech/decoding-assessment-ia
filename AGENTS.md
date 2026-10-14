@@ -11,6 +11,7 @@ App fullstack de diagnóstico de maturidade em IA (porta de entrada da Trilha de
 - `specs/05-plano.md` fases e fatias (marque os checkboxes ao concluir)
 - `specs/07-layout-dashboard.md` layout do admin no padrão Decoding Campus (sidebar, KPIs, hero)
 - `specs/06-design-system.md` design system Decoding (tokens, tipografia, componentes, tom de voz)
+- `specs/08-fluxo-participante.md` telas do participante (boas-vindas → perfil → perguntas → devolutiva), mockups aprovados em `specs/ref-participante/`, escala e regras do PDF
 
 ## Stack
 React + Vite + Tailwind (client/) · Node 20 + Express, JavaScript ESM (server/) · Sequelize · SQLite local / Postgres via `DATABASE_URL` · Vitest.
@@ -38,3 +39,9 @@ Todo o front segue o design system oficial: https://design-system-decoding.verce
 - Fontes Aileron/Just Sans locais (`assets/fonts`, @font-face no 06-design-system.md), Inter só como fallback; logos em `assets/brand`; labels em uppercase + letter-spacing 0.2em; grid de 8px.
 - 60% Insight · 40% Lime; texto Code Blue no claro, branco no escuro; cores semânticas só para estado.
 - Rodapé: "IA First. Human Driven." + espaço para logo Decoding.
+
+## Front do participante (obrigatório)
+- Siga `specs/08-fluxo-participante.md` e o mockup da tela em `specs/ref-participante/`; desvios só registrados na tabela "Desvios conscientes".
+- Questionário: uma dimensão por vez (original) e, dentro dela, uma pergunta por tela.
+- Medidas em rem (escala `html.participant-scale`); conferir em 1920×950, 1366×650 e 390×760.
+- Mudou a devolutiva? Gere o PDF e confira (blocos `data-pdf-block`, escuros com `data-pdf-dark`, cores normalizadas em `lib/pdf.js`).

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { api } from '../../lib/api.js';
 import { ParticipantShell } from '../../components/ParticipantShell.jsx';
@@ -8,7 +8,7 @@ import Identify from './Identify.jsx';
 import Questionnaire from './Questionnaire.jsx';
 import Result from './Result.jsx';
 
-// /r/:token → Welcome → Identify → Questionnaire → Result (RF-08 a RF-12).
+// /r/:token → Welcome → Identify ("Seu perfil": identificação + P0b/P0c) → Questionnaire → Result (RF-08 a RF-12).
 // Concluído, o mesmo link abre direto a devolutiva.
 
 // Rascunho só no navegador desta aba, para um recarregamento não apagar as respostas.
@@ -46,6 +46,12 @@ function initialStep(participant) {
 
 export default function ParticipantFlow() {
   const { token } = useParams();
+  // Escala proporcional do participante (index.css, html.participant-scale): no desktop, tudo
+  // (texto, espaçamentos, larguras em rem) acompanha a janela, para caber também em telas HD.
+  useLayoutEffect(() => {
+    document.documentElement.classList.add('participant-scale');
+    return () => document.documentElement.classList.remove('participant-scale');
+  }, []);
   const [data, setData] = useState(null);
   const [loadError, setLoadError] = useState('');
   const [step, setStep] = useState(null);
@@ -120,6 +126,7 @@ export default function ParticipantFlow() {
           participant={participant}
           questionnaire={questionnaire}
           onConfirmed={(p) => { updateParticipant(p); setStep('questionnaire'); }}
+          onBack={() => setStep('welcome')}
         />
       );
     case 'questionnaire':
@@ -130,7 +137,6 @@ export default function ParticipantFlow() {
           questionnaire={questionnaire}
           answers={answers}
           onAnswersChange={updateAnswers}
-          onParticipantChange={updateParticipant}
           onBackToIdentify={() => setStep('identify')}
           onSubmitted={handleSubmitted}
         />

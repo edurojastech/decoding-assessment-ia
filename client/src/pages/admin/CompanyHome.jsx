@@ -213,7 +213,7 @@ export default function CompanyHome() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <PageHeader
         eyebrow="Painel da empresa · Assessment de IA"
         title={company.name}

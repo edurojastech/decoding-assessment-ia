@@ -24,7 +24,7 @@
 - Breadcrumb: `Decoding Campus › Assessment de IA › <página>` (último item em Code Blue bold).
 - Direita: ícone de ajuda (abre modal curto explicando níveis e cobertura), avatar + nome + chevron (menu com Sair). Sem sino de notificações falso (regra de honestidade: não mostrar notificação que não existe).
 
-**Área de conteúdo:** fundo Surface `#F8F9FE`, largura máx. ~1200px, padding 32px.
+**Área de conteúdo:** fundo Surface `#F8F9FE`, largura total ao lado da sidebar, padding 16px (24px a partir de `sm`).
 
 **Responsivo:** < 1024px a sidebar vira drawer (botão hambúrguer na topbar); cards empilham em 1 coluna no celular.
 
@@ -67,3 +67,14 @@
 - KPIs de concluídos / em andamento / pendentes batem com a lista de participantes.
 - Visual fiel ao print (sidebar navy, item ativo lime, hero escuro, KPI cards) e responsivo (1280px e 390px).
 - Testes existentes continuam verdes; nenhuma rota de API alterada.
+
+## Tela de Participantes (redesenho, 13/10)
+- Cabeçalho: eyebrow, nome da empresa e subtítulo; à direita, **Copiar todos os links** (ghost) e **Baixar CSV de links** (primary). Com filtro ativo, o primeiro vira "Copiar links filtrados".
+- Aviso "Os links não são enviados automaticamente" logo abaixo (RNF-05).
+- Card da lista: contagem "X de Y participantes" e botão **Filtros (n)**, que abre um painel com status (com contagens), área e nível. n = filtros ativos. O `?status=` vindo dos KPIs continua funcionando.
+- Tabela: Pessoa (avatar, nome, e-mail) · Área · Status · Nível · Ações (Copiar link com ícone, Excluir em vermelho com confirmação).
+- Rodapé: "Exibindo X a Y de Z participantes", páginas e seletor 8/16/32 por página (paginação no cliente; copiar e CSV usam a lista filtrada inteira).
+- No celular, cada pessoa vira um bloco empilhado; sem rolagem lateral (C7).
+
+## Largura do painel (13/10)
+- O conteúdo do admin ocupa toda a largura ao lado da sidebar (sem `max-width`), com margens de 16px no celular e 24px a partir de `sm`, e 24px entre blocos. Topbar e rodapé seguem as mesmas margens.

@@ -11,7 +11,7 @@ export function Card({ variant = 'basic', as: Comp = 'div', className, children,
   const stripe = STRIPES[variant];
   return (
     <Comp
-      className={cx('relative overflow-hidden rounded-2xl border border-border-default bg-canvas shadow-card', className)}
+      className={cx('relative rounded-2xl border border-border-default bg-canvas shadow-card', stripe && 'overflow-hidden', className)}
       {...props}
     >
       {stripe && <div aria-hidden="true" className={cx('h-2 w-full', stripe)} />}

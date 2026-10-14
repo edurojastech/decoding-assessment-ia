@@ -12,14 +12,14 @@ export function Tag({ selected = false, count, className, children, ...props }) 
         'transition-all duration-150',
         selected
           ? 'border-code-blue bg-code-blue text-pulse-lime'
-          : 'border-border-default bg-code-blue-50 text-[#2338A8] hover:border-code-blue-200',
+          : 'border-border-default bg-code-blue-50 text-code-blue-700 hover:border-code-blue-200',
         className,
       )}
       {...props}
     >
       {children}
       {count !== undefined && (
-        <span className={cx('font-semibold', selected ? 'text-canvas' : 'text-[#2338A8]/70')}>{count}</span>
+        <span className={cx('font-semibold', selected ? 'text-canvas' : 'text-code-blue-700/70')}>{count}</span>
       )}
     </button>
   );

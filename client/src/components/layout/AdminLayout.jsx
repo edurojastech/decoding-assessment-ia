@@ -64,10 +64,11 @@ export function AdminLayout() {
           menuOpen={drawer}
           onMenu={() => setDrawer(true)}
         />
-        <main className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-8 sm:px-8">
+        {/* Largura total: o painel ocupa todo o espaço ao lado da sidebar, com margens mínimas. */}
+        <main className="w-full min-w-0 flex-1 px-4 py-6 sm:px-6">
           <Outlet context={{ refreshCompanies }} />
         </main>
-        <Footer />
+        <Footer wide />
       </div>
     </div>
   );

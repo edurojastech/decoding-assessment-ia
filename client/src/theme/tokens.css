@@ -12,9 +12,15 @@
   --code-blue-50:#F0F3FD; --code-blue-100:#E0E5FA; --code-blue-200:#BAC6F2; --code-blue-300:#8AA0E8;
   --insight-50:#EDF8FE;   --insight-100:#D8F0FD;   --insight-500:#77C6F9;
   --lime-50:#FAFFF0;      --lime-500:#E4FD98;      --lime-900:#8CB800;
+  /* Tons usados pelos componentes do DS (badges, tags, alertas) */
+  --code-blue-700:#2338A8; --insight-700:#1A6FA8;
+  --lime-100:#F5FEDF; --lime-200:#EDFDB8; --lime-800:#5B6E00;
 
   /* Semânticas (só feedback de estado, sempre com ícone + texto) */
   --success:#22C55E; --warning:#F59E0B; --error:#EF4444; --info:#77C6F9;
+  --success-50:#F0FDF4; --success-100:#DCFCE7; --success-700:#15803D; --success-800:#166534;
+  --warning-50:#FFFBEB; --warning-100:#FEF3C7; --warning-700:#B45309; --warning-800:#92400E;
+  --error-50:#FFF5F5;   --error-100:#FEE2E2;   --error-700:#B91C1C;   --error-800:#991B1B;
   --destructive:#DC2626; /* botão destructive e erro de input (DS /componentes/botoes, /inputs) */
 
   /* Texto e bordas semânticos (tokens do site do DS) */

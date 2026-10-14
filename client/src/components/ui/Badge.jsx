@@ -3,12 +3,12 @@ import { cx } from './cx.js';
 // Fiel ao DS: https://design-system-decoding.vercel.app/componentes/badges
 // 6 variantes, pílula 10px em caixa alta (0.05em). Cores semânticas só para estado, sempre com texto.
 const VARIANTS = {
-  default: 'bg-[#E0E5FA] text-[#2338A8]',
-  info: 'bg-[#D8F0FD] text-[#1A6FA8]',
-  success: 'bg-[#DCFCE7] text-[#166534]',
-  pending: 'bg-[#FEF3C7] text-[#92400E]',
-  error: 'bg-[#FEE2E2] text-[#991B1B]',
-  highlight: 'bg-[#F5FEDF] text-[#5B6E00]',
+  default: 'bg-code-blue-100 text-code-blue-700',
+  info: 'bg-insight-100 text-insight-700',
+  success: 'bg-success-100 text-success-800',
+  pending: 'bg-warning-100 text-warning-800',
+  error: 'bg-error-100 text-error-800',
+  highlight: 'bg-lime-100 text-lime-800',
 };
 
 export function Badge({ variant = 'default', className, ...props }) {

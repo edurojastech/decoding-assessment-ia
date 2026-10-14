@@ -1,9 +1,10 @@
 import { Logo } from './Logo.jsx';
 
-export function Footer() {
+// `wide`: no admin, o rodapé acompanha a largura total do painel.
+export function Footer({ wide = false }) {
   return (
     <footer className="border-t border-code-blue-100 bg-canvas">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+      <div className={`flex flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 ${wide ? 'py-6' : 'mx-auto max-w-6xl py-8'}`}>
         <Logo className="sm:self-center" />
         <div className="flex flex-col gap-1 sm:items-end">
           <p className="text-label text-code-blue">

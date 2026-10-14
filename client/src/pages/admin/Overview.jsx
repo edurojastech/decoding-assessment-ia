@@ -145,7 +145,7 @@ export default function Overview() {
   const firstName = user?.name?.split(' ')[0] || 'Administrador';
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <PageHeader
         title={`Olá, ${firstName}`}
         subtitle="Acompanhe o preenchimento de cada empresa. Os resultados aparecem sempre como visão dos respondentes, junto com a cobertura."

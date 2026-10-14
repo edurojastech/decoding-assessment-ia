@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { api } from '../../lib/api.js';
 import { ParticipantShell } from '../../components/ParticipantShell.jsx';
@@ -46,6 +46,12 @@ function initialStep(participant) {
 
 export default function ParticipantFlow() {
   const { token } = useParams();
+  // Escala proporcional do participante (index.css, html.participant-scale): no desktop, tudo
+  // (texto, espaçamentos, larguras em rem) acompanha a janela, para caber também em telas HD.
+  useLayoutEffect(() => {
+    document.documentElement.classList.add('participant-scale');
+    return () => document.documentElement.classList.remove('participant-scale');
+  }, []);
   const [data, setData] = useState(null);
   const [loadError, setLoadError] = useState('');
   const [step, setStep] = useState(null);

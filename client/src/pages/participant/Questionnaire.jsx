@@ -113,10 +113,10 @@ export default function Questionnaire({
 
   return (
     <ParticipantShell wide step="questions">
-      <div className="grid gap-10 lg:grid-cols-[280px_1fr] lg:gap-16">
+      <div className="grid gap-10 lg:grid-cols-[17.5rem_1fr] lg:gap-16">
         {/* Barra lateral: dimensões e progresso (bloco escuro, Degradê 01) */}
         <aside className="hidden lg:block">
-          <div className="sticky top-8 flex flex-col gap-8 rounded-3xl bg-mesh-dark p-6 text-canvas">
+          <div className="sticky top-6 flex flex-col gap-6 rounded-3xl bg-mesh-dark p-6 text-canvas">
             <p className="text-label text-insight">Dimensões</p>
             <ol className="flex flex-col gap-1">
               {dimensions.map((d, i) => {
@@ -181,7 +181,7 @@ export default function Questionnaire({
                   tabIndex={-1}
                   onKeyDown={(e) => handleShortcut(q, e)}
                   aria-labelledby={`${q.id}-texto`}
-                  className="flex scroll-mt-32 flex-col gap-5 border-b border-code-blue-100 py-10 outline-none last:border-b-0"
+                  className="flex scroll-mt-32 flex-col gap-4 border-b border-code-blue-100 py-8 outline-none last:border-b-0"
                 >
                   <div className="flex flex-col gap-2">
                     <p className="text-label text-code-blue/70">Pergunta {questionNumber[q.id]} de {allQuestions.length}</p>

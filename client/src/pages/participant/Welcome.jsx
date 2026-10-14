@@ -75,12 +75,12 @@ export default function Welcome({ token, participant, questionnaire, onConsented
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <div className="grid flex-1 lg:grid-cols-[1.05fr_1fr]">
+      <div className="grid flex-1 lg:min-h-dvh lg:grid-cols-[1.05fr_1fr]">
         {/* Hero escuro (Degradê 01 · Mesh Escuro) */}
-        <section className="flex flex-col justify-between gap-12 bg-mesh-dark px-6 py-10 text-canvas sm:px-10 sm:py-14 lg:px-16 lg:py-16">
+        <section className="flex flex-col justify-between gap-10 bg-mesh-dark px-6 py-10 text-canvas sm:px-10 sm:py-14 lg:gap-8 lg:px-16 lg:py-12">
           <Logo tone="onDark" />
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-5">
             <p className="text-label text-insight">Assessment de Maturidade em IA</p>
             <h1 className="text-4xl leading-[1.05] sm:text-5xl xl:text-6xl">
               Decodifique seu potencial em <span className="text-pulse-lime">IA.</span>
@@ -120,8 +120,8 @@ export default function Welcome({ token, participant, questionnaire, onConsented
         </section>
 
         {/* Privacidade e consentimento, direto no fundo claro (sem card) */}
-        <main className="flex items-center bg-surface px-6 py-12 sm:px-10 lg:px-16">
-          <div className="mx-auto flex w-full max-w-lg flex-col gap-8">
+        <main className="flex items-center bg-surface px-6 py-12 sm:px-10 lg:px-16 lg:py-10">
+          <div className="mx-auto flex w-full max-w-lg flex-col gap-6">
             <div className="flex flex-col gap-2">
               <p className="text-label text-code-blue/70">Antes de começar</p>
               <h2 className="text-3xl leading-tight">Privacidade e uso dos seus dados</h2>
@@ -129,7 +129,7 @@ export default function Welcome({ token, participant, questionnaire, onConsented
 
             <ul className="flex flex-col">
               {items.map((item) => (
-                <li key={item.title} className="flex gap-4 border-b border-code-blue-100 py-4 first:pt-0">
+                <li key={item.title} className="flex gap-4 border-b border-code-blue-100 py-3.5 first:pt-0">
                   <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-insight-50 text-insight-700">
                     <Icon icon={item.icon} size={22} />
                   </span>
@@ -141,7 +141,7 @@ export default function Welcome({ token, participant, questionnaire, onConsented
               ))}
             </ul>
 
-            <details className="group -mt-4">
+            <details className="group -mt-2">
               <summary className="cursor-pointer text-sm font-semibold text-code-blue-700 underline underline-offset-4">
                 Ler detalhes
               </summary>
@@ -155,7 +155,7 @@ export default function Welcome({ token, participant, questionnaire, onConsented
               </dl>
             </details>
 
-            <div className="flex flex-col gap-4 border-t border-code-blue-100 pt-6">
+            <div className="flex flex-col gap-4 border-t border-code-blue-100 pt-5">
               <OptionCard
                 type="checkbox"
                 variant="plain"

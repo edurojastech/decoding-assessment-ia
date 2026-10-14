@@ -136,6 +136,11 @@
     html.admin-scale {
       font-size: clamp(12px, min(100vw / 120, 100vh / 59), 16px);
     }
+    /* Fluxo do participante: mesma ideia, calibrada para caber em HD (1366 × 768, ~650px úteis no navegador)
+       sem rolar nas telas de boas-vindas e perfil. FullHD continua em 16px. */
+    html.participant-scale {
+      font-size: clamp(12px, min(100vw / 90, 100vh / 52), 16px);
+    }
   }
   body {
     @apply bg-surface font-sans text-code-blue;

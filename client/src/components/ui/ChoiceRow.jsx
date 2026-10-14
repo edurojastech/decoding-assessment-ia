@@ -8,7 +8,7 @@ export function ChoiceRow({ shortcut, checked = false, className, children, ...p
   return (
     <label
       className={cx(
-        'group flex cursor-pointer items-center gap-4 rounded-xl px-3 py-3.5 text-base text-code-blue sm:px-4',
+        'group flex cursor-pointer items-center gap-4 rounded-xl px-3 py-3 text-base text-code-blue sm:px-4',
         'transition-colors duration-150',
         'has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-insight',
         checked ? 'bg-insight-50' : 'hover:bg-code-blue-50',

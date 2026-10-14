@@ -80,16 +80,16 @@ export default function Identify({ token, participant, questionnaire, onConfirme
     <ParticipantShell wide step="profile">
       <div className="flex flex-col gap-3">
         <p className="text-label text-code-blue/70">Antes das perguntas</p>
-        <h1 className="text-3xl sm:text-h2">Complete seu perfil</h1>
-        <p className="max-w-2xl text-lg text-code-blue/80">
+        <h1 className="text-3xl lg:text-4xl">Complete seu perfil</h1>
+        <p className="max-w-3xl text-lg text-code-blue/80">
           Estas informações ajudam a contextualizar o diagnóstico e não entram na pontuação.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} noValidate className="mt-10 flex flex-col gap-10">
+      <form onSubmit={handleSubmit} noValidate className="mt-8 flex flex-col gap-8">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Coluna 1 · Seus dados + função */}
-          <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-8">
             <section aria-labelledby="dados-titulo" className="flex flex-col gap-5">
               <div className="flex items-start justify-between gap-4">
                 <SectionHeading icon={IconUser} title={<span id="dados-titulo">Seus dados</span>}>
@@ -120,7 +120,7 @@ export default function Identify({ token, participant, questionnaire, onConfirme
               ) : (
                 <dl className="flex flex-col">
                   {readRows.map((r) => (
-                    <div key={r.label} className="flex flex-col gap-0.5 border-b border-code-blue-100 py-3 first:pt-0">
+                    <div key={r.label} className="flex flex-col gap-0.5 border-b border-code-blue-100 py-2.5 first:pt-0">
                       <dt className="text-xs text-code-blue/70">{r.label}</dt>
                       <dd className="break-words">{r.value}</dd>
                     </div>
@@ -165,7 +165,7 @@ export default function Identify({ token, participant, questionnaire, onConfirme
 
         {error && <Alert variant="error">{error}</Alert>}
 
-        <div className="flex flex-col gap-3 border-t border-code-blue-100 pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 border-t border-code-blue-100 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-code-blue/70">Próximo passo: {questionnaire.dimensions.length} dimensões, uma de cada vez.</p>
           <Button type="submit" size="lg" disabled={saving} className="w-full sm:w-auto">
             {saving ? 'Salvando…' : 'Começar as perguntas'}

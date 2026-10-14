@@ -21,7 +21,7 @@ export function RadarChart({ data, className = '' }) {
     .join('; ');
 
   return (
-    <div role="img" aria-label={`Radar por dimensão. ${description}.`} className={`relative mx-auto aspect-square w-full max-w-[400px] ${className}`}>
+    <div role="img" aria-label={`Radar por dimensão. ${description}.`} className={`relative mx-auto aspect-square w-full max-w-[25rem] ${className}`}>
       {/* Posição no wrapper: estilo no próprio <svg> iria junto quando o html2canvas o rasteriza. */}
       <div
         aria-hidden="true"

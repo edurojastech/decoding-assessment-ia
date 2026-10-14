@@ -24,6 +24,7 @@
   --color-warning: var(--warning);
   --color-error: var(--error);
   --color-info: var(--info);
+  --color-destructive: var(--destructive);
 
   --font-sans: Aileron, Inter, system-ui, sans-serif;
   --font-display: 'Just Sans', Inter, system-ui, sans-serif;

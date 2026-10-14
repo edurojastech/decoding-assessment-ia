@@ -15,6 +15,7 @@
 
   /* Semânticas (só feedback de estado, sempre com ícone + texto) */
   --success:#22C55E; --warning:#F59E0B; --error:#EF4444; --info:#77C6F9;
+  --destructive:#DC2626; /* botão destructive (DS /componentes/botoes) */
 
   /* Sombras */
   --shadow-sm:0 1px 3px rgba(11,27,86,.08);

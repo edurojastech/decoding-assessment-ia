@@ -100,7 +100,7 @@ export default function Result({ token, justSubmitted }) {
   );
 
   return (
-    <ParticipantShell wide headerLabel="Devolutiva individual" headerSlot={actions}>
+    <ParticipantShell wide step="result" headerLabel="Devolutiva individual" headerSlot={actions}>
       {justSubmitted && (
         <Alert variant="success" title="Feito! Sua devolutiva está pronta." className="mb-6">
           <p>Suas respostas foram registradas. Leia com calma: o diagnóstico mostra onde você está hoje e por onde seguir.</p>

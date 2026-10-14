@@ -22,7 +22,8 @@ sempre do backend e do questionário (`server/src/scoring/`), nunca do mockup.
    lateral das perguntas e no card da Trilha de IA; o card branco do perfil. O resto fica direto no fundo `surface`,
    separado por espaço e linhas finas (`border-code-blue-100`).
 2. **Fluidez.** Jornada em 4 passos (`components/participant/StepIndicator.jsx`): Boas-vindas → Seu perfil →
-   Perguntas → Devolutiva. Botão principal sempre visível, avanço automático nas perguntas, atalhos de teclado.
+   Perguntas → Devolutiva. O indicador aparece no topo de **todas** as etapas depois das boas-vindas
+   (perfil, perguntas e devolutiva), marcando as concluídas e a atual (na devolutiva, "Pronta"). Botão principal sempre visível, avanço automático nas perguntas, atalhos de teclado.
 3. **Cabe na tela.** Desktop com escala proporcional (ver "Escala") e conteúdo largo até `90rem`, sem faixas vazias.
    Boas-vindas e Seu perfil cabem inteiros em HD (1366 × 768, ~650px úteis no navegador); celular sem rolagem lateral.
 4. **Uma informação, um lugar.** Cada evidência (RN-10) aparece uma vez; detalhes abrem sob demanda.

@@ -14,7 +14,7 @@ export function StepIndicator({ current, questionCount = 24, className }) {
   const currentIndex = PARTICIPANT_STEPS.findIndex((s) => s.key === current);
   const hint = (step, i) => {
     if (i < currentIndex) return 'Concluído';
-    if (i === currentIndex) return 'Em andamento';
+    if (i === currentIndex) return step.key === 'result' ? 'Pronta' : 'Em andamento';
     if (step.key === 'questions') return `${questionCount} perguntas`;
     if (step.key === 'result') return 'Seu diagnóstico';
     return '';

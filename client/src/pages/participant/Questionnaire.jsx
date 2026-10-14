@@ -5,6 +5,7 @@ import { Logo } from '../../components/Logo.jsx';
 import { Alert, Button, ChoiceRow, Icon, Progress } from '../../components/ui/index.js';
 import { cx } from '../../components/ui/cx.js';
 import { DIMENSION_ICONS } from '../../components/participant/dimensionIcons.js';
+import { StepIndicator } from '../../components/participant/StepIndicator.jsx';
 
 const SECONDS_PER_QUESTION = 25; // 24 perguntas ≈ 10 min, dentro dos "9 a 12 minutos" do original
 
@@ -193,6 +194,8 @@ export default function Questionnaire({
 
       <main className="flex flex-1 flex-col px-4 py-8 sm:px-8 lg:px-16 lg:py-10">
         <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col">
+          {/* Jornada em 4 passos: mesma barra das outras etapas */}
+          <StepIndicator current="questions" questionCount={total} className="mb-8 lg:mb-10" />
           <div className="flex flex-col gap-3">
             <p className="text-label text-code-blue/70">
               Dimensão {dimIndex + 1} de {dimensions.length} · {dimension.name} · Pergunta {index + 1} de {total}
@@ -206,7 +209,7 @@ export default function Questionnaire({
             tabIndex={-1}
             onKeyDown={handleKeyDown}
             aria-labelledby={`${question.id}-texto`}
-            className="mt-8 flex flex-col gap-6 outline-none lg:mt-10"
+            className="mt-6 flex flex-col gap-6 outline-none lg:mt-8"
           >
             <div className="flex flex-col gap-2">
               <p className="text-sm text-code-blue/70">{dimension.name} · {positionInDimension} de {dimension.questions.length}</p>

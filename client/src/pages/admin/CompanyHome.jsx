@@ -261,11 +261,16 @@ export default function CompanyHome() {
 
       {error && <Alert variant="error" title="Não foi possível carregar o resumo">{error}</Alert>}
 
-      {/* Ações primeiro (o que precisa de você), depois a distribuição; listas abertas, sem card. */}
-      <div className="grid gap-8 border-t border-code-blue-100 pt-6 lg:grid-cols-[1.2fr_1fr] lg:gap-0">
-        <AttentionList items={items} loading={loading} className="lg:pr-8" />
-        <section aria-labelledby="distribuicao" className="lg:border-l lg:border-code-blue-100 lg:pl-8">
-          <div className="flex h-full flex-col gap-5">
+      {/* Desktop: à esquerda o que pede ação e a distribuição; à direita o hero do diagnóstico. No celular, empilha. */}
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+        <div className="flex min-w-0 flex-col gap-6">
+        <Card>
+          <CardBody>
+            <AttentionList items={items} loading={loading} />
+          </CardBody>
+        </Card>
+        <Card as="section" aria-labelledby="distribuicao">
+          <CardBody className="flex flex-col gap-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="text-label text-code-blue-300">Distribuição por nível</p>
@@ -291,31 +296,33 @@ export default function CompanyHome() {
                 {plural(summary.distribution.incomplete, 'pessoa', 'pessoas')} com preenchimento incompleto, fora da distribuição.
               </p>
             )}
-          </div>
-        </section>
+          </CardBody>
+        </Card>
+        </div>
+        <HeroCard
+          stacked
+          className="h-full"
+          eyebrow="Visão dos respondentes"
+          title="Diagnóstico de maturidade em IA"
+          meta={company.invited > 0
+            ? <p><strong className="text-canvas">{company.responded} de {company.invited}</strong> responderam · {company.coverage}% de cobertura</p>
+            : <p>Nenhum participante importado ainda.</p>}
+          actions={(
+            <Button as={Link} to={to('diagnostico')} variant="accent">
+              Ver diagnóstico <Icon icon={IconArrowRight} className="h-4 w-4" />
+            </Button>
+          )}
+          aside={{
+            title: step.title,
+            text: step.text,
+            action: (
+              <Link to={step.to} className="inline-flex items-center gap-1 self-start text-sm font-semibold text-pulse-lime hover:underline">
+                {step.cta} <Icon icon={IconArrowRight} className="h-4 w-4" />
+              </Link>
+            ),
+          }}
+        />
       </div>
-
-      <HeroCard
-        eyebrow="Visão dos respondentes"
-        title="Diagnóstico de maturidade em IA"
-        meta={company.invited > 0
-          ? <p><strong className="text-canvas">{company.responded} de {company.invited}</strong> responderam · {company.coverage}% de cobertura</p>
-          : <p>Nenhum participante importado ainda.</p>}
-        actions={(
-          <Button as={Link} to={to('diagnostico')} variant="accent">
-            Ver diagnóstico <Icon icon={IconArrowRight} className="h-4 w-4" />
-          </Button>
-        )}
-        aside={{
-          title: step.title,
-          text: step.text,
-          action: (
-            <Link to={step.to} className="inline-flex items-center gap-1 self-start text-sm font-semibold text-pulse-lime hover:underline">
-              {step.cta} <Icon icon={IconArrowRight} className="h-4 w-4" />
-            </Link>
-          ),
-        }}
-      />
 
     </div>
   );

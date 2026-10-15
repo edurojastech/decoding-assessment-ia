@@ -31,10 +31,10 @@ export function AttentionList({ items, loading, className }) {
         )}
 
         {!loading && items.length > 0 && (
-          <ul className="flex flex-col">
+          <ul className="flex flex-col gap-2">
             {items.map(({ id, icon, title, text, to }) => (
-              <li key={id} className="border-b border-code-blue-100 last:border-b-0">
-                <Link to={to} className="-mx-2 flex items-center gap-3 rounded-lg px-2 py-3 hover:bg-code-blue-50">
+              <li key={id}>
+                <Link to={to} className="flex items-center gap-3 rounded-lg border border-code-blue-100 px-3 py-2.5 transition-colors duration-150 hover:border-insight hover:bg-code-blue-50">
                   <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-insight-50">
                     <Icon icon={icon} className="h-[1.125rem] w-[1.125rem]" />
                   </span>

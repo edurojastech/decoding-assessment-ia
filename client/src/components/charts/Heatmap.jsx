@@ -27,7 +27,7 @@ export function Heatmap({ dimensions, rows }) {
         </div>
       </fieldset>
 
-      <div className="-mx-6 overflow-x-auto px-6">
+      <div className="relative w-full min-w-0 overflow-x-auto">
         <table className="w-full min-w-[640px] border-separate border-spacing-0.5 text-sm">
           <caption className="sr-only">Média dos respondentes por área e dimensão, de 0 a 100</caption>
           <thead>

@@ -127,3 +127,9 @@ O PDF não é mais uma captura da tela: é uma análise individual que pode ser 
 - [ ] Na devolutiva: gerou o PDF e conferiu as páginas.
 - [ ] `npm test` verde e `npm run build` sem erro.
 - [ ] Se a mudança altera uma decisão daqui, atualize este arquivo e, se preciso, o mockup em `ref-participante/`.
+
+## Revisão da devolutiva (15/10, doc "Ajustes front - Assessment")
+- Seções editoriais, sem card; só o hero e o "Percurso sugerido" ficam em bloco (raio 12px).
+- Resultado por dimensão em linhas: dimensão e descrição | barra na escala 0–100 (marcas a cada 25) com nota e nível | interpretação. No celular, empilha nessa ordem.
+- Radar removido da tela (as barras alinhadas comparam melhor). O PDF não muda (desenho vetorial em `lib/pdf.js`); gerado e conferido: 5 páginas.
+- "Entrega esperada" com linha lateral em vez de caixa; "Como interpretar" com linha superior em vez de caixa.

@@ -1,3 +1,4 @@
+import { DEMO_COMPANIES } from '../seed/data.js';
 import { beforeAll, describe, expect, it } from 'vitest';
 import request from 'supertest';
 import { config } from '../config.js';
@@ -38,7 +39,7 @@ describe('auth admin (RF-01)', () => {
 
     const companies = await agent.get('/api/companies');
     expect(companies.status).toBe(200);
-    expect(companies.body).toHaveLength(2);
+    expect(companies.body).toHaveLength(DEMO_COMPANIES.length);
     for (const c of companies.body) {
       expect(c.invited).toBeGreaterThanOrEqual(15);
       expect(c.invited).toBeLessThanOrEqual(25);

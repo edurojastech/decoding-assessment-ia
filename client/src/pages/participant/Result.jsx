@@ -120,7 +120,7 @@ export default function Result({ token, justSubmitted }) {
       {/* Bloco 6 · Relatório completo (RF-12): o aprofundamento fica no PDF. */}
       <section
         aria-labelledby="bloco-pdf"
-        className="mt-10 flex flex-col gap-4 rounded-2xl bg-code-blue-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
+        className="mt-10 flex flex-col gap-4 rounded-lg bg-code-blue-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between"
       >
         <div className="flex flex-col gap-1">
           <h2 id="bloco-pdf" className="text-lg font-bold tracking-normal">Relatório completo</h2>

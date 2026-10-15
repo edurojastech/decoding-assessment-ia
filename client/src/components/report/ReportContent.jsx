@@ -3,14 +3,14 @@ import { Alert, Badge, Icon } from '../ui/index.js';
 import { cx } from '../ui/cx.js';
 import { LevelBadge } from './LevelBadge.jsx';
 import { LevelScale } from './LevelScale.jsx';
-import { RadarChart } from './RadarChart.jsx';
 import { ScoreGauge } from './ScoreGauge.jsx';
 
 // RF-11 + guia "Front 1 · Devolutiva no app": a tela logo depois do formulário, para ler em ~2 minutos.
-// Sequência: resultado (nota, nível e síntese) → cinco dimensões (barra, nota, nível e frase curta) →
+// Sequência: resultado (nota, nível e síntese) → cinco dimensões em linhas (descrição | barra na escala 0–100 | interpretação) →
 // prioridades e força relativa → primeira ação e percurso → relatório completo → como interpretar.
 // O texto vem pronto do backend (`report.screen`, services/reportScreen.js); aqui só se apresenta.
-// O layout responde ao contêiner (@container), não à janela. Só o hero e a Trilha de IA ficam em bloco escuro.
+// O layout responde ao contêiner (@container), não à janela. Estilo editorial: seções direto no fundo,
+// separadas por espaço e linha fina; só o hero e a Trilha de IA ficam em bloco.
 
 function SectionTitle({ eyebrow, id, subtitle, children }) {
   return (
@@ -28,15 +28,6 @@ function Score({ value, size = 'md' }) {
       <span className={cx('font-bold', size === 'lg' ? 'text-3xl' : 'text-xl')}>{value}</span>
       <span className="text-sm text-code-blue/70"> de 100</span>
     </span>
-  );
-}
-
-// Barra decorativa: o número ao lado já informa o score.
-function ScoreBar({ value, className }) {
-  return (
-    <div aria-hidden="true" className={cx('h-2 overflow-hidden rounded-full bg-code-blue-100', className)}>
-      <div className="h-full rounded-full bg-insight-lime" style={{ width: `${value}%` }} />
-    </div>
   );
 }
 
@@ -74,7 +65,7 @@ function StageBlock({ stage, synthesis, consistencyFlagged, heading, details }) 
   return (
     <section
       aria-labelledby="bloco-estagio"
-      className="grid gap-8 overflow-hidden rounded-3xl bg-mesh-dark p-6 text-canvas sm:p-10 @3xl:grid-cols-[1.3fr_auto_1fr] @3xl:items-center"
+      className="grid gap-8 overflow-hidden rounded-xl bg-mesh-dark p-6 text-canvas sm:p-10 @3xl:grid-cols-[1.3fr_auto_1fr] @3xl:items-center"
     >
       <div className="flex flex-col gap-3">
         <p className="text-label text-insight">Assessment de maturidade em IA</p>
@@ -111,54 +102,77 @@ function StageBlock({ stage, synthesis, consistencyFlagged, heading, details }) 
   );
 }
 
-function DimensionRow({ dimension: d, line }) {
+const TICKS = [0, 25, 50, 75, 100];
+
+// Barra numa escala comum de 0 a 100 (marcas a cada 25), igual para as cinco dimensões.
+function ScaleBar({ value }) {
+  return (
+    <div aria-hidden="true" className="relative h-2.5 rounded-full bg-code-blue-50">
+      {TICKS.slice(1, -1).map((t) => (
+        <span key={t} className="absolute inset-y-0 w-px bg-code-blue-100" style={{ left: `${t}%` }} />
+      ))}
+      <div className="relative h-full rounded-full bg-code-blue" style={{ width: `${value}%` }} />
+    </div>
+  );
+}
+
+// Uma linha por dimensão: dimensão e descrição | barra, nota e nível | interpretação.
+// No celular, empilha na mesma ordem.
+function DimensionRow({ dimension: d, line, description }) {
   const scored = d.score !== null;
   return (
-    <li className="flex flex-col gap-2 border-b border-code-blue-100 py-4 first:pt-0 last:border-b-0">
-      {/* Celular: nome e nota na primeira linha, barra embaixo. Largo: tudo numa linha. */}
-      <div className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 @lg:grid-cols-[minmax(7rem,1fr)_minmax(5rem,1.3fr)_auto]">
+    <li className="grid gap-3 border-b border-code-blue-100 py-5 last:border-b-0 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1.3fr)] @3xl:gap-8">
+      <div className="flex flex-col gap-1">
         <h3 className="text-lg font-bold">{d.name}</h3>
-        {scored ? <ScoreBar value={d.score} className="order-last col-span-2 @lg:order-none @lg:col-span-1" /> : <span className="hidden @lg:block" />}
-        <div className="flex items-center justify-end gap-3">
+        {description && <p className="text-sm text-code-blue/70">{description}</p>}
+      </div>
+      <div className="flex flex-col gap-2 @3xl:pt-1">
+        {scored ? <ScaleBar value={d.score} /> : null}
+        <div className="flex items-center gap-3">
           {scored && <Score value={d.score} />}
           {scored ? <LevelBadge level={d.level} /> : <Badge variant="pending">Dados insuficientes</Badge>}
         </div>
       </div>
-      {line && <p className="text-code-blue/90">{line.short}</p>}
-      {line?.evidence.length > 0 && (
-        <Disclosure label={line.evidence.length > 1 ? 'Ver respostas' : 'Ver resposta'}>
-          {line.evidence.map((text) => <Evidence key={text} evidence={{ text }} />)}
-        </Disclosure>
-      )}
+      <div className="flex flex-col gap-2">
+        {line && <p className="text-code-blue/90">{line.short}</p>}
+        {line?.evidence.length > 0 && (
+          <Disclosure label={line.evidence.length > 1 ? 'Ver respostas' : 'Ver resposta'}>
+            {line.evidence.map((text) => <Evidence key={text} evidence={{ text }} />)}
+          </Disclosure>
+        )}
+      </div>
     </li>
   );
 }
 
-// Bloco 3 · Cinco dimensões: barras com nota, nível e uma frase curta (comparação principal);
-// o radar fica ao lado como leitura secundária.
-function DimensionMapBlock({ dimensions, lines }) {
+// Bloco 3 · Cinco dimensões em linhas, com uma escala comum de 0 a 100 (substitui o radar:
+// barras alinhadas comparam melhor que o mapa).
+function DimensionMapBlock({ dimensions, lines, descriptions }) {
   const lineOf = Object.fromEntries(lines.map((l) => [l.id, l]));
+  const descOf = Object.fromEntries((descriptions ?? []).map((d) => [d.name, d.description]));
   return (
-    <section aria-labelledby="bloco-pontuacoes" className="grid gap-10 @3xl:grid-cols-[1fr_1.4fr] @3xl:gap-0">
-      <div className="order-2 flex flex-col gap-6 @3xl:order-1 @3xl:pr-12">
-        <SectionTitle eyebrow="Visão geral" id="bloco-mapa" subtitle="O mesmo resultado em forma de mapa.">
-          Seu perfil
-        </SectionTitle>
-        <RadarChart data={dimensions.map(({ id, name, score }) => ({ id, name, score }))} />
-        <p className="flex items-start gap-2 text-xs text-code-blue/70">
-          <Icon icon={IconInfoCircle} size={16} />
-          Escala de 0 a 100. Os anéis marcam as faixas de nível: até 25 Iniciante, até 50 Básico,
-          até 75 Intermediário e acima de 75 Avançado.
-        </p>
+    <section aria-labelledby="bloco-pontuacoes" className="flex flex-col gap-6 border-t border-code-blue-100 pt-10">
+      <SectionTitle eyebrow="Suas cinco dimensões" id="bloco-pontuacoes" subtitle="Nota de 0 a 100, nível e o que as suas respostas indicam em cada dimensão.">
+        Resultado por dimensão
+      </SectionTitle>
+      <div aria-hidden="true" className="hidden text-xs text-code-blue/60 @3xl:grid @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,1.3fr)] @3xl:gap-8">
+        <span className="text-label">Dimensão</span>
+        <span className="relative h-4">
+          {TICKS.map((t) => (
+            <span key={t} className="absolute -translate-x-1/2 first:translate-x-0 last:-translate-x-full" style={{ left: `${t}%` }}>{t}</span>
+          ))}
+        </span>
+        <span className="text-label">O que indica</span>
       </div>
-      <div className="order-1 flex flex-col gap-6 @3xl:order-2 @3xl:border-l @3xl:border-code-blue-100 @3xl:pl-12">
-        <SectionTitle eyebrow="Suas cinco dimensões" id="bloco-pontuacoes" subtitle="Nota, nível e o que as suas respostas indicam em cada dimensão.">
-          Resultado por dimensão
-        </SectionTitle>
-        <ul aria-labelledby="bloco-pontuacoes" className="flex flex-col">
-          {dimensions.map((d) => <DimensionRow key={d.id} dimension={d} line={lineOf[d.id]} />)}
-        </ul>
-      </div>
+      <ul className="flex flex-col">
+        {dimensions.map((d) => (
+          <DimensionRow key={d.id} dimension={d} line={lineOf[d.id]} description={descOf[d.name]} />
+        ))}
+      </ul>
+      <p className="flex items-start gap-2 text-xs text-code-blue/70">
+        <Icon icon={IconInfoCircle} size={16} />
+        Faixas de nível: até 25 Iniciante, até 50 Básico, até 75 Intermediário e acima de 75 Avançado.
+      </p>
     </section>
   );
 }
@@ -224,7 +238,7 @@ function FirstActionBlock({ firstAction, learning }) {
         <div className="flex flex-col gap-5">
           <SectionTitle eyebrow="Primeira ação" id="bloco-acao">Sua primeira ação</SectionTitle>
           <p className="text-lg">{firstAction.text}</p>
-          <div className="flex gap-4 rounded-2xl bg-code-blue-50 px-5 py-4">
+          <div className="flex gap-4 border-l-4 border-insight pl-4">
             <span aria-hidden="true" className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-pulse-lime text-code-blue">
               <Icon icon={IconCheck} size={14} stroke={3} />
             </span>
@@ -238,7 +252,7 @@ function FirstActionBlock({ firstAction, learning }) {
       )}
 
       {learning.offer && (
-        <div className="flex flex-col gap-4 self-start rounded-3xl bg-mesh-dark p-8 text-canvas">
+        <div className="flex flex-col gap-4 self-start rounded-xl bg-mesh-dark p-8 text-canvas">
           <p className="text-label text-pulse-lime">Percurso sugerido · Trilha de IA</p>
           <p className="text-3xl leading-tight font-bold">{learning.offer.name}</p>
           <p className="text-canvas/85">{learning.offer.why}</p>
@@ -272,7 +286,7 @@ export function MethodologyBlock({ methodology, submittedAt }) {
   const { versions } = methodology;
   const date = submittedAt ? new Date(submittedAt).toLocaleDateString('pt-BR') : null;
   return (
-    <details className="group rounded-2xl border border-code-blue-100 px-6 py-5">
+    <details className="group border-t border-code-blue-100 pt-6">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
         <span className="flex flex-col gap-1">
           <span className="text-label text-code-blue/70">Metodologia</span>
@@ -318,7 +332,7 @@ export function ReportContent({ report, heading, details }) {
         heading={heading}
         details={details}
       />
-      <DimensionMapBlock dimensions={report.dimensions} lines={screen.dimensions} />
+      <DimensionMapBlock dimensions={report.dimensions} lines={screen.dimensions} descriptions={screen.methodology?.dimensions} />
       <PrioritiesBlock focus={screen.focus} strength={screen.strength} />
       <FirstActionBlock firstAction={screen.firstAction} learning={screen.learning} />
       {report.consistency && <ConsistencyBlock consistency={report.consistency} />}

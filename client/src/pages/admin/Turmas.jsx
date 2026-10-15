@@ -89,21 +89,32 @@ function MoveSelect({ person, turmas, currentId, onMove, label }) {
   );
 }
 
+// Colunas alinhadas: Pessoa | Área | Pontuação | Nível | ação. No celular, empilha.
+const MEMBER_GRID = 'md:grid md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_7rem_9rem_minmax(0,14rem)] md:items-center md:gap-4';
+
+function MemberHead() {
+  return (
+    <div aria-hidden="true" className={`text-label hidden border-b border-code-blue-100 pb-2 text-code-blue/60 ${MEMBER_GRID}`}>
+      <span>Pessoa</span><span>Área</span><span>Pontuação</span><span>Nível</span><span />
+    </div>
+  );
+}
+
 function MemberRow({ person, leading, action }) {
   return (
-    <li className="flex flex-col gap-3 border-b border-code-blue-100 py-3 last:border-b-0 sm:flex-row sm:items-center sm:justify-between">
+    <li className={`flex flex-col gap-2 border-b border-code-blue-100 py-3 last:border-b-0 ${MEMBER_GRID}`}>
       <div className="flex min-w-0 items-center gap-3">
         {leading}
         <Avatar name={person.name} size="sm" />
-        <div className="min-w-0">
-          <p className="truncate font-semibold">{person.name}</p>
-          <p className="truncate text-sm text-code-blue/70">{person.area}{person.score !== null && ` · ${person.score} de 100`}</p>
-        </div>
-        <span className="shrink-0">
-          {person.level ? <LevelBadge level={person.level} /> : <Badge>Incompleto</Badge>}
-        </span>
+        <p className="truncate font-semibold">{person.name}</p>
       </div>
-      {action}
+      <p className="text-sm text-code-blue/80"><span className="text-label mr-2 text-code-blue/60 md:hidden">Área</span>{person.area}</p>
+      <p className="text-sm">
+        <span className="text-label mr-2 text-code-blue/60 md:hidden">Pontuação</span>
+        {person.score !== null ? <><b>{person.score}</b><span className="text-code-blue/70"> de 100</span></> : <span className="text-code-blue/50">—</span>}
+      </p>
+      <span>{person.level ? <LevelBadge level={person.level} /> : <Badge>Incompleto</Badge>}</span>
+      <div className="md:justify-self-end">{action}</div>
     </li>
   );
 }
@@ -131,7 +142,7 @@ function TurmaCard({ turma, board, onBoard }) {
   const showSuggestion = turma.suggestedOffer && turma.suggestedOffer !== turma.offer;
 
   return (
-    <Card as="section" variant="gradient" aria-labelledby={`turma-${turma.id}`}>
+    <Card as="section" aria-labelledby={`turma-${turma.id}`}>
       <CardBody className="flex flex-col gap-5">
         {mode === 'edit' ? (
           <TurmaForm
@@ -198,6 +209,8 @@ function TurmaCard({ turma, board, onBoard }) {
         {error && <Alert variant="error">{error}</Alert>}
 
         {turma.participants.length > 0 && (
+          <div>
+          <MemberHead />
           <ul>
             {turma.participants.map((p) => (
               <MemberRow
@@ -207,6 +220,7 @@ function TurmaCard({ turma, board, onBoard }) {
               />
             ))}
           </ul>
+          </div>
         )}
       </CardBody>
     </Card>
@@ -276,6 +290,7 @@ function Unassigned({ board, onBoard }) {
               </div>
             )}
             {error && <Alert variant="error">{error}</Alert>}
+            <MemberHead />
             <ul>
               {board.unassigned.map((p) => (
                 <MemberRow
@@ -319,37 +334,36 @@ export default function Turmas({ company }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Card>
-        <CardBody className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="max-w-2xl">
-              <p className="text-label text-code-blue/70">Turmas revisáveis</p>
-              <p className="mt-2 text-code-blue/80">
-                Os grupos por maturidade orientam as turmas, mas a montagem é manual: junte níveis vizinhos quando um grupo
-                tiver poucas pessoas e mova quem precisar.
-              </p>
-            </div>
-            {!creating && <Button variant="accent" onClick={() => setCreating(true)}>Nova turma</Button>}
+      {/* Orientação e estado num bloco só, sem card: resumo em uma linha + como montar. */}
+      <section aria-label="Resumo das turmas" className="flex flex-col gap-4 border-b border-code-blue-100 pb-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-2xl">
+            <p className="text-lg font-semibold">
+              {board.turmas.length === 0 ? 'Nenhuma turma criada' : `${board.turmas.length} ${board.turmas.length === 1 ? 'turma' : 'turmas'}`}
+              {' · '}
+              {board.unassigned.length} {board.unassigned.length === 1 ? 'pessoa aguardando' : 'pessoas aguardando'} distribuição
+            </p>
+            <p className="mt-1 text-sm text-code-blue/70">
+              Os grupos por maturidade orientam as turmas, mas a montagem é manual: junte níveis vizinhos quando um grupo
+              tiver poucas pessoas e mova quem precisar. Também dá para criar uma turma a partir de um grupo, na tela Grupos.
+            </p>
           </div>
-          {creating && (
-            <TurmaForm
-              board={board}
-              initial={{ name: '', sourceLevel: '', offer: '' }}
-              submitLabel="Criar turma"
-              onCancel={() => setCreating(false)}
-              onSubmit={async (fields) => {
-                setBoard(await api.post(`/companies/${company.id}/turmas`, fields));
-                setCreating(false);
-              }}
-            />
-          )}
-          <LevelLegend />
-        </CardBody>
-      </Card>
-
-      {board.turmas.length === 0 && (
-        <Card><CardBody><p className="text-code-blue/80">Nenhuma turma ainda. Crie uma aqui ou a partir de um grupo na tela Grupos.</p></CardBody></Card>
-      )}
+          {!creating && <Button variant="accent" onClick={() => setCreating(true)}>Nova turma</Button>}
+        </div>
+        {creating && (
+          <TurmaForm
+            board={board}
+            initial={{ name: '', sourceLevel: '', offer: '' }}
+            submitLabel="Criar turma"
+            onCancel={() => setCreating(false)}
+            onSubmit={async (fields) => {
+              setBoard(await api.post(`/companies/${company.id}/turmas`, fields));
+              setCreating(false);
+            }}
+          />
+        )}
+        <LevelLegend />
+      </section>
 
       {board.turmas.map((t) => <TurmaCard key={t.id} turma={t} board={board} onBoard={setBoard} />)}
 

@@ -17,10 +17,10 @@ export function KpiCard({ icon, label, value, caption, to, children, className }
       {children && <div className="mt-4">{children}</div>}
     </>
   );
-  const base = cx('block rounded-2xl border border-border-default bg-canvas p-5 shadow-card', className);
+  const base = cx('block rounded-lg border border-border-default bg-canvas p-5', className);
   if (!to) return <div className={base}>{body}</div>;
   return (
-    <Link to={to} className={cx(base, 'transition-[box-shadow,border-color] duration-150 hover:border-insight hover:shadow-lg')}>
+    <Link to={to} className={cx(base, 'transition-[box-shadow,border-color] duration-150 hover:border-insight hover:bg-code-blue-50')}>
       {body}
     </Link>
   );

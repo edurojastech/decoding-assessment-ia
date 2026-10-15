@@ -25,10 +25,10 @@ describe('seed (RF-19, C6)', () => {
     expect(await seedIfEmpty()).toBe(false);
   });
 
-  it('cria 1 admin, 2 empresas com 15 a 25 participantes e 1 turma', async () => {
+  it('cria 1 admin, ao menos 2 empresas (4 na demo) com 15 a 25 participantes e 1 turma', async () => {
     const c = await counts();
     expect(c.users).toBe(1);
-    expect(c.companies).toBe(2);
+    expect(c.companies).toBeGreaterThanOrEqual(2);
     expect(c.turmas).toBe(1);
     for (const company of await Company.findAll()) {
       const n = await Participant.count({ where: { companyId: company.id } });

@@ -82,3 +82,13 @@
 ## Escala proporcional e lista sem rolagem (13/10)
 - No desktop (≥1024px) o admin usa `html.admin-scale`: o tamanho base acompanha a janela, com o FullHD como referência (`clamp(12px, min(100vw/120, 100vh/59), 16px)`). Em HD (1366×768) tudo encolhe junto e a tela fica com a mesma visão proporcional do FullHD. Tamanhos de texto e colunas fixas foram passados para `rem`.
 - Participantes: a opção padrão de paginação é **Ajustar à tela**, que calcula quantas linhas cabem na janela, para a página não ganhar barra de rolagem (com 8/16/32 por página, o que passar da tela rola dentro da tabela, com o cabeçalho da tabela e a paginação fixos; a página em si não rola). O aviso duplicado sobre links saiu: o subtítulo já diz que os links não são enviados automaticamente.
+
+## Revisão "menos cara de template" (15/10, doc "Ajustes front - Assessment")
+- Títulos: nome da tela grande e empresa pequena acima (Visão geral, Painel da empresa, Participantes, Importar participantes, Diagnóstico de maturidade, Grupos por maturidade, Turmas).
+- Blocos: `Card` sem sombra e com raio 12px; seções comuns ficam direto no fundo, separadas por espaço e linha fina. Sombra só em menus flutuantes.
+- Fonte: escala proporcional com mínimo de 14px (antes 12px).
+- Painel da empresa: KPIs numa faixa compacta (`KpiStrip`), "O que precisa de você" logo abaixo, como lista aberta; hero do diagnóstico no fim.
+- Turmas: resumo e orientação num bloco só ("N turmas · M pessoas aguardando distribuição"); pessoas em colunas Pessoa | Área | Pontuação | Nível.
+- Diagnóstico: títulos sem numeração; radar trocado por barras horizontais na escala 0–100 (`ScoreBars`); distribuição por nível com largura = % e marcas a cada 25%.
+- Cores de nível únicas (badges, barras e mapa): tints de Code Blue, do 100 (Iniciante) ao Code Blue (Avançado), em `charts/levelScale.jsx`.
+- Fora desta revisão, a pedido: Participantes, Grupos e Importar (só herdam fonte, sombra e raio).

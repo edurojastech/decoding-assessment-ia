@@ -4,7 +4,7 @@ import { api } from '../../lib/api.js';
 import { saveLastCompany } from '../../lib/lastCompany.js';
 import { Alert } from '../../components/ui/index.js';
 import { PageHeader } from '../../components/layout/PageHeader.jsx';
-import { COMPANY_PAGES, companyPath } from '../../components/layout/nav.js';
+import { companyPath } from '../../components/layout/nav.js';
 import Participants from './Participants.jsx';
 import Import from './Import.jsx';
 import Diagnosis from './Diagnosis.jsx';
@@ -53,6 +53,15 @@ export default function CompanyLayout() {
 
 export const useCompany = () => useOutletContext();
 
+// Padrão das telas: título = nome da tela; a empresa entra pequena, acima, como contexto.
+const TITLES = {
+  participantes: 'Participantes',
+  importar: 'Importar participantes',
+  diagnostico: 'Diagnóstico de maturidade',
+  grupos: 'Grupos por maturidade',
+  turmas: 'Turmas',
+};
+
 const SUBTITLES = {
   participantes: 'Status, nível e link pessoal de cada pessoa. Os links não são enviados automaticamente.',
   importar: 'Importe a lista do time em CSV. Só as linhas válidas entram; as outras voltam para correção.',
@@ -63,10 +72,9 @@ const SUBTITLES = {
 
 function CompanyPage({ path, children }) {
   const { company } = useCompany();
-  const page = COMPANY_PAGES.find((p) => p.path === path);
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader eyebrow={`${page.label} · Assessment de IA`} title={company.name} subtitle={SUBTITLES[path]} />
+      <PageHeader eyebrow={company.name} title={TITLES[path]} subtitle={SUBTITLES[path]} />
       {children}
     </div>
   );
@@ -76,7 +84,7 @@ function CompanyPage({ path, children }) {
 export function ParticipantsPage() {
   const { company, reload, go } = useCompany();
   // Participantes monta o próprio cabeçalho, porque as ações (copiar links, CSV) dependem da lista filtrada.
-  const header = { eyebrow: 'Participantes · Assessment de IA', title: company.name, subtitle: SUBTITLES.participantes };
+  const header = { eyebrow: company.name, title: TITLES.participantes, subtitle: SUBTITLES.participantes };
   return <Participants company={company} header={header} onChanged={reload} onImport={() => go('importar')} />;
 }
 

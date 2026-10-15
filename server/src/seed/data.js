@@ -39,6 +39,30 @@ export const DEMO_COMPANIES = [
       'em_andamento', 'pendente', 'pendente', 'em_andamento',
     ],
   },
+  {
+    name: 'Nexo Saúde',
+    domain: 'nexo.example.com',
+    size: 15,
+    areas: ['Atendimento', 'Enfermagem', 'Administrativo', 'Financeiro', 'Liderança'],
+    nameOffset: 3,
+    plans: [
+      'iniciante', 'basico', 'iniciante', 'intermediario', 'basico', 'iniciante',
+      'avancado', 'basico', 'otimista', 'intermediario', 'iniciante', 'basico',
+      'em_andamento', 'pendente', 'pendente',
+    ],
+  },
+  {
+    name: 'Horizonte Educação',
+    domain: 'horizonte.example.com',
+    size: 16,
+    areas: ['Pedagógico', 'Secretaria', 'Comercial', 'Tecnologia'],
+    nameOffset: 11,
+    plans: [
+      'avancado', 'intermediario', 'avancado', 'basico', 'intermediario', 'avancado',
+      'intermediario', 'iniciante', 'intermediario', 'otimista', 'basico', 'avancado',
+      'intermediario', 'em_andamento', 'pendente', 'pendente',
+    ],
+  },
 ];
 
 export const DEMO_TURMA = {

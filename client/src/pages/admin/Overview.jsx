@@ -71,8 +71,11 @@ const toComposition = (distribution) => ({
 // Macro: soma de todas as empresas, como visão dos respondentes.
 function Totals({ totals }) {
   return (
-    <>
+    // Desktop: indicadores (2 × 2) à esquerda e distribuição por nível à direita; no celular, empilha.
+    <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
       <KpiStrip
+        columns={2}
+        className="h-full"
         items={[
           { icon: IconBuilding, label: 'Empresas', value: totals.companies, caption: 'no assessment' },
           { icon: IconUsers, label: 'Convidados', value: totals.invited, caption: 'pessoas com link pessoal' },
@@ -94,7 +97,7 @@ function Totals({ totals }) {
             : <p className="text-sm text-code-blue/70">Ainda não há respondentes com nível calculado.</p>}
         </CardBody>
       </Card>
-    </>
+    </div>
   );
 }
 

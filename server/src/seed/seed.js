@@ -53,7 +53,7 @@ async function seedTurmaMembers(turma, transaction) {
   }
 }
 
-// RF-19: admin, 2 empresas, participantes com links, respostas nos 4 níveis e 1 turma populada.
+// RF-19: admin, 4 empresas, participantes com links, respostas nos 4 níveis e 1 turma populada.
 // Idempotente: cada registro é procurado antes de ser criado.
 export async function seed() {
   return sequelize.transaction(async (transaction) => {

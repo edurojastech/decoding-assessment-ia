@@ -118,7 +118,7 @@ export default function Import({ company, onImported, onShowParticipants }) {
 
             <Textarea
               label="Conteúdo do CSV"
-              rows={10}
+              rows={4}
               placeholder={PLACEHOLDER}
               value={csv}
               onChange={(e) => { setCsv(e.target.value); setFileName(''); }}

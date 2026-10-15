@@ -72,7 +72,8 @@ describe('seed etapa 2 · respostas (RF-19, C6)', () => {
       expect(r.overallScore).toBe(expected.overallScore);
       expect(r.overallLevel).toBe(expected.overallLevel);
       expect(r.dimensionScores).toEqual(expected.dimensions);
-      expect(r.flags).toEqual(expected.flags);
+      // Além das travas do motor, o envio registra as versões do instrumento e da devolutiva (guia Front 1).
+      expect(r.flags).toEqual({ ...expected.flags, versions: expect.any(Object) });
     }
   });
 

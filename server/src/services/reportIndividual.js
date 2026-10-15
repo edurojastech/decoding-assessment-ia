@@ -1,6 +1,8 @@
 // RF-11: devolutiva individual (seção 6 do original), montada por regras a partir do resultado
 // já calculado pelo motor (scoring/). Função pura: não consulta banco nem recalcula pontuação.
 import { LEVELS } from '../constants.js';
+import { buildReportAnalysis } from './reportAnalysis.js';
+import { buildReportScreen } from './reportScreen.js';
 import { DIMENSIONS, NOT_SURE_LABEL, QUESTIONS } from '../scoring/questions.js';
 import { OFFERS, rankDimensions, recommend, strengthDimensions } from '../scoring/recommend.js';
 import {
@@ -199,6 +201,7 @@ export function buildIndividualReport(response) {
   const dimensions = response.dimensionScores;
   const answeredCount = Object.keys(response.answers ?? {}).length;
   const recommendation = recommend({ dimensions, overallLevel: response.overallLevel });
+  const analysis = buildReportAnalysis(response);
 
   return {
     submittedAt: response.submittedAt ?? null,
@@ -210,5 +213,8 @@ export function buildIndividualReport(response) {
     gaps: gaps(dimensions, recommendation.gaps),
     nextSteps: nextSteps(recommendation),
     consistency: consistency(response),
+    // Conteúdo do PDF (guia Front 2) e da tela (guia Front 1): a mesma avaliação e a mesma base de cálculo.
+    analysis,
+    screen: buildReportScreen(response, analysis, recommendation.offer),
   };
 }

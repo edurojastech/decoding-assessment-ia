@@ -8,7 +8,7 @@ import { api } from '../../lib/api.js';
 import { copyText } from '../../lib/clipboard.js';
 import { saveLastCompany } from '../../lib/lastCompany.js';
 import {
-  Alert, AttentionList, Button, Card, CardBody, HeroCard, Icon, Input, KpiCard, Progress,
+  Alert, AttentionList, Button, Card, CardBody, HeroCard, Icon, Input, KpiStrip, Progress,
 } from '../../components/ui/index.js';
 import { LevelBars } from '../../components/charts/LevelBars.jsx';
 import { PageHeader } from '../../components/layout/PageHeader.jsx';
@@ -215,8 +215,8 @@ export default function CompanyHome() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        eyebrow="Painel da empresa · Assessment de IA"
-        title={company.name}
+        eyebrow={company.name}
+        title="Painel da empresa"
         subtitle="Acompanhe o preenchimento e prepare as turmas. Os resultados são a visão dos respondentes."
         actions={!mode && (
           <>
@@ -247,50 +247,25 @@ export default function CompanyHome() {
         />
       )}
 
-      <HeroCard
-        eyebrow="Visão dos respondentes"
-        title="Diagnóstico de maturidade em IA"
-        meta={company.invited > 0
-          ? <p><strong className="text-canvas">{company.responded} de {company.invited}</strong> responderam · {company.coverage}% de cobertura</p>
-          : <p>Nenhum participante importado ainda.</p>}
-        actions={(
-          <Button as={Link} to={to('diagnostico')} variant="accent">
-            Ver diagnóstico <Icon icon={IconArrowRight} className="h-4 w-4" />
-          </Button>
-        )}
-        aside={{
-          title: step.title,
-          text: step.text,
-          action: (
-            <Link to={step.to} className="inline-flex items-center gap-1 self-start text-sm font-semibold text-pulse-lime hover:underline">
-              {step.cta} <Icon icon={IconArrowRight} className="h-4 w-4" />
-            </Link>
-          ),
-        }}
+      <KpiStrip
+        items={[
+          { icon: IconCircleCheck, label: 'Concluídos', value: concluido, caption: 'responderam o questionário', to: to('participantes', '?status=concluido') },
+          { icon: IconClock, label: 'Em andamento', value: inProgress, caption: 'começaram e não concluíram', to: to('participantes', '?status=em_andamento') },
+          { icon: IconCircleDashed, label: 'Pendentes', value: pendente, caption: 'ainda não abriram o link', to: to('participantes', '?status=pendente') },
+          {
+            icon: IconChartPie, label: 'Cobertura', value: `${company.coverage}%`, caption: `${company.responded} de ${company.invited} convidados`, to: to('participantes'),
+            children: <Progress value={company.coverage} showValue={false} hideLabel size="sm" label="Cobertura" />,
+          },
+        ]}
       />
-
-      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <li>
-          <KpiCard icon={IconCircleCheck} label="Concluídos" value={concluido} caption="responderam o questionário" to={to('participantes', '?status=concluido')} className="h-full" />
-        </li>
-        <li>
-          <KpiCard icon={IconClock} label="Em andamento" value={inProgress} caption="começaram e não concluíram" to={to('participantes', '?status=em_andamento')} className="h-full" />
-        </li>
-        <li>
-          <KpiCard icon={IconCircleDashed} label="Pendentes" value={pendente} caption="ainda não abriram o link" to={to('participantes', '?status=pendente')} className="h-full" />
-        </li>
-        <li>
-          <KpiCard icon={IconChartPie} label="Cobertura" value={`${company.coverage}%`} caption={`${company.responded} de ${company.invited} convidados`} to={to('participantes')} className="h-full">
-            <Progress value={company.coverage} showValue={false} hideLabel size="sm" label="Cobertura" />
-          </KpiCard>
-        </li>
-      </ul>
 
       {error && <Alert variant="error" title="Não foi possível carregar o resumo">{error}</Alert>}
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card as="section" aria-labelledby="distribuicao">
-          <CardBody className="flex h-full flex-col gap-5">
+      {/* Ações primeiro (o que precisa de você), depois a distribuição; listas abertas, sem card. */}
+      <div className="grid gap-8 border-t border-code-blue-100 pt-6 lg:grid-cols-[1.2fr_1fr] lg:gap-0">
+        <AttentionList items={items} loading={loading} className="lg:pr-8" />
+        <section aria-labelledby="distribuicao" className="lg:border-l lg:border-code-blue-100 lg:pl-8">
+          <div className="flex h-full flex-col gap-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="text-label text-code-blue-300">Distribuição por nível</p>
@@ -316,11 +291,32 @@ export default function CompanyHome() {
                 {plural(summary.distribution.incomplete, 'pessoa', 'pessoas')} com preenchimento incompleto, fora da distribuição.
               </p>
             )}
-          </CardBody>
-        </Card>
-
-        <AttentionList items={items} loading={loading} />
+          </div>
+        </section>
       </div>
+
+      <HeroCard
+        eyebrow="Visão dos respondentes"
+        title="Diagnóstico de maturidade em IA"
+        meta={company.invited > 0
+          ? <p><strong className="text-canvas">{company.responded} de {company.invited}</strong> responderam · {company.coverage}% de cobertura</p>
+          : <p>Nenhum participante importado ainda.</p>}
+        actions={(
+          <Button as={Link} to={to('diagnostico')} variant="accent">
+            Ver diagnóstico <Icon icon={IconArrowRight} className="h-4 w-4" />
+          </Button>
+        )}
+        aside={{
+          title: step.title,
+          text: step.text,
+          action: (
+            <Link to={step.to} className="inline-flex items-center gap-1 self-start text-sm font-semibold text-pulse-lime hover:underline">
+              {step.cta} <Icon icon={IconArrowRight} className="h-4 w-4" />
+            </Link>
+          ),
+        }}
+      />
+
     </div>
   );
 }

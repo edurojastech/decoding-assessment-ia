@@ -2,14 +2,14 @@ import { Link } from 'react-router';
 import { IconChevronRight, IconCircleCheck } from '@tabler/icons-react';
 import { Icon } from './Icon.jsx';
 import { Badge } from './Badge.jsx';
-import { Card, CardBody } from './Card.jsx';
 
 // "Pede atenção" (specs/07): itens derivados dos dados reais; cada um leva à tela correspondente.
 // `items`: [{ id, icon, title, text, to }]. Vazio = "Tudo em dia".
 export function AttentionList({ items, loading, className }) {
   return (
-    <Card as="section" aria-labelledby="pede-atencao" className={className}>
-      <CardBody className="flex h-full flex-col gap-4">
+    // Lista aberta, sem card: são as ações do admin, então ficam no topo e com leitura direta.
+    <section aria-labelledby="pede-atencao" className={className}>
+      <div className="flex h-full flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-label text-code-blue-300">Pede atenção</p>
@@ -48,7 +48,7 @@ export function AttentionList({ items, loading, className }) {
             ))}
           </ul>
         )}
-      </CardBody>
-    </Card>
+      </div>
+    </section>
   );
 }

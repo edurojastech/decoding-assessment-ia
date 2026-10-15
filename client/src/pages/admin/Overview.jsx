@@ -5,7 +5,7 @@ import {
 } from '@tabler/icons-react';
 import { api } from '../../lib/api.js';
 import { useAuth } from '../../lib/auth.jsx';
-import { Alert, Badge, Button, Card, CardBody, Icon, Input, KpiCard, Progress } from '../../components/ui/index.js';
+import { Alert, Badge, Button, Card, CardBody, Icon, Input, KpiStrip, Progress } from '../../components/ui/index.js';
 import { LevelBars } from '../../components/charts/LevelBars.jsx';
 import { CompositionBar } from '../../components/charts/CompositionBar.jsx';
 import { PageHeader } from '../../components/layout/PageHeader.jsx';
@@ -72,16 +72,17 @@ const toComposition = (distribution) => ({
 function Totals({ totals }) {
   return (
     <>
-      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <li><KpiCard icon={IconBuilding} label="Empresas" value={totals.companies} caption="no assessment" className="h-full" /></li>
-        <li><KpiCard icon={IconUsers} label="Convidados" value={totals.invited} caption="pessoas com link pessoal" className="h-full" /></li>
-        <li><KpiCard icon={IconCircleCheck} label="Respondentes" value={totals.responded} caption="concluíram o questionário" className="h-full" /></li>
-        <li>
-          <KpiCard icon={IconChartPie} label="Cobertura geral" value={`${totals.coverage}%`} caption={`${totals.responded} de ${totals.invited} convidados`} className="h-full">
-            <Progress value={totals.coverage} showValue={false} hideLabel size="sm" label="Cobertura geral" />
-          </KpiCard>
-        </li>
-      </ul>
+      <KpiStrip
+        items={[
+          { icon: IconBuilding, label: 'Empresas', value: totals.companies, caption: 'no assessment' },
+          { icon: IconUsers, label: 'Convidados', value: totals.invited, caption: 'pessoas com link pessoal' },
+          { icon: IconCircleCheck, label: 'Respondentes', value: totals.responded, caption: 'concluíram o questionário' },
+          {
+            icon: IconChartPie, label: 'Cobertura geral', value: `${totals.coverage}%`, caption: `${totals.responded} de ${totals.invited} convidados`,
+            children: <Progress value={totals.coverage} showValue={false} hideLabel size="sm" label="Cobertura geral" />,
+          },
+        ]}
+      />
       <Card as="section" aria-labelledby="macro">
         <CardBody className="flex flex-col gap-5">
           <div>
@@ -99,7 +100,7 @@ function Totals({ totals }) {
 
 function CompanyCard({ company }) {
   return (
-    <Card className="h-full transition-shadow duration-150 hover:shadow-lg">
+    <Card className="h-full transition-colors duration-150 hover:border-insight">
       <CardBody className="flex h-full flex-col gap-5">
         <div className="flex items-start justify-between gap-3">
           <h2 className="min-w-0 text-lg font-bold break-words">{company.name}</h2>
@@ -147,7 +148,8 @@ export default function Overview() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title={`Olá, ${firstName}`}
+        eyebrow={`Olá, ${firstName} · Assessment de IA`}
+        title="Visão geral"
         subtitle="Acompanhe o preenchimento de cada empresa. Os resultados aparecem sempre como visão dos respondentes, junto com a cobertura."
         actions={!creating && companies?.length > 0 && (
           <Button variant="accent" size="sm" onClick={() => setCreating(true)}>

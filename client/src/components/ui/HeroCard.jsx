@@ -5,7 +5,7 @@ export function HeroCard({ eyebrow, title, meta, actions, aside, className }) {
   return (
     <section
       aria-label={title}
-      className={cx('grid gap-8 rounded-2xl bg-mesh-dark p-6 text-canvas shadow-md sm:p-8 lg:grid-cols-[minmax(0,1fr)_18.75rem]', className)}
+      className={cx('grid gap-8 rounded-xl bg-mesh-dark p-6 text-canvas sm:p-8 lg:grid-cols-[minmax(0,1fr)_18.75rem]', className)}
     >
       <div className="flex min-w-0 flex-col gap-4">
         {eyebrow && <p className="text-label text-canvas/80">{eyebrow}</p>}

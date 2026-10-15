@@ -44,4 +44,4 @@ Todo o front segue o design system oficial: https://design-system-decoding.verce
 - Siga `specs/08-fluxo-participante.md` e o mockup da tela em `specs/ref-participante/`; desvios só registrados na tabela "Desvios conscientes".
 - Questionário: uma dimensão por vez (original) e, dentro dela, uma pergunta por tela.
 - Medidas em rem (escala `html.participant-scale`); conferir em 1920×950, 1366×650 e 390×760.
-- Mudou a devolutiva? Gere o PDF e confira (blocos `data-pdf-block`, escuros com `data-pdf-dark`, cores normalizadas em `lib/pdf.js`).
+- Mudou a devolutiva? Gere o PDF e confira. O PDF segue o guia "Front 2": 4 páginas + apêndice, conteúdo em `report.analysis` (services/reportAnalysis.js) e desenho vetorial em `lib/pdf.js` (ver specs/08, seção PDF).

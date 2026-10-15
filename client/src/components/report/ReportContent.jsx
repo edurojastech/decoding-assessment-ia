@@ -6,12 +6,11 @@ import { LevelScale } from './LevelScale.jsx';
 import { RadarChart } from './RadarChart.jsx';
 import { ScoreGauge } from './ScoreGauge.jsx';
 
-// RF-11: blocos 1 a 6 da devolutiva (seção 6 do original), na ordem do original.
-// O texto vem pronto do backend (services/reportIndividual.js); aqui só se apresenta.
-// Usado na tela e na versão do PDF: o layout responde ao contêiner (@container), não à janela,
-// e cada `data-pdf-block` é uma unidade que não se quebra entre páginas (lib/pdf.js).
-// Redesign (mockups aprovados): só o hero e a Trilha de IA ficam em bloco escuro; o resto vive direto
-// no fundo claro. Detalhes (frase e evidência, RN-10) abrem sob demanda; no PDF (`expanded`) já vêm abertos.
+// RF-11 + guia "Front 1 · Devolutiva no app": a tela logo depois do formulário, para ler em ~2 minutos.
+// Sequência: resultado (nota, nível e síntese) → cinco dimensões (barra, nota, nível e frase curta) →
+// prioridades e força relativa → primeira ação e percurso → relatório completo → como interpretar.
+// O texto vem pronto do backend (`report.screen`, services/reportScreen.js); aqui só se apresenta.
+// O layout responde ao contêiner (@container), não à janela. Só o hero e a Trilha de IA ficam em bloco escuro.
 
 function SectionTitle({ eyebrow, id, subtitle, children }) {
   return (
@@ -68,15 +67,13 @@ const Dot = ({ tone }) => (
   />
 );
 
-// Bloco 1 · Estágio atual — hero escuro com nota, nível e régua de níveis.
-function StageBlock({ stage, consistencyFlagged, heading, details }) {
+// Bloco 2 · Seu resultado — hero escuro com nota, nível, régua de níveis e a síntese.
+function StageBlock({ stage, synthesis, consistencyFlagged, heading, details }) {
   const calculated = stage.status === 'calculado';
-  const [lead, ...rest] = stage.summary;
+  const [lead, ...rest] = synthesis;
   return (
     <section
       aria-labelledby="bloco-estagio"
-      data-pdf-block
-      data-pdf-dark
       className="grid gap-8 overflow-hidden rounded-3xl bg-mesh-dark p-6 text-canvas sm:p-10 @3xl:grid-cols-[1.3fr_auto_1fr] @3xl:items-center"
     >
       <div className="flex flex-col gap-3">
@@ -95,16 +92,17 @@ function StageBlock({ stage, consistencyFlagged, heading, details }) {
             <LevelBadge level={stage.level} className="mt-1" />
           </ScoreGauge>
         ) : (
-          <Badge variant="pending">Estágio geral não calculado</Badge>
+          <Badge variant="pending">Resultado geral não calculado</Badge>
         )}
       </div>
 
       <div className="flex flex-col gap-5 @3xl:border-l @3xl:border-canvas/15 @3xl:pl-8">
         <div className="flex flex-col gap-2">
+          {calculated && <p className="sr-only">Resultado geral: {stage.score} de 100. Nível {stage.level}.</p>}
           <p className="text-lg font-semibold">{lead}</p>
-          {rest.map((sentence) => <p key={sentence} className="text-sm text-canvas/80">{sentence}</p>)}
+          {rest.length > 0 && <p className="text-sm text-canvas/80">{rest.join(' ')}</p>}
           {consistencyFlagged && (
-            <p className="text-sm text-canvas/80">O estágio considera a observação de consistência, no fim desta devolutiva.</p>
+            <p className="text-sm text-canvas/80">O nível considera a observação de consistência, mais abaixo.</p>
           )}
         </div>
         {calculated && <LevelScale level={stage.level} />}
@@ -113,195 +111,141 @@ function StageBlock({ stage, consistencyFlagged, heading, details }) {
   );
 }
 
-function DimensionRow({ dimension: d, expanded }) {
+function DimensionRow({ dimension: d, line }) {
   const scored = d.score !== null;
   return (
     <li className="flex flex-col gap-2 border-b border-code-blue-100 py-4 first:pt-0 last:border-b-0">
-      <div className="grid grid-cols-[minmax(7rem,1fr)_minmax(5rem,1.3fr)_auto] items-center gap-4">
+      {/* Celular: nome e nota na primeira linha, barra embaixo. Largo: tudo numa linha. */}
+      <div className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 @lg:grid-cols-[minmax(7rem,1fr)_minmax(5rem,1.3fr)_auto]">
         <h3 className="text-lg font-bold">{d.name}</h3>
-        {scored ? <ScoreBar value={d.score} /> : <span />}
+        {scored ? <ScoreBar value={d.score} className="order-last col-span-2 @lg:order-none @lg:col-span-1" /> : <span className="hidden @lg:block" />}
         <div className="flex items-center justify-end gap-3">
           {scored && <Score value={d.score} />}
           {scored ? <LevelBadge level={d.level} /> : <Badge variant="pending">Dados insuficientes</Badge>}
         </div>
       </div>
-      <Disclosure label="Ver por quê" expanded={expanded}>
-        <p className="text-code-blue/90">{d.phrase}</p>
-        <Evidence evidence={d.evidence} />
-      </Disclosure>
+      {line && <p className="text-code-blue/90">{line.short}</p>}
+      {line?.evidence.length > 0 && (
+        <Disclosure label={line.evidence.length > 1 ? 'Ver respostas' : 'Ver resposta'}>
+          {line.evidence.map((text) => <Evidence key={text} evidence={{ text }} />)}
+        </Disclosure>
+      )}
     </li>
   );
 }
 
-// Bloco 2 · Mapa por dimensão: radar ao lado das pontuações (da maior para a menor) e, abaixo,
-// o ponto forte e a maior lacuna em destaque.
-function DimensionMapBlock({ dimensions, stage, strengths, gaps, expanded }) {
-  const ranked = [...dimensions].sort((a, b) => (b.score ?? -1) - (a.score ?? -1));
-  const byId = Object.fromEntries(dimensions.map((d) => [d.id, d]));
-  // Frase coerente com o destaque: a de potencialidade para o ponto forte, a de lacuna para a maior lacuna.
-  const phraseOf = (id, list) => list.find((x) => x.id === id)?.phrase ?? byId[id]?.phrase;
-  const highlights = [
-    stage.strongest && { tone: 'forca', label: 'Ponto forte', ...stage.strongest },
-    stage.weakest && stage.weakest.id !== stage.strongest?.id && { tone: 'lacuna', label: 'Maior lacuna', ...stage.weakest },
-  ].filter(Boolean);
-
+// Bloco 3 · Cinco dimensões: barras com nota, nível e uma frase curta (comparação principal);
+// o radar fica ao lado como leitura secundária.
+function DimensionMapBlock({ dimensions, lines }) {
+  const lineOf = Object.fromEntries(lines.map((l) => [l.id, l]));
   return (
-    <section aria-labelledby="bloco-mapa" className="flex flex-col gap-10">
-      <div className="grid gap-10 @3xl:grid-cols-[1fr_1.2fr] @3xl:gap-0">
-        <div data-pdf-block className="flex flex-col gap-6 @3xl:pr-12">
-          <SectionTitle eyebrow="Suas cinco dimensões" id="bloco-mapa" subtitle="Como você se posiciona nas cinco dimensões da maturidade em IA.">
-            Visão geral do seu perfil
-          </SectionTitle>
-          <RadarChart data={dimensions.map(({ id, name, score }) => ({ id, name, score }))} />
-          <p className="flex items-start gap-2 text-xs text-code-blue/70">
-            <Icon icon={IconInfoCircle} size={16} />
-            Escala de 0 a 100. Os anéis marcam as faixas de nível: até 25 Iniciante, até 50 Básico,
-            até 75 Intermediário e acima de 75 Avançado.
-          </p>
-        </div>
-        <div data-pdf-block className="flex flex-col gap-6 @3xl:border-l @3xl:border-code-blue-100 @3xl:pl-12">
-          <SectionTitle eyebrow="Resultado por dimensão" id="bloco-pontuacoes" subtitle="Seu desempenho em cada dimensão da maturidade em IA.">
-            Suas pontuações
-          </SectionTitle>
-          <ul aria-labelledby="bloco-pontuacoes" className="flex flex-col">
-            {ranked.map((d) => <DimensionRow key={d.id} dimension={d} expanded={expanded} />)}
+    <section aria-labelledby="bloco-pontuacoes" className="grid gap-10 @3xl:grid-cols-[1fr_1.4fr] @3xl:gap-0">
+      <div className="order-2 flex flex-col gap-6 @3xl:order-1 @3xl:pr-12">
+        <SectionTitle eyebrow="Visão geral" id="bloco-mapa" subtitle="O mesmo resultado em forma de mapa.">
+          Seu perfil
+        </SectionTitle>
+        <RadarChart data={dimensions.map(({ id, name, score }) => ({ id, name, score }))} />
+        <p className="flex items-start gap-2 text-xs text-code-blue/70">
+          <Icon icon={IconInfoCircle} size={16} />
+          Escala de 0 a 100. Os anéis marcam as faixas de nível: até 25 Iniciante, até 50 Básico,
+          até 75 Intermediário e acima de 75 Avançado.
+        </p>
+      </div>
+      <div className="order-1 flex flex-col gap-6 @3xl:order-2 @3xl:border-l @3xl:border-code-blue-100 @3xl:pl-12">
+        <SectionTitle eyebrow="Suas cinco dimensões" id="bloco-pontuacoes" subtitle="Nota, nível e o que as suas respostas indicam em cada dimensão.">
+          Resultado por dimensão
+        </SectionTitle>
+        <ul aria-labelledby="bloco-pontuacoes" className="flex flex-col">
+          {dimensions.map((d) => <DimensionRow key={d.id} dimension={d} line={lineOf[d.id]} />)}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+// Bloco 4 · Prioridades: até duas prioridades e uma força relativa, num bloco só.
+function PrioritiesBlock({ focus, strength }) {
+  if (!focus && !strength) return null;
+  return (
+    <section
+      aria-labelledby="bloco-prioridades"
+      className={cx('grid gap-10 border-t border-code-blue-100 pt-10', strength && focus && '@3xl:grid-cols-[1.4fr_1fr] @3xl:gap-0')}
+    >
+      {focus && (
+        <div className={cx('flex flex-col gap-6', strength && '@3xl:pr-12')}>
+          <SectionTitle eyebrow="Prioridades" id="bloco-prioridades" subtitle={focus.title}>Seu foco agora</SectionTitle>
+          <ul className="flex flex-col">
+            {focus.items.map((item) => (
+              <li key={item.id} className="flex gap-4 border-b border-code-blue-100 py-4 first:pt-0 last:border-b-0">
+                <Dot tone="lacuna" />
+                <div className="flex min-w-0 flex-col gap-1">
+                  <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                    <h3 className="text-xl font-bold">{item.name}</h3>
+                    <Score value={item.score} />
+                    <LevelBadge level={item.level} />
+                  </div>
+                  <p className="text-code-blue/80">{item.text}</p>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
-      </div>
-
-      {highlights.length > 0 && (
-        <div data-pdf-block className="grid gap-8 border-t border-code-blue-100 pt-8 @3xl:grid-cols-2 @3xl:gap-0">
-          {highlights.map((h, i) => (
-            <div key={h.label} className={cx('flex gap-4', i === 1 && '@3xl:border-l @3xl:border-code-blue-100 @3xl:pl-12')}>
-              <Dot tone={h.tone} />
-              <div className="flex flex-col gap-1">
-                <p className="text-label text-code-blue/70">{h.label}</p>
-                <p className="text-2xl font-bold">{h.name} <span className="ml-1">{h.score}</span></p>
-                <p className="text-code-blue/80">{phraseOf(h.id, h.tone === 'forca' ? strengths : gaps)}</p>
+      )}
+      {strength && (
+        <div className={cx('flex flex-col gap-6', focus && '@3xl:border-l @3xl:border-code-blue-100 @3xl:pl-12')}>
+          <SectionTitle eyebrow="Força relativa" id={focus ? undefined : 'bloco-prioridades'}>Onde você já se apoia</SectionTitle>
+          <div className="flex gap-4">
+            <Dot tone="forca" />
+            <div className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                <h3 className="text-xl font-bold">{strength.name}</h3>
+                <Score value={strength.score} />
+                <LevelBadge level={strength.level} />
               </div>
+              <p className="text-code-blue/80">{strength.text}</p>
+              <p className="text-xs text-code-blue/70">É a maior nota do seu perfil hoje, não uma competência consolidada.</p>
             </div>
-          ))}
+          </div>
         </div>
       )}
     </section>
   );
 }
 
-function HighlightList({ items, tone, empty, shownEvidence, expanded }) {
-  if (items.length === 0) return <p className="text-code-blue/80">{empty}</p>;
-  return (
-    <ul className="flex flex-col">
-      {items.map((item) => {
-        const evidence = item.evidence && !shownEvidence.has(item.evidence.text) ? item.evidence : null;
-        return (
-          <li key={item.id} className="flex gap-4 border-b border-code-blue-100 py-5 first:pt-0 last:border-b-0">
-            <Dot tone={tone} />
-            <div className="flex min-w-0 flex-col gap-2">
-              <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                <h3 className="text-xl font-bold">{item.name}</h3>
-                <Score value={item.score} />
-              </div>
-              <p className="text-code-blue/80">{item.phrase}</p>
-              {(item.example || evidence) && (
-                <Disclosure label="Ver exemplo" expanded={expanded}>
-                  {item.example && <p className="text-sm">{item.example}</p>}
-                  <Evidence evidence={evidence} className={tone === 'forca' ? 'border-lime-900' : undefined} />
-                </Disclosure>
-              )}
-            </div>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
-// Blocos 3 e 4 · Potencialidades e lacunas, lado a lado.
-function StrengthsAndGaps({ strengths, gaps, shownEvidence, expanded }) {
-  return (
-    <div className="grid gap-10 border-t border-code-blue-100 pt-10 @3xl:grid-cols-2 @3xl:gap-0">
-      <section aria-labelledby="bloco-forcas" data-pdf-block className="flex flex-col gap-6 @3xl:pr-12">
-        <SectionTitle eyebrow="Potencialidades" id="bloco-forcas">Onde você já se apoia</SectionTitle>
-        <HighlightList
-          items={strengths}
-          tone="forca"
-          shownEvidence={shownEvidence}
-          expanded={expanded}
-          empty="Ainda não há dimensões suficientes para apontar potencialidades."
-        />
-      </section>
-      <section
-        aria-labelledby="bloco-lacunas"
-        data-pdf-block
-        className="flex flex-col gap-6 @3xl:border-l @3xl:border-code-blue-100 @3xl:pl-12"
-      >
-        <SectionTitle eyebrow="Lacunas e o que significam" id="bloco-lacunas">Onde há mais espaço para avançar</SectionTitle>
-        <HighlightList
-          items={gaps}
-          tone="lacuna"
-          shownEvidence={shownEvidence}
-          expanded={expanded}
-          empty="Ainda não há dimensões suficientes para apontar lacunas."
-        />
-      </section>
-    </div>
-  );
-}
-
-// Bloco 5 · Próximos passos: três ações ligadas às lacunas e o percurso como convite (RN-11),
-// com o foco curto (dimensões ≤ 40) como itens da trilha.
-function NextStepsBlock({ nextSteps }) {
-  const { actions, focus, recommendation } = nextSteps;
+// Bloco 5 · Primeira ação (uma prática com entrega verificável) e o percurso sugerido com a justificativa.
+function FirstActionBlock({ firstAction, learning }) {
+  if (!firstAction && !learning.offer) return null;
   return (
     <section
-      aria-labelledby="bloco-passos"
-      data-pdf-block
+      aria-labelledby="bloco-acao"
       className="grid gap-10 border-t border-code-blue-100 pt-10 @3xl:grid-cols-[1.4fr_1fr] @3xl:gap-12"
     >
-      <div className="flex flex-col gap-6">
-        <SectionTitle eyebrow="Próximos passos" id="bloco-passos" subtitle="Ações práticas para evoluir no uso de IA no seu dia a dia.">
-          O que fazer a partir de agora
-        </SectionTitle>
-
-        {actions.length > 0 && (
-          <ol className="flex flex-col">
-            {actions.map((a, i) => (
-              <li key={a.text} className="flex items-center gap-5 border-b border-code-blue-100 py-4 first:pt-0 last:border-b-0">
-                <span aria-hidden="true" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-insight-100 text-lg font-bold">
-                  {i + 1}
-                </span>
-                <p className="text-lg">{a.text}</p>
-              </li>
-            ))}
-          </ol>
-        )}
-
-        {!recommendation && focus.length > 0 && (
-          <ul className="flex flex-col gap-2">
-            {focus.map((f) => <li key={f.dimension}><b>{f.name}:</b> {f.text}.</li>)}
-          </ul>
-        )}
-      </div>
-
-      {recommendation && (
-        <div data-pdf-dark className="flex flex-col gap-4 self-start rounded-3xl bg-mesh-dark p-8 text-canvas">
-          <p className="text-label text-pulse-lime">Percurso sugerido · Trilha de IA</p>
-          <p className="text-3xl leading-tight font-bold">{recommendation.offer}</p>
-          <p className="text-canvas/85">{recommendation.invite}</p>
-          {focus.length > 0 && (
-            <div className="flex flex-col gap-3">
-              <p className="text-label text-canvas/70">Foco curto</p>
-              <ul className="flex flex-col gap-3">
-                {focus.map((f) => (
-                  <li key={f.dimension} className="flex items-start gap-3">
-                    <span aria-hidden="true" className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-pulse-lime text-code-blue">
-                      <Icon icon={IconCheck} size={14} stroke={3} />
-                    </span>
-                    <span><b>{f.name}:</b> {f.text}.</span>
-                  </li>
-                ))}
-              </ul>
+      {firstAction && (
+        <div className="flex flex-col gap-5">
+          <SectionTitle eyebrow="Primeira ação" id="bloco-acao">Sua primeira ação</SectionTitle>
+          <p className="text-lg">{firstAction.text}</p>
+          <div className="flex gap-4 rounded-2xl bg-code-blue-50 px-5 py-4">
+            <span aria-hidden="true" className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-pulse-lime text-code-blue">
+              <Icon icon={IconCheck} size={14} stroke={3} />
+            </span>
+            <div className="flex flex-col gap-1">
+              <p className="text-label text-code-blue/70">Entrega esperada</p>
+              <p className="font-semibold">{firstAction.delivery}</p>
             </div>
+          </div>
+          <p className="text-sm text-code-blue/70">{firstAction.note}</p>
+        </div>
+      )}
+
+      {learning.offer && (
+        <div className="flex flex-col gap-4 self-start rounded-3xl bg-mesh-dark p-8 text-canvas">
+          <p className="text-label text-pulse-lime">Percurso sugerido · Trilha de IA</p>
+          <p className="text-3xl leading-tight font-bold">{learning.offer.name}</p>
+          <p className="text-canvas/85">{learning.offer.why}</p>
+          {learning.text && (
+            <p className="border-t border-canvas/15 pt-4 text-sm text-canvas/80">
+              <b className="text-canvas">Aprendizagem sugerida:</b> {learning.text}
+            </p>
           )}
         </div>
       )}
@@ -312,7 +256,7 @@ function NextStepsBlock({ nextSteps }) {
 // Bloco 6 · Observação de consistência (RN-09), em tom de desenvolvimento.
 function ConsistencyBlock({ consistency }) {
   return (
-    <section aria-label="Observação de consistência" data-pdf-block>
+    <section aria-label="Observação de consistência">
       <Alert variant="info" title={consistency.title}>
         <p>{consistency.text}</p>
       </Alert>
@@ -321,22 +265,63 @@ function ConsistencyBlock({ consistency }) {
 }
 
 /**
- * `heading` e `details` (opcionais) personalizam o hero na tela: nome e identificação do participante.
- * Sem eles (PDF, que já tem cabeçalho próprio), o hero mostra o nível. `expanded`: detalhes abertos (PDF).
+ * Bloco 7 · Como interpretar: resumo metodológico expansível (escala, dimensões, data, versão e alcance).
+ * Fica depois do botão do relatório completo (Result.jsx).
  */
-export function ReportContent({ report, heading, details, expanded = false }) {
-  const shownEvidence = new Set(report.dimensions.map((d) => d.evidence?.text).filter(Boolean));
+export function MethodologyBlock({ methodology, submittedAt }) {
+  const { versions } = methodology;
+  const date = submittedAt ? new Date(submittedAt).toLocaleDateString('pt-BR') : null;
+  return (
+    <details className="group rounded-2xl border border-code-blue-100 px-6 py-5">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
+        <span className="flex flex-col gap-1">
+          <span className="text-label text-code-blue/70">Metodologia</span>
+          <span className="text-lg font-bold">Como interpretar seus resultados</span>
+        </span>
+        <Icon icon={IconChevronDown} size={20} className="shrink-0 transition-transform duration-150 group-open:rotate-180" />
+      </summary>
+      <div className="mt-5 grid gap-6 text-sm text-code-blue/90 @3xl:grid-cols-2 @3xl:gap-10">
+        <div className="flex flex-col gap-3">
+          <p>{methodology.scale}</p>
+          <p>{methodology.overall}</p>
+          <p>{methodology.origin}</p>
+          <p>{methodology.scope}</p>
+        </div>
+        <div className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-2">
+            {methodology.dimensions.map((d) => (
+              <li key={d.name}><b>{d.name}:</b> {d.description}</li>
+            ))}
+          </ul>
+          <p className="text-code-blue/70">
+            {[date && `Aplicação em ${date}`, `instrumento v${versions.instrument}`, `devolutiva v${versions.report}`].filter(Boolean).join(' · ')}.
+            {' '}{methodology.pdf}
+          </p>
+          {versions.notice && <p className="text-code-blue/70">{versions.notice}</p>}
+        </div>
+      </div>
+    </details>
+  );
+}
+
+/**
+ * `heading` e `details` personalizam o hero com o nome e a identificação do participante.
+ */
+export function ReportContent({ report, heading, details }) {
+  const { screen } = report;
   return (
     <div className="@container flex flex-col gap-12">
-      <StageBlock stage={report.stage} consistencyFlagged={Boolean(report.consistency)} heading={heading} details={details} />
-      <DimensionMapBlock dimensions={report.dimensions} stage={report.stage} strengths={report.strengths} gaps={report.gaps} expanded={expanded} />
-      <StrengthsAndGaps strengths={report.strengths} gaps={report.gaps} shownEvidence={shownEvidence} expanded={expanded} />
-      <NextStepsBlock nextSteps={report.nextSteps} />
+      <StageBlock
+        stage={report.stage}
+        synthesis={screen.synthesis}
+        consistencyFlagged={Boolean(report.consistency)}
+        heading={heading}
+        details={details}
+      />
+      <DimensionMapBlock dimensions={report.dimensions} lines={screen.dimensions} />
+      <PrioritiesBlock focus={screen.focus} strength={screen.strength} />
+      <FirstActionBlock firstAction={screen.firstAction} learning={screen.learning} />
       {report.consistency && <ConsistencyBlock consistency={report.consistency} />}
-      <p className="flex items-center gap-2 border-t border-code-blue-100 pt-6 text-xs text-code-blue/70">
-        <Icon icon={IconInfoCircle} size={16} />
-        As ações e os exemplos são ilustrativos e servem para orientar o seu desenvolvimento.
-      </p>
     </div>
   );
 }

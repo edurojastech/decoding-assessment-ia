@@ -1,6 +1,10 @@
 // ADR-04: questionário como dado — fonte única de verdade (specs/04-pontuacao.md, seção 4 do original).
 // Textos e pontos transcritos do _00-prompt-original.pdf. Pesos e pontos são critérios de pilotagem.
 
+// Versão do questionário e da regra de pontuação, citada no PDF (identificação e apêndice).
+// Mude ao alterar perguntas, opções, pontos, pesos ou fórmulas.
+export const INSTRUMENT_VERSION = Object.freeze({ questionnaire: '1.0', scoring: '1.0' });
+
 // RN-02: autopercepção 1 · conhecimento e julgamento 1,5 · situação prática 2.
 export const WEIGHTS = { A: 1, C: 1.5, P: 2 };
 

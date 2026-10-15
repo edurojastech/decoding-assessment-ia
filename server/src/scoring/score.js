@@ -9,6 +9,15 @@ const MIN_OVERALL_COVERAGE = 0.7; // RN-08
 const SELF_HIGH = 75; // RN-09
 const PRACTICE_LOW = 40; // RN-09
 
+// Parâmetros do cálculo efetivamente implementado, para o apêndice de metodologia do PDF.
+export const SCORING_RULES = Object.freeze({
+  maxPoints: MAX_POINTS,
+  minDimensionCoverage: MIN_DIMENSION_COVERAGE,
+  minOverallCoverage: MIN_OVERALL_COVERAGE,
+  selfHigh: SELF_HIGH,
+  practiceLow: PRACTICE_LOW,
+});
+
 const QUESTIONS_BY_ID = new Map(QUESTIONS.map((q) => [q.id, q]));
 
 export class InvalidAnswersError extends Error {

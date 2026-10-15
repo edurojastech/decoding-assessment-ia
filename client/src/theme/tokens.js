@@ -14,6 +14,12 @@ export const colors = {
   insight100: '#D8F0FD',
   lime50: '#FAFFF0',
   lime900: '#8CB800',
+  lime100: '#F5FEDF',
+  lime800: '#5B6E00',
+  codeBlue700: '#2338A8',
+  insight700: '#1A6FA8',
+  textSecondary: '#5B78DA',
+  textMuted: '#8AA0E8',
 };
 
 // Gráficos: contorno Code Blue, preenchimento Insight, destaque Lime, grade em tints.
